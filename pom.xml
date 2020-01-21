@@ -7,6 +7,9 @@
     <groupId>com.chengxiaoxiao</groupId>
     <artifactId>admin-api</artifactId>
     <version>1.0.0</version>
+    <modules>
+        <module>admin-web</module>
+    </modules>
     <packaging>pom</packaging>
 
     <name>admin-api</name>
@@ -26,6 +29,10 @@
         <spring-cloud.version>Greenwich.SR3</spring-cloud.version>
         <commons-lang3.version>3.8.1</commons-lang3.version>
         <commons-codec.version>1.13</commons-codec.version>
+        <druid.version>1.1.9</druid.version>
+        <fastjson.version>1.2.60</fastjson.version>
+        <oracle.version>11.2.0.3</oracle.version>
+        <mysql.version>8.0.11</mysql.version>
     </properties>
 
     <dependencies>
@@ -49,7 +56,7 @@
             <artifactId>commons-codec</artifactId>
             <version>${commons-codec.version}</version>
         </dependency>
-        <!--common是工具包-->
+        <!--commons工具包-->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
