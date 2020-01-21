@@ -15,8 +15,8 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 @SpringBootApplication
 @EntityScan("com.chengxiaoxiao.model")
-public class MainApplication {
+public class WebApplication {
     public static void main(String[] args) {
-        SpringApplication.run(MainApplication.class, args);
+        SpringApplication.run(WebApplication.class, args);
     }
 }
