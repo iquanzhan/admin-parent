@@ -1,6 +1,5 @@
 server:
   port: 10080
-
 # druid 连接池配置
 spring:
   datasource:
@@ -29,3 +28,6 @@ spring:
   jpa:
     show-sql: true
     open-in-view: false
+
+  profiles:
+    active: dev

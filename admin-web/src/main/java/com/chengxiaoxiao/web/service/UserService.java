@@ -1,6 +1,7 @@
 package com.chengxiaoxiao.web.service;
 
-import com.chengxiaoxiao.web.pojo.User;
+
+import com.chengxiaoxiao.model.User;
 
 /**
  * @Author: Cheng XiaoXiao  (🍊 ^_^ ^_^)

@@ -2,6 +2,8 @@ package com.chengxiaoxiao.web;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 /**
  * 启动类
@@ -10,7 +12,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @Date: 2020/1/21 9:40 下午
  * @Description:
  */
+@EnableSwagger2
 @SpringBootApplication
+@EntityScan("com.chengxiaoxiao.model")
 public class MainApplication {
     public static void main(String[] args) {
         SpringApplication.run(MainApplication.class, args);

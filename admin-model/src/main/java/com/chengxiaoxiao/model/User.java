@@ -1,4 +1,10 @@
-package com.chengxiaoxiao.web.pojo;
+package com.chengxiaoxiao.model;
+
+/**
+ * @Author: Cheng XiaoXiao  (🍊 ^_^ ^_^)
+ * @Date: 2020/1/21 11:31 下午
+ * @Description:
+ */
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
