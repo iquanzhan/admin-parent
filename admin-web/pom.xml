@@ -75,13 +75,6 @@
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
 
-        <!--lombok-->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <optional>true</optional>
-        </dependency>
-
         <!--spring data redis-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -95,6 +88,13 @@
             <scope>runtime</scope>
             <optional>true</optional>
         </dependency>
+
+        <dependency>
+            <groupId>de.codecentric</groupId>
+            <artifactId>spring-boot-admin-starter-client</artifactId>
+            <version>${spring-boot-admin.version}</version>
+        </dependency>
+
     </dependencies>
 
 </project>

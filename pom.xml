@@ -11,6 +11,8 @@
         <module>admin-web</module>
         <module>admin-api</module>
         <module>admin-model</module>
+        <module>admin-common</module>
+        <module>admin-server</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -36,6 +38,7 @@
         <oracle.version>11.2.0.3</oracle.version>
         <mysql.version>8.0.11</mysql.version>
         <swagger.version>2.8.0</swagger.version>
+        <spring-boot-admin.version>2.1.0</spring-boot-admin.version>
     </properties>
 
     <dependencies>
@@ -47,24 +50,44 @@
             <type>pom</type>
             <scope>import</scope>
         </dependency>
+
+        <!--spring admin-->
+        <dependency>
+            <groupId>de.codecentric</groupId>
+            <artifactId>spring-boot-admin-dependencies</artifactId>
+            <version>${spring-boot-admin.version}</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+
         <!-- spring test-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+
         <!--摘要算法加密解密包-->
         <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
             <version>${commons-codec.version}</version>
         </dependency>
+
         <!--commons工具包-->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>${commons-lang3.version}</version>
         </dependency>
+
+        <!--lombok-->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+
     </dependencies>
 
 

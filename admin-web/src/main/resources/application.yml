@@ -2,6 +2,22 @@ server:
   port: 10080
 # druid 连接池配置
 spring:
+  application:
+    name: admin-user
+  boot:
+    admin:
+      client:
+        # Spring Boot Admin 服务端地址
+        url: "http://localhost:10086/"
+        instance:
+          metadata:
+            # 客户端端点信息的安全认证信息
+            user.name: ${spring.security.user.name}
+            user.password: ${spring.security.user.password}
+  security:
+    user:
+      name: admin
+      password: 123456
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.jdbc.Driver
@@ -28,6 +44,19 @@ spring:
   jpa:
     show-sql: true
     open-in-view: false
-
+  redis:
+    host: 192.168.4.188
   profiles:
     active: dev
+
+# admin配置
+management:
+  endpoint:
+    health:
+      # 端点健康情况，默认值"never"，设置为"always"可以显示硬盘使用情况和线程情况
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        # 设置端点暴露的哪些内容，默认["health","info"]，设置"*"代表暴露所有可访问的端点
+        include: "*"
