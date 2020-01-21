@@ -5,14 +5,14 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.chengxiaoxiao</groupId>
-    <artifactId>admin-api</artifactId>
+    <artifactId>admin-parent</artifactId>
     <version>1.0.0</version>
     <modules>
         <module>admin-web</module>
     </modules>
     <packaging>pom</packaging>
 
-    <name>admin-api</name>
+    <name>admin-parent</name>
     <description>基于Spring boot 2.1.11 、spring data jpa实现的细粒度权限管理系统</description>
 
     <parent>
