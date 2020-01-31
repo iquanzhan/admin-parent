@@ -18,7 +18,12 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class CodeMsg implements Serializable {
 
+    //通用异常
     public static CodeMsg ERROR = new CodeMsg(0, "success");
+    public static CodeMsg BIND_ERROR = new CodeMsg(500101, "参数校验异常：%s");
+
+    //用户异常
+
 
     private Integer code;
     private String msg;
