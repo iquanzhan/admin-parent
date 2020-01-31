@@ -1,4 +1,4 @@
-package com.chengxiaoxiao.web.repository;
+package com.chengxiaoxiao.model.repository;
 
 import com.chengxiaoxiao.model.web.pojos.User;
 import org.springframework.data.jpa.repository.JpaRepository;
