@@ -1,4 +1,4 @@
-package com.chengxiaoxiao.utils.common;
+package com.chengxiaoxiao.common.utils;
 
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 

@@ -1,4 +1,4 @@
-package com.chengxiaoxiao.utils.jwt;
+package com.chengxiaoxiao.common.jwt;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -9,7 +9,6 @@ import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Component;
 
 /**
  * Jwt工具类
@@ -19,7 +18,7 @@ import org.springframework.stereotype.Component;
  * @Description:
  */
 @Configuration
-@ConfigurationProperties(prefix = "mysql.core")
+@ConfigurationProperties(prefix = "jwt.config")
 public class JwtUtil {
 
     private String key;

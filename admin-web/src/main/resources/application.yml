@@ -1,5 +1,5 @@
 server:
-  port: 10080
+  port: 18000
 # druid 连接池配置
 spring:
   application:

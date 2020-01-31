@@ -15,6 +15,12 @@
     <dependencies>
         <dependency>
             <groupId>com.chengxiaoxiao</groupId>
+            <artifactId>admin-common</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.chengxiaoxiao</groupId>
             <artifactId>admin-model</artifactId>
             <version>1.0.0</version>
         </dependency>
@@ -35,8 +41,6 @@
             <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
 
-
-
         <!-- mysql依赖-->
         <dependency>
             <groupId>mysql</groupId>
@@ -44,11 +48,11 @@
             <version>${mysql.version}</version>
         </dependency>
 
-<!--        <dependency>-->
-<!--            <groupId>com.oracle</groupId>-->
-<!--            <artifactId>ojdbc6</artifactId>-->
-<!--            <version>11.2.0.3</version>-->
-<!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>com.oracle</groupId>-->
+        <!--            <artifactId>ojdbc6</artifactId>-->
+        <!--            <version>11.2.0.3</version>-->
+        <!--        </dependency>-->
 
         <!--druid-->
         <dependency>

@@ -1,4 +1,4 @@
-package com.chengxiaoxiao.utils.common;
+package com.chengxiaoxiao.common.utils;
 
 import java.lang.management.ManagementFactory;
 import java.net.InetAddress;
