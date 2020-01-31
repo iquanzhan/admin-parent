@@ -13,7 +13,6 @@
         <module>admin-model</module>
         <module>admin-common</module>
         <module>admin-server</module>
-        <module>admin-utils</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -41,6 +40,7 @@
         <swagger.version>2.8.0</swagger.version>
         <spring-boot-admin.version>2.1.0</spring-boot-admin.version>
         <jwt.version>0.9.1</jwt.version>
+        <hutool.version>5.1.2</hutool.version>
     </properties>
 
     <dependencies>
@@ -89,6 +89,13 @@
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
+
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>${hutool.version}</version>
+        </dependency>
+
 
     </dependencies>
 
