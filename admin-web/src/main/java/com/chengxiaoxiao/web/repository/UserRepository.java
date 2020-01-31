@@ -1,6 +1,6 @@
 package com.chengxiaoxiao.web.repository;
 
-import com.chengxiaoxiao.model.User;
+import com.chengxiaoxiao.model.web.pojos.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**

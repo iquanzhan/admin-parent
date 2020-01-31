@@ -21,7 +21,7 @@
 
         <dependency>
             <groupId>com.chengxiaoxiao</groupId>
-            <artifactId>admin-api</artifactId>
+            <artifactId>admin-apis</artifactId>
             <version>1.0.0</version>
         </dependency>
 

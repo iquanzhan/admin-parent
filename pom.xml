@@ -9,10 +9,11 @@
     <version>1.0.0</version>
     <modules>
         <module>admin-web</module>
-        <module>admin-api</module>
+        <module>admin-apis</module>
         <module>admin-model</module>
         <module>admin-common</module>
         <module>admin-server</module>
+        <module>admin-utils</module>
     </modules>
     <packaging>pom</packaging>
 

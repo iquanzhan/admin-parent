@@ -1,4 +1,4 @@
-package com.chengxiaoxiao.model;
+package com.chengxiaoxiao.model.web.pojos;
 
 /**
  * @Author: Cheng XiaoXiao  (🍊 ^_^ ^_^)

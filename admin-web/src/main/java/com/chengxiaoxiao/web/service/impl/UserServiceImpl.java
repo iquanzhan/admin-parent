@@ -1,6 +1,6 @@
 package com.chengxiaoxiao.web.service.impl;
 
-import com.chengxiaoxiao.model.User;
+import com.chengxiaoxiao.model.web.pojos.User;
 import com.chengxiaoxiao.web.repository.UserRepository;
 import com.chengxiaoxiao.web.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

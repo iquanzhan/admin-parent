@@ -1,9 +1,8 @@
 package com.chengxiaoxiao.api.user;
 
-import com.chengxiaoxiao.model.User;
+import com.chengxiaoxiao.model.web.pojos.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.PathVariable;
 
 /**
  * 用户接口类
