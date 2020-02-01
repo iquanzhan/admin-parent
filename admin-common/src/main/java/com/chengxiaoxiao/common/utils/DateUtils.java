@@ -364,19 +364,13 @@ public class DateUtils {
     public static String getBirthDayFromIDCard(String idno) {
         Calendar cd = Calendar.getInstance();
         if (idno.length() == 15) {
-            cd.set(Calendar.YEAR, Integer.valueOf("19" + idno.substring(6, 8))
-                    .intValue());
-            cd.set(Calendar.MONTH, Integer.valueOf(idno.substring(8, 10))
-                    .intValue() - 1);
-            cd.set(Calendar.DAY_OF_MONTH,
-                    Integer.valueOf(idno.substring(10, 12)).intValue());
+            cd.set(Calendar.YEAR, Integer.valueOf("19" + idno.substring(6, 8)));
+            cd.set(Calendar.MONTH, Integer.valueOf(idno.substring(8, 10)) - 1);
+            cd.set(Calendar.DAY_OF_MONTH, Integer.valueOf(idno.substring(10, 12)));
         } else if (idno.length() == 18) {
-            cd.set(Calendar.YEAR, Integer.valueOf(idno.substring(6, 10))
-                    .intValue());
-            cd.set(Calendar.MONTH, Integer.valueOf(idno.substring(10, 12))
-                    .intValue() - 1);
-            cd.set(Calendar.DAY_OF_MONTH,
-                    Integer.valueOf(idno.substring(12, 14)).intValue());
+            cd.set(Calendar.YEAR, Integer.valueOf(idno.substring(6, 10)));
+            cd.set(Calendar.MONTH, Integer.valueOf(idno.substring(10, 12)) - 1);
+            cd.set(Calendar.DAY_OF_MONTH, Integer.valueOf(idno.substring(12, 14)));
         }
         return DateUtils.dateToString(cd.getTime());
     }
@@ -430,7 +424,7 @@ public class DateUtils {
     }
 
     /**
-     * 將OBJECT類型轉換為Date
+     * 将OBJECT类型转换为Date
      *
      * @param date
      * @return
@@ -457,21 +451,5 @@ public class DateUtils {
         long age = sec / (1000 * 60 * 60 * 24) / 365;
 
         return age;
-    }
-
-
-    /**
-     * @param args
-     */
-    public static void main(String[] args) {
-        //String temp = DateUtil.dateToString(getLastDayOfMonth(new Date()),
-        ///   DateUtil.DATE_FORMAT_CHINESE);
-        //String s=DateUtil.dateToString(DateUtil.addDay(DateUtil.addYear(new Date(),1),-1));
-
-
-        long s = DateUtils.getDayByMinusDate("2012-01-01", "2012-12-31");
-        System.err.println(s);
-
-
     }
 }
