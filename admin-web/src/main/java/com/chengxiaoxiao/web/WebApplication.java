@@ -13,8 +13,8 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  * @Date: 2020/1/21 9:40 下午
  * @Description:
  */
-@EnableSwagger2
 @SpringBootApplication
+@EnableSwagger2
 @EntityScan("com.chengxiaoxiao.model.web.pojos")
 @EnableJpaRepositories("com.chengxiaoxiao.model.repository")
 public class WebApplication {

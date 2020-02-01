@@ -451,3 +451,224 @@ http://localhost:8080/druid/
 
 ### 3.7 集成swagger便捷进行接口测试与文档编写
 
+添加依赖
+
+```xml
+<swagger.version>2.8.0</swagger.version>
+
+<!--swagger-->
+<dependency>
+    <groupId>io.springfox</groupId>
+    <artifactId>springfox-swagger2</artifactId>
+    <version>${swagger.version}</version>
+</dependency>
+<dependency>
+    <groupId>io.springfox</groupId>
+    <artifactId>springfox-swagger-ui</artifactId>
+    <version>${swagger.version}</version>
+</dependency>
+```
+
+配置
+
+```
+@Configuration
+@EnableSwagger2
+@Profile({"dev", "test"})// 设置 dev test 环境开启 prod 环境就关闭了
+public class Swagger2Config {
+    @Bean
+    public Docket createRestApi() {
+        return new Docket(DocumentationType.SWAGGER_2)
+                .apiInfo(apiInfo())
+                .select()
+                .apis(RequestHandlerSelectors.basePackage("com.chengxiaoxiao.web.controller"))
+                .paths(PathSelectors.any())
+                .build();
+    }
+
+    private ApiInfo apiInfo() {
+        return new ApiInfoBuilder()
+                .title("接口文档标题")
+                .description("接口文档描述")
+//                .termsOfServiceUrl("http:/xxx/xxx")
+                .contact("作者")
+                .version("1.0")
+                .build();
+    }
+}
+```
+
+```
+@Configuration
+public class WebMvcConfig extends WebMvcConfigurationSupport {
+    @Override
+    protected void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("swagger-ui.html")
+                .addResourceLocations("classpath:/META-INF/resources/");
+        registry.addResourceHandler("/webjars/**")
+                .addResourceLocations("classpath:/META-INF/resources/webjars/");
+    }
+}
+```
+
+常用注解：
+
+@Api : 用在类上，说明该类的主要作用。
+
+@ApiOperation：用在方法上，给API增加方法说明。
+
+@ApiImplicitParams : 用在方法上，包含一组参数说明。
+
+@ApiImplicitParam：用来注解来给方法入参增加说明。
+
+@ApiResponses：用于表示一组响应。
+
+@ApiResponse：用在@ApiResponses中，一般用于表达一个错误的响应信息
+
+@ApiModel：用在返回对象类上，描述一个Model的信息（一般用在请求参数无法使用@ApiImplicitParam注解进行描述的时候）
+
+ @ApiModelProperty：描述一个model的属性
+
+使用示例：
+
+```java
+
+@RestController
+@RequestMapping("emp")
+@Api(value = "用户管理类")
+public class EmployeeController {
+ @Autowired
+ private EmployeeReposiroty employeeReposiroty;
+      /**
+      * 增加人物
+      * @param employee
+      * @return
+      */
+     @PostMapping(value = "employee")
+     @ApiOperation(value = "新增一个用户",notes = "新增之后返回对象")
+     @ApiImplicitParam(paramType = "query",name = "employee",value = "用户",required = true)
+     public String insert(Employee employee){
+         
+     }
+      /**
+      * 删除单个用户
+      * @param id
+      * @return
+      */
+      @DeleteMapping(value = "employee/{id}")
+      @ApiOperation(value = "删除用户",notes = "根据成员id删除单个用户")
+      @ApiImplicitParam(paramType = "path",name = "id",value = "用户id",required = true,dataType = "Integer")
+      public String delete(@PathVariable("id")Integer id){
+           
+      }
+
+      /**
+      * 修改单个成员
+      * @param employee
+      * @return
+      */
+      @PutMapping(value = "employee/{id}")
+      @ApiOperation(value = "修改用户信息",notes = "根据成员id修改单个用户")
+      public String update(Employee employee){
+           /**
+           * save方法如果参数属性缺失，会导致原本存在的数据为null
+           */
+           Employee employee1 = employeeReposiroty.saveAndFlush(employee);
+           if (employee1 != null) {
+                return SysNode.Judge.SUCCESS.getResult();
+           }else {
+               return SysNode.Judge.FAILD.getResult();
+           }
+      }
+
+      /**
+      * 获取所有成员,升序排列
+      * @return
+      */
+      @GetMapping(value = "employee/sort")
+      @ApiOperation(value = "查询全部用户",notes = "默认根据升序查询全部用户信息")
+      public List<Employee> findAll(){
+           Sort orders = new Sort(Sort.Direction.DESC,"employeeId");
+           List<Employee> employeeList = employeeReposiroty.findAll(orders);
+           return employeeList;
+      }
+
+      /**
+     * 获取所有成员,升序排列
+     * @return
+      */
+      @GetMapping(value = "employee/pageSort")
+      @ApiOperation(value = "查询用户信息",notes = "查询用户信息")
+      @ApiImplicitParams({
+           @ApiImplicitParam(paramType = "query",name = "sort",value = "排序方式:asc|desc",dataType = "String",required = true),
+           @ApiImplicitParam(paramType = "query",name = "pagenumber",value = "第几页",dataType = "Integer",required = true),
+           @ApiImplicitParam(paramType = "query",name = "pageSize",value = "分页数",dataType = "Integer",required = true)
+      })
+      public List<Employee> findAllByPage(String sort,Integer pagenumber,Integer pageSize){
+      }
+}
+```
+
+设置接收对象的参数：
+
+```
+@Data
+@Entity
+@Table(name = "employee")
+@ApiModel(value = "用户对象模型")
+public class Employee {
+
+   @Id
+   @GeneratedValue(strategy = GenerationType.IDENTITY)
+   @Column(name = "employee_id")
+   @Min(value = 1,groups = Employee.Children.class)
+   private Integer employeeId;
+
+   @Column(name = "user_name",length = 20,nullable = true)
+   @ApiModelProperty(value = "userName",required = true)
+   private String userName;
+
+   @Column(nullable = true)
+   @Size(min = 0,max = 65,message = "年龄超过范围限制",groups = Employee.Audit.class)
+   @ApiModelProperty(value = "age",required = true)
+   private Integer age;
+
+   @Column(name="gra_id")
+   @ApiModelProperty(value = "graId",required = true)
+   //@Digits(integer = 12,fraction = 4)  //限制必须为一个小数，且整数部分的 位数 不能超过integer，小数部分的 位数 不能超过fraction
+   private Integer graId;
+
+   public interface Audit{};
+
+   public interface Children{};
+}
+```
+
+访问：
+
+[http:localhost:9001/swagger-ui.html]()
+
+### 3.8利用spring-boot-devtools进行项目热部署与加载
+
+添加依赖
+
+```xml
+    <!--热部署插件-->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-devtools</artifactId>
+      <optional>true</optional>
+    </dependency>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <fork>true</fork> <!-- 如果没有该配置，devtools不会生效 -->
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+```
+
