@@ -1,4 +1,4 @@
-package com.chengxiaoxiao.web.controller;
+package com.chengxiaoxiao.web.controller.v1;
 
 import com.chengxiaoxiao.api.user.UserControllerApi;
 import com.chengxiaoxiao.model.web.pojos.User;
@@ -15,14 +15,14 @@ import org.springframework.web.bind.annotation.RestController;
  * @Description:
  */
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/v1/user")
 public class UserController implements UserControllerApi {
     @Autowired
     UserService userService;
 
     @Override
     @GetMapping("/{id}")
-    public User findById(@PathVariable Integer id){
+    public User findById(@PathVariable Integer id) {
         return userService.findById(id);
     }
 }

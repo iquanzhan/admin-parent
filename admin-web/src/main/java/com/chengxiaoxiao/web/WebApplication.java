@@ -19,13 +19,14 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 @EntityScan("com.chengxiaoxiao.model.web.pojos")
 @EnableJpaRepositories("com.chengxiaoxiao.model.repository")
-public class WebApplication extends SpringBootServletInitializer {
+public class WebApplication  {
     public static void main(String[] args) {
         SpringApplication.run(WebApplication.class, args);
     }
 
-    @Override
-    protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
-        return builder.sources(WebApplication.class);
-    }
+    //extends SpringBootServletInitializer
+//    @Override
+//    protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
+//        return builder.sources(WebApplication.class);
+//    }
 }
