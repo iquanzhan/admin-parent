@@ -12,7 +12,7 @@ import java.util.Date;
  * @Date: 2020/1/31 7:59 下午
  * @Description:
  */
-public class DateUtils {
+public class DateUtil {
     public static String DATE_FORMAT = "yyyy-MM-dd";
 
     public static String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
@@ -32,7 +32,7 @@ public class DateUtils {
      */
     public static String getCurrentDate() {
         String datestr = null;
-        SimpleDateFormat df = new SimpleDateFormat(DateUtils.DATE_FORMAT);
+        SimpleDateFormat df = new SimpleDateFormat(DateUtil.DATE_FORMAT);
         datestr = df.format(new Date());
         return datestr;
     }
@@ -44,7 +44,7 @@ public class DateUtils {
      */
     public static String getCurrentDateTime() {
         String datestr = null;
-        SimpleDateFormat df = new SimpleDateFormat(DateUtils.DATE_TIME_FORMAT);
+        SimpleDateFormat df = new SimpleDateFormat(DateUtil.DATE_TIME_FORMAT);
         datestr = df.format(new Date());
         return datestr;
     }
@@ -63,7 +63,7 @@ public class DateUtils {
 
     public static String dateToDateTime(Date date) {
         String datestr = null;
-        SimpleDateFormat df = new SimpleDateFormat(DateUtils.DATE_TIME_FORMAT);
+        SimpleDateFormat df = new SimpleDateFormat(DateUtil.DATE_TIME_FORMAT);
         datestr = df.format(date);
         return datestr;
     }
@@ -80,11 +80,11 @@ public class DateUtils {
             return null;
         }
         Date date = new Date();
-        SimpleDateFormat df = new SimpleDateFormat(DateUtils.DATE_FORMAT);
+        SimpleDateFormat df = new SimpleDateFormat(DateUtil.DATE_FORMAT);
         try {
             date = df.parse(datestr);
         } catch (ParseException e) {
-            date = DateUtils.stringToDate(datestr, "yyyyMMdd");
+            date = DateUtil.stringToDate(datestr, "yyyyMMdd");
         }
         return date;
     }
@@ -116,7 +116,7 @@ public class DateUtils {
      */
     public static String dateToString(Date date) {
         String datestr = null;
-        SimpleDateFormat df = new SimpleDateFormat(DateUtils.DATE_FORMAT);
+        SimpleDateFormat df = new SimpleDateFormat(DateUtil.DATE_FORMAT);
         datestr = df.format(date);
         return datestr;
     }
@@ -210,7 +210,7 @@ public class DateUtils {
      * @param date
      */
     public static Date getLastDayOfMonth(Date date) {
-        return DateUtils.addDay(DateUtils.getFirstDayOfMonth(DateUtils.addMonth(date, 1)), -1);
+        return DateUtil.addDay(DateUtil.getFirstDayOfMonth(DateUtil.addMonth(date, 1)), -1);
     }
 
     /**
@@ -322,9 +322,9 @@ public class DateUtils {
      */
     public static long getDayByMinusDate(Object fromDate, Object toDate) {
 
-        Date f = DateUtils.chgObject(fromDate);
+        Date f = DateUtil.chgObject(fromDate);
 
-        Date t = DateUtils.chgObject(toDate);
+        Date t = DateUtil.chgObject(toDate);
 
         long fd = f.getTime();
         long td = t.getTime();
@@ -341,12 +341,12 @@ public class DateUtils {
      */
     public static int calcAge(Date birthday, Date calcDate) {
 
-        int cYear = DateUtils.getYearOfDate(calcDate);
-        int cMonth = DateUtils.getMonthOfDate(calcDate);
-        int cDay = DateUtils.getDayOfDate(calcDate);
-        int bYear = DateUtils.getYearOfDate(birthday);
-        int bMonth = DateUtils.getMonthOfDate(birthday);
-        int bDay = DateUtils.getDayOfDate(birthday);
+        int cYear = DateUtil.getYearOfDate(calcDate);
+        int cMonth = DateUtil.getMonthOfDate(calcDate);
+        int cDay = DateUtil.getDayOfDate(calcDate);
+        int bYear = DateUtil.getYearOfDate(birthday);
+        int bMonth = DateUtil.getMonthOfDate(birthday);
+        int bDay = DateUtil.getDayOfDate(birthday);
 
         if (cMonth > bMonth || (cMonth == bMonth && cDay > bDay)) {
             return cYear - bYear;
@@ -372,7 +372,7 @@ public class DateUtils {
             cd.set(Calendar.MONTH, Integer.valueOf(idno.substring(10, 12)) - 1);
             cd.set(Calendar.DAY_OF_MONTH, Integer.valueOf(idno.substring(12, 14)));
         }
-        return DateUtils.dateToString(cd.getTime());
+        return DateUtil.dateToString(cd.getTime());
     }
 
     /**
@@ -436,7 +436,7 @@ public class DateUtils {
         }
 
         if (date != null && date instanceof String) {
-            return DateUtils.stringToDate((String) date);
+            return DateUtil.stringToDate((String) date);
         }
 
         return null;

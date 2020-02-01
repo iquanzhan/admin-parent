@@ -739,7 +739,7 @@ spring:
 
 pom文件中添加profile节点，并在build下的resources节点添加打包过滤的配置文件规则
 
-```
+```xml
     <profiles>
         <profile>
             <!--	开发环境		-->
@@ -791,7 +791,7 @@ pom文件中添加profile节点，并在build下的resources节点添加打包�
 
 在`application.yml`中配置一个动态属性进行占位，默认的分隔符是@属性名@，这个属性会通过maven打包时传入参数进行替换;
 
-```
+```yml
 spring:
   profiles:
     active: @profileActive@

@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
  * @Date: 2020/1/31 7:59 下午
  * @Description:
  */
-public class IpUtils {
+public class IpUtil {
 
     public static String getIpAddress(HttpServletRequest request) {
         String ip = request.getHeader("x-forwarded-for");
