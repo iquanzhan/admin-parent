@@ -648,7 +648,7 @@ public class Employee {
 
 [http:localhost:9001/swagger-ui.html]()
 
-### 3.8利用spring-boot-devtools进行项目热部署与加载
+### 3.8 利用spring-boot-devtools进行项目热部署与加载
 
 添加依赖
 
@@ -672,3 +672,142 @@ public class Employee {
     </build>
 ```
 
+### 3.9 打包jar和war
+
+添加依赖
+
+```xml
+<dependency>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-starter-tomcat</artifactId>
+  <scope>provided</scope>
+</dependency>
+    
+<build>
+    <finalName>${project.artifactId}</finalName>
+    <plugins>
+        <plugin>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-maven-plugin</artifactId>
+        </plugin>
+    </plugins>
+</build>
+```
+
+> 3.修改打包方式为war
+
+```
+<packaging>war</packaging>
+```
+
+> 4.mainApplication需要继承SpringBootServletInitializer,并重写configure方法
+
+```
+@Override
+protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
+    return builder.sources(MainApplication.class);
+}
+```
+
+> 5.项目根目录打包：mvn clean package 
+>
+> 6.放tomcat目录下，启动（解决需要增加应用名） 
+>
+> 1.可以把context设置为空 
+>
+> 2.直接放到ROOT目录下
+
+### 3.10 yml实现多环境部署
+
+在`Spring Boot`中多环境配置文件名需要满足`application-{profile}.yml`的格式，其中`{profile}`对应你的环境标识;
+
+```
+application-dev 开发环境
+application-test 测试环境
+application-prod 生产环境
+```
+
+如果我们要激活某一个环境，只需要在 `application.yml`里：
+
+```
+spring:
+  profiles:
+    active: dev
+```
+
+多环境profile打包
+
+pom文件中添加profile节点，并在build下的resources节点添加打包过滤的配置文件规则
+
+```
+    <profiles>
+        <profile>
+            <!--	开发环境		-->
+            <id>dev</id>
+            <properties>
+                <profileActive>dev</profileActive>
+            </properties>
+            <!--	默认激活的环境		-->
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+        <profile>
+            <!--	测试环境		-->
+            <id>test</id>
+            <properties>
+                <profileActive>test</profileActive>
+            </properties>
+        </profile>
+        <profile>
+            <!--	生产环境		-->
+            <id>prod</id>
+            <properties>
+                <profileActive>prod</profileActive>
+            </properties>
+        </profile>
+    </profiles>
+    
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>application-${profileActive}.yml</include>
+                    <include>application.yml</include>
+                    <include>**/*.xml</include>
+                </includes>
+                <filtering>true</filtering>
+            </resource>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.xml</include>
+                </includes>
+            </resource>
+        </resources>
+    </build>
+```
+
+在`application.yml`中配置一个动态属性进行占位，默认的分隔符是@属性名@，这个属性会通过maven打包时传入参数进行替换;
+
+```
+spring:
+  profiles:
+    active: @profileActive@
+```
+
+打包过滤配置文件规则也是用一个占位符进行占位，打包时也会通过maven传入参数进行替换。
+
+- 1、`通过 -D命令传入属性值profileActive`，如：
+
+```
+clean install -Dmaven.test.skip=true -DprofileActive=dev
+复制代码
+```
+
+- 2、`通过-P命令指定profile环境`，如：
+
+```
+clean package -P prod
+```
