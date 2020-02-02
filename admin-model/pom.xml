@@ -29,5 +29,12 @@
             <version>1.0.0</version>
             <scope>compile</scope>
         </dependency>
+
+        <!--swagger-->
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>${swagger.version}</version>
+        </dependency>
     </dependencies>
 </project>

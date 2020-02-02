@@ -1,4 +1,4 @@
-package com.chengxiaoxiao.model.common.dtos;
+package com.chengxiaoxiao.model.common.dtos.result;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

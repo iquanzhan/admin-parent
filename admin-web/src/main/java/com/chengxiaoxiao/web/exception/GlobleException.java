@@ -1,6 +1,6 @@
 package com.chengxiaoxiao.web.exception;
 
-import com.chengxiaoxiao.model.common.dtos.CodeMsg;
+import com.chengxiaoxiao.model.common.dtos.result.CodeMsg;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

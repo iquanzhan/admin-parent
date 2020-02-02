@@ -1,10 +1,9 @@
 package com.chengxiaoxiao.web.exception;
 
-import com.chengxiaoxiao.model.common.dtos.CodeMsg;
-import com.chengxiaoxiao.model.common.dtos.Result;
+import com.chengxiaoxiao.model.common.dtos.result.CodeMsg;
+import com.chengxiaoxiao.model.common.dtos.result.Result;
 import org.springframework.validation.BindException;
 import org.springframework.validation.ObjectError;
-import org.springframework.web.HttpRequestHandler;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;

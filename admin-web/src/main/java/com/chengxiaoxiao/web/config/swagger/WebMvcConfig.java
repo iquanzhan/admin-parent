@@ -1,4 +1,4 @@
-package com.chengxiaoxiao.api.config;
+package com.chengxiaoxiao.web.config.swagger;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;

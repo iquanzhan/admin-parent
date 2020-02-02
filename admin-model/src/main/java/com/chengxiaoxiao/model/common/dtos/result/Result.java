@@ -1,5 +1,7 @@
-package com.chengxiaoxiao.model.common.dtos;
+package com.chengxiaoxiao.model.common.dtos.result;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
 import java.io.Serializable;
@@ -14,9 +16,13 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@ApiModel("统一结果返回类")
 public class Result<T> implements Serializable {
+    @ApiModelProperty("错误码")
     private Integer code;
+    @ApiModelProperty("消息提示")
     private String msg;
+    @ApiModelProperty("数据实体")
     private T data;
 
     private Result(T data) {
