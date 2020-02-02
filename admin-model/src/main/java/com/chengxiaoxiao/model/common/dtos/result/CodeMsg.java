@@ -25,6 +25,12 @@ public class CodeMsg implements Serializable {
     public static CodeMsg AUTHENTICATION_ERROR = new CodeMsg(403001, "抱歉，您没有权限访问本页面");
 
     //用户异常
+    public static CodeMsg LOGIN_SUCCESS = new CodeMsg(0, "登录成功");
+    public static CodeMsg LOGOUT_SUCCESS = new CodeMsg(0, "登出成功");
+
+    public static CodeMsg USER_NOT_EXIST = new CodeMsg(404001, "用户名不存在");
+    public static CodeMsg USER_LOCKED = new CodeMsg(200, "用户被冻结");
+    public static CodeMsg USER_PASSWORD_INCORRENT = new CodeMsg(200, "用户名密码不正确");
 
 
     private Integer code;

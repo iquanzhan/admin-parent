@@ -34,6 +34,11 @@ public class Result<T> implements Serializable {
         return new Result<>(data);
     }
 
+    //成功时的回调
+    public static <T> Result<T> success(CodeMsg codeMsg) {
+        return new Result<>(codeMsg.getCode(), codeMsg.getMsg(), null);
+    }
+
     private Result(CodeMsg cm) {
         if (cm == null) {
             return;

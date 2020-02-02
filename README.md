@@ -838,16 +838,42 @@ String token = jwtUtil.createJWT(adminUser.getId(), adminUser.getLoginname(), "a
 Claims claims=(Claims)request.getAttribute("admin_claims");
 ```
 
-3.12 权限控制spring-security
+### 3.12 权限控制spring-security
 
-3.13 日志引入
+添加依赖
 
-3.14 异步调用
 
-3.15 Websocket
 
-3.16全局异常处理
+### 3.13 日志引入
 
-3.17实现问卷效果
+添加依赖
 
-3.18Mybatis
+```xml
+<!-- JWT依赖 -->
+<dependency>
+  <groupId>org.springframework.security</groupId>
+  <artifactId>spring-security-jwt</artifactId>
+  <version>1.0.9.RELEASE</version>
+</dependency>
+<dependency>
+  <groupId>io.jsonwebtoken</groupId>
+  <artifactId>jjwt</artifactId>
+  <version>0.9.0</version>
+</dependency>
+```
+
+
+
+### 3.14 异步调用
+
+### 3.15 Websocket
+
+### 3.16 全局异常处理
+
+### 3.17 实现问卷效果
+
+### 3.18 Mybatis
+
+### 3.19 接口幂等性验证
+
+### 3.20 activiti

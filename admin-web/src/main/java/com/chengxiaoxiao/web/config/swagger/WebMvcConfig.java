@@ -5,6 +5,8 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
 /**
+ * Swagger 中取消拦截其资源信息
+ *
  * @Author: Cheng XiaoXiao  (🍊 ^_^ ^_^)
  * @Date: 2020/1/21 11:24 下午
  * @Description:

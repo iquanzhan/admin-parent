@@ -10,6 +10,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
+ * Druid配置
+ *
  * @Author: Cheng XiaoXiao  (🍊 ^_^ ^_^)
  * @Date: 2020/1/22 9:32 下午
  * @Description:
