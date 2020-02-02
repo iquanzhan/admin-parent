@@ -73,3 +73,8 @@ management:
       exposure:
         # 设置端点暴露的哪些内容，默认["health","info"]，设置"*"代表暴露所有可访问的端点
         include: "*"
+# jwt配置
+jwt:
+  config:
+    key: chengxiaoxiao
+    ttl: 7200000

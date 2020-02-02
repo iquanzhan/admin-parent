@@ -814,7 +814,29 @@ clean package -P prod
 
 ### 3.11 JWT引入
 
+添加依赖
 
+```xml
+<dependency>
+  <groupId>io.jsonwebtoken</groupId>
+  <artifactId>jjwt</artifactId>
+  <version>${jwt.version}</version>
+</dependency>
+```
+
+使用：
+
+登录时创建token：
+
+```java
+String token = jwtUtil.createJWT(adminUser.getId(), adminUser.getLoginname(), "admin");
+```
+
+获取权限：
+
+```java
+Claims claims=(Claims)request.getAttribute("admin_claims");
+```
 
 3.12 权限控制spring-security
 
