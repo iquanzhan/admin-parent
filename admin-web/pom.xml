@@ -48,11 +48,11 @@
             <version>${mysql.version}</version>
         </dependency>
 
-        <!--        <dependency>-->
-        <!--            <groupId>com.oracle</groupId>-->
-        <!--            <artifactId>ojdbc6</artifactId>-->
-        <!--            <version>11.2.0.3</version>-->
-        <!--        </dependency>-->
+        <dependency>
+            <groupId>com.oracle</groupId>
+            <artifactId>ojdbc6</artifactId>
+            <version>11.2.0.3</version>
+        </dependency>
 
         <!--druid-->
         <dependency>
@@ -122,12 +122,11 @@
             <version>0.9.0</version>
         </dependency>
 
-        <!-- spring-boot-starter-security-->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
-        </dependency>
-
+<!--        &lt;!&ndash; spring-boot-starter-security&ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.boot</groupId>-->
+<!--            <artifactId>spring-boot-starter-security</artifactId>-->
+<!--        </dependency>-->
 
 
     </dependencies>

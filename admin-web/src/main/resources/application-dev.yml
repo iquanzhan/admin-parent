@@ -20,10 +20,10 @@ spring:
       password: 123456
   datasource:
     druid:
-      url: jdbc:mysql://192.168.4.188:3306/xxadmin?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=utf-8&useSSL=false
-      username: root
-      password: 123456
-      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:oracle:thin:@192.168.4.132:1521:ORP
+      username: ORP
+      password: 123456789
+      driver-class-name: oracle.jdbc.driver.OracleDriver
       # 初始化物理连接个数
       initial-size: 1
       # 最大连接池数量
@@ -37,7 +37,7 @@ spring:
       # 启用PSCache后，指定每个连接上PSCache的大小
       max-pool-prepared-statement-per-connection-size: 20
       # 用来检测连接是否有效的sql
-      validation-query: select 'x'
+      validation-query: select 1 from dual
       # 申请连接时不检测连接是否有效
       test-on-borrow: false
       # 归还连接时不检测连接是否有效
@@ -59,6 +59,7 @@ spring:
   jpa:
     show-sql: true
     open-in-view: false
+    database-platform: org.hibernate.dialect.Oracle10gDialect
   redis:
     host: 192.168.4.188
 

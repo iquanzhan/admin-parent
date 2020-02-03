@@ -361,7 +361,7 @@ spring:
       url: jdbc:mysql://127.0.0.1:3306/test?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=utf-8&useSSL=false
       username: root
       password: 123456
-      driver-class-name: com.mysql.cj.jdbc.Driver
+      driver-class-name: com.mysql.cj.jdbc.Driver --oracle 配置：oracle.jdbc.driver.OracleDriver
       # 初始化物理连接个数
       initial-size: 1
       # 最大连接池数量
@@ -375,7 +375,7 @@ spring:
       # 启用PSCache后，指定每个连接上PSCache的大小
       max-pool-prepared-statement-per-connection-size: 20
       # 用来检测连接是否有效的sql
-      validation-query: select 'x'
+      validation-query: select 'x'  --oracle 配置：validation-query: select 1 from dual
       # 申请连接时不检测连接是否有效
       test-on-borrow: false
       # 归还连接时不检测连接是否有效
