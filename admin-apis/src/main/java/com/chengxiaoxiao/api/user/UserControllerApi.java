@@ -22,8 +22,8 @@ import java.util.Map;
 @Api(value = "用户管理接口", description = "用户管理接口，提供用户的增、删、改、查")
 public interface UserControllerApi {
     @ApiOperation("根据Id查询用户信息")
-    @ApiImplicitParam(name = "id", value = "用户ID", required = true, dataType = "Integer", paramType = "path")
-    Result findById(Integer id);
+    @ApiImplicitParam(name = "id", value = "用户ID", required = true, dataType = "String", paramType = "path")
+    Result findById(String id);
 
     @ApiOperation("条件查询用户信息")
     Result search(UserSearchDto userSearchDto, PageQueryDtos pageQueryDtos);
@@ -32,8 +32,8 @@ public interface UserControllerApi {
     Result insert(User user);
 
     @ApiOperation("更新用户信息")
-    Result update(Integer id, User user);
+    Result update(String id, User user);
 
     @ApiOperation("删除用户")
-    Result delete(Integer id);
+    Result delete(String id);
 }

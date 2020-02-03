@@ -60,6 +60,9 @@ spring:
     show-sql: true
     open-in-view: false
     database-platform: org.hibernate.dialect.Oracle10gDialect
+    hibernate:
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
   redis:
     host: 192.168.4.188
 

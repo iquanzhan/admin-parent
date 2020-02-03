@@ -26,6 +26,8 @@ public class Result<T> implements Serializable {
     private T data;
 
     private Result(T data) {
+        this.code = 0;
+        this.msg = "请求成功";
         this.data = data;
     }
 

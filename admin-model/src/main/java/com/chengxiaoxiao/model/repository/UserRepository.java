@@ -8,5 +8,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @Date: 2020/1/21 10:39 下午
  * @Description:
  */
-public interface UserRepository extends JpaRepository<User,Integer> {
+public interface UserRepository extends BaseDao<User,String>{
 }
