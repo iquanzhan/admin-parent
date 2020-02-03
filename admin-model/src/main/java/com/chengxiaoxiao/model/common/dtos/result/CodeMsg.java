@@ -22,6 +22,7 @@ public class CodeMsg implements Serializable {
     public static CodeMsg ERROR = new CodeMsg(0, "success");
     public static CodeMsg BIND_ERROR = new CodeMsg(500101, "参数校验异常：%s");
 
+    public static CodeMsg OTHER_ERROR = new CodeMsg(500, "系统发生异常，请稍后重试");
     public static CodeMsg AUTHENTICATION_ERROR = new CodeMsg(403001, "抱歉，您没有权限访问本页面");
 
     //用户异常

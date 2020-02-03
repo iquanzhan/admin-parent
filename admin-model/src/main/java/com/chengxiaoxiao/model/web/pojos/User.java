@@ -6,6 +6,7 @@ package com.chengxiaoxiao.model.web.pojos;
  * @Description:
  */
 
+import com.chengxiaoxiao.model.annotation.validator.IsMobile;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -16,9 +17,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.AssertTrue;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -39,30 +38,53 @@ public class User implements Serializable {
     @ApiModelProperty(value = "用户Id", required = true)
     private String id;
 
-    @ApiModelProperty(value = "姓名", required = true)
+    @NotBlank(message = "请输入正确的用户名")
+    @ApiModelProperty(value = "用户名", required = true)
     private String userName;
-    @ApiModelProperty(value = "电话号码", required = true)
+
+    @IsMobile(message = "请输入正确的手机号码")
+    @ApiModelProperty(value = "手机号码", required = true)
     private String telephone;
+
+    @Past(message = "请输入正确的出生日期")
     @ApiModelProperty(value = "出生日期", required = true)
     private Date birthday;
+
+    @Email(message = "请输入正确的电子邮箱")
     @ApiModelProperty(value = "电子邮箱", required = true)
     private String email;
+
+    @NotNull(message = "请输入正确的性别信息")
     @ApiModelProperty(value = "性别", required = true)
     private Integer sex;
+
     @ApiModelProperty(value = "地址", required = true)
     private String address;
+
     @ApiModelProperty(value = "描述信息", required = true)
     private String descript;
+
+    @NotNull(message = "请输入正确的性别信息")
     @ApiModelProperty(value = "是否锁定", required = true)
-    private String locked;
+    private Integer locked;
+
+    @NotNull
     @ApiModelProperty(value = "昵称", required = true)
     private String nickName;
+
+    @NotNull
     @ApiModelProperty(value = "密码", required = true)
     private String password;
+
+    @NotNull
     @ApiModelProperty(value = "创建时间", required = true)
     private String createTime;
+
+    @NotNull
     @ApiModelProperty(value = "修改时间", required = true)
     private String UpdateTime;
+
+    @NotNull
     @ApiModelProperty(value = "删除状态", required = true)
-    private String deleteStatus;
+    private Integer deleteStatus;
 }

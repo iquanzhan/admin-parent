@@ -62,7 +62,7 @@ spring:
     database-platform: org.hibernate.dialect.Oracle10gDialect
     hibernate:
       naming:
-        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+        physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
   redis:
     host: 192.168.4.188
 

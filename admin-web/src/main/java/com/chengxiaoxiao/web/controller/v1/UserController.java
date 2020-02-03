@@ -38,6 +38,7 @@ public class UserController implements UserControllerApi {
     @Override
     @PostMapping("/")
     public Result insert(@Valid @RequestBody User user) {
+
         return Result.success(userService.insert(user));
     }
 
