@@ -4,6 +4,7 @@ import com.chengxiaoxiao.api.user.UserControllerApi;
 import com.chengxiaoxiao.model.common.dtos.query.PageQueryDtos;
 import com.chengxiaoxiao.model.common.dtos.result.CodeMsg;
 import com.chengxiaoxiao.model.common.dtos.result.Result;
+import com.chengxiaoxiao.model.web.dtos.UserModelDto;
 import com.chengxiaoxiao.model.web.dtos.UserSearchDto;
 import com.chengxiaoxiao.model.web.pojos.User;
 import com.chengxiaoxiao.web.service.UserService;
@@ -37,14 +38,14 @@ public class UserController implements UserControllerApi {
 
     @Override
     @PostMapping("/")
-    public Result insert(@Valid @RequestBody User user) {
+    public Result insert(@Valid @RequestBody UserModelDto user) {
 
         return Result.success(userService.insert(user));
     }
 
     @Override
     @PutMapping("/{id}")
-    public Result update(@PathVariable String id, @RequestBody User user) {
+    public Result update(@PathVariable String id, @RequestBody UserModelDto user) {
         return Result.success(userService.update(id, user));
     }
 

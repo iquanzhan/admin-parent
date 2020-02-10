@@ -1,15 +1,19 @@
 package com.chengxiaoxiao.web.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.chengxiaoxiao.common.utils.IdWorker;
 import com.chengxiaoxiao.model.common.dtos.result.CodeMsg;
 import com.chengxiaoxiao.model.repository.BaseDao;
+import com.chengxiaoxiao.model.web.dtos.UserModelDto;
 import com.chengxiaoxiao.model.web.pojos.User;
 import com.chengxiaoxiao.model.repository.UserRepository;
 import com.chengxiaoxiao.web.exception.GlobleException;
 import com.chengxiaoxiao.web.service.UserService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.Optional;
 
 /**
@@ -31,20 +35,31 @@ public class UserServiceImpl extends BaseServiceImpl<User, String> implements Us
     }
 
     @Override
-    public User insert(User user) {
+    public User insert(UserModelDto userDto) {
+        User user = new User();
+
+        BeanUtil.copyProperties(user, userDto);
+
         user.setId(idWorker.nextId() + "");
+        user.setLocked(0);
+        user.setDeleteStatus(0);
+        user.setCreateTime(new Date());
+        user.setUpdateTime(new Date());
         save(user);
         return user;
     }
 
     @Override
-    public User update(String id, User user) {
+    public User update(String id, UserModelDto userDto) {
         User userDb = find(id);
         if (userDb == null) {
             throw new GlobleException(CodeMsg.USER_NOT_EXIST);
         }
-        user.setId(id);
-        save(user);
-        return user;
+
+        BeanUtil.copyProperties(userDb, userDto);
+
+        userDb.setUpdateTime(new Date());
+        save(userDb);
+        return userDb;
     }
 }

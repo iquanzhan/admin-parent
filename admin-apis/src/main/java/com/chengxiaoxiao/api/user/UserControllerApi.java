@@ -2,6 +2,7 @@ package com.chengxiaoxiao.api.user;
 
 import com.chengxiaoxiao.model.common.dtos.query.PageQueryDtos;
 import com.chengxiaoxiao.model.common.dtos.result.Result;
+import com.chengxiaoxiao.model.web.dtos.UserModelDto;
 import com.chengxiaoxiao.model.web.dtos.UserSearchDto;
 import com.chengxiaoxiao.model.web.pojos.User;
 import io.swagger.annotations.Api;
@@ -29,10 +30,10 @@ public interface UserControllerApi {
     Result search(UserSearchDto userSearchDto, PageQueryDtos pageQueryDtos);
 
     @ApiOperation("添加用户")
-    Result insert(User user);
+    Result insert(UserModelDto user);
 
     @ApiOperation("更新用户信息")
-    Result update(String id, User user);
+    Result update(String id, UserModelDto user);
 
     @ApiOperation("删除用户")
     Result delete(String id);

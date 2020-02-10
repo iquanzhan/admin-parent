@@ -1,6 +1,7 @@
 package com.chengxiaoxiao.web.service;
 
 
+import com.chengxiaoxiao.model.web.dtos.UserModelDto;
 import com.chengxiaoxiao.model.web.pojos.User;
 
 /**
@@ -10,7 +11,7 @@ import com.chengxiaoxiao.model.web.pojos.User;
  */
 public interface UserService extends BaseService<User, String> {
 
-    User insert(User user);
+    User insert(UserModelDto user);
 
-    User update(String id, User user);
+    User update(String id, UserModelDto user);
 }

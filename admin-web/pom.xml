@@ -122,11 +122,18 @@
             <version>0.9.0</version>
         </dependency>
 
-<!--        &lt;!&ndash; spring-boot-starter-security&ndash;&gt;-->
+        <!-- spring-boot-starter-security-->
 <!--        <dependency>-->
 <!--            <groupId>org.springframework.boot</groupId>-->
 <!--            <artifactId>spring-boot-starter-security</artifactId>-->
 <!--        </dependency>-->
+
+        <!--commons工具包-->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${commons-lang3.version}</version>
+        </dependency>
 
 
     </dependencies>

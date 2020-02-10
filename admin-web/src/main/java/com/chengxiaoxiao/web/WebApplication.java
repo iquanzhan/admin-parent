@@ -41,4 +41,9 @@ public class WebApplication extends SpringBootServletInitializer {
     public JwtUtil jwtUtil() {
         return new JwtUtil();
     }
+
+//    @Bean
+//    public BCryptPasswordEncoder encoder() {
+//        return new BCryptPasswordEncoder();
+//    }
 }

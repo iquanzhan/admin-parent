@@ -20,9 +20,9 @@ spring:
       password: 123456
   datasource:
     druid:
-      url: jdbc:oracle:thin:@192.168.4.132:1521:ORP
-      username: ORP
-      password: 123456789
+      url: jdbc:oracle:thin:@localhost:1521:helowinXDB
+      username: system
+      password: system
       driver-class-name: oracle.jdbc.driver.OracleDriver
       # 初始化物理连接个数
       initial-size: 1

@@ -23,7 +23,9 @@ public class CodeMsg implements Serializable {
     public static CodeMsg BIND_ERROR = new CodeMsg(500101, "参数校验异常：%s");
 
     public static CodeMsg OTHER_ERROR = new CodeMsg(500, "系统发生异常，请稍后重试");
+    public static CodeMsg AUTHENTICATION_TOKEN_EXPIRED = new CodeMsg(403000, "抱歉，TOKEN已过期");
     public static CodeMsg AUTHENTICATION_ERROR = new CodeMsg(403001, "抱歉，您没有权限访问本页面");
+
 
     //用户异常
     public static CodeMsg LOGIN_SUCCESS = new CodeMsg(0, "登录成功");
