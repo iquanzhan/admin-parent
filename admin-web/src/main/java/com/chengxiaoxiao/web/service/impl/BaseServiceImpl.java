@@ -3,12 +3,14 @@ package com.chengxiaoxiao.web.service.impl;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
 import com.chengxiaoxiao.model.repository.BaseDao;
 import com.chengxiaoxiao.web.service.BaseService;
 
+import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -21,7 +23,12 @@ public abstract class BaseServiceImpl<T, ID extends Serializable> implements Bas
 
     @Override
     public T find(ID id) {
-        return getBaseDao().getOne(id);
+        Optional<T> entity = getBaseDao().findById(id);
+        if (entity.isPresent()) {
+            return entity.get();
+        } else {
+            return null;
+        }
     }
 
     @Override

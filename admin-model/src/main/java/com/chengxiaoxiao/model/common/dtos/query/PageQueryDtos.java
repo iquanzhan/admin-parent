@@ -16,6 +16,8 @@ public class PageQueryDtos {
     private Integer page;
     @ApiModelProperty(value="页码",notes = "不传此参数，默认显示10条")
     private Integer size;
-    @ApiModelProperty(value="排序",notes = "不传此参数，按照默认排序规则")
-    private String sort;
+    @ApiModelProperty(value="排序字段名",notes = "不传此参数，按照默认排序规则")
+    private String sortName;
+    @ApiModelProperty(value="排序规则",notes = "desc/asc")
+    private String sortOrder;
 }

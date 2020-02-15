@@ -38,6 +38,9 @@ public class Result<T> implements Serializable {
 
     //成功时的回调
     public static <T> Result<T> success(CodeMsg codeMsg) {
+        if (codeMsg == null) {
+            codeMsg = CodeMsg.ERROR;
+        }
         return new Result<>(codeMsg.getCode(), codeMsg.getMsg(), null);
     }
 

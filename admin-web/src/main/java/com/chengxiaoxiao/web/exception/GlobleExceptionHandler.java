@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
@@ -29,16 +30,14 @@ public class GlobleExceptionHandler {
             String msg = error.getDefaultMessage();
 
             return Result.error(CodeMsg.BIND_ERROR.fillArgs(msg));
-        }
-        else if(e instanceof MethodArgumentNotValidException){
+        } else if (e instanceof MethodArgumentNotValidException) {
             MethodArgumentNotValidException ex = (MethodArgumentNotValidException) e;
 
             return Result.error(CodeMsg.BIND_ERROR.fillArgs(ex.getBindingResult().getAllErrors().get(0).getDefaultMessage()));
-        }
-        else if (e instanceof GlobleException) {
+        } else if (e instanceof GlobleException) {
             GlobleException ex = (GlobleException) e;
             return Result.error(ex.getCm());
-        } else {
+        }else {
             return Result.error(CodeMsg.OTHER_ERROR);
         }
     }

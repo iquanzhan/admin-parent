@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.domain.Page;
 
 import java.io.Serializable;
 import java.util.List;
@@ -20,11 +21,18 @@ import java.util.List;
 @ApiModel("分页结果显示类")
 public class PageResult<T> implements Serializable {
     @ApiModelProperty("总记录数")
-    private Integer total;
+    private long total;
     @ApiModelProperty("页码大小")
     private Integer pageSize;
     @ApiModelProperty("当前页")
     private Integer pageNumber;
     @ApiModelProperty("分页数据")
     private List<T> rows;
+
+    public PageResult(Page<T> page) {
+        this.total = page.getTotalElements();
+        this.pageSize = page.getSize();
+        this.pageNumber = page.getNumber();
+        this.rows = page.getContent();
+    }
 }
