@@ -1,6 +1,7 @@
 package com.chengxiaoxiao.web.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.bean.copier.CopyOptions;
 import com.chengxiaoxiao.common.utils.IdWorker;
 import com.chengxiaoxiao.model.common.dtos.result.CodeMsg;
 import com.chengxiaoxiao.model.repository.BaseDao;
@@ -97,7 +98,7 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRole, String> impleme
     @Override
     public SysRole insert(SysRoleModelDto sysRoleDto) {
         SysRole sysRole = new SysRole();
-        BeanUtils.copyProperties(sysRoleDto, sysRole);
+        BeanUtil.copyProperties(sysRoleDto, sysRole, CopyOptions.create().setIgnoreNullValue(true).setIgnoreError(true));
         sysRole.setId(idWorker.nextId() + "");
         sysRole.setCreateTime(new Date());
         sysRole.setUpdateTime(new Date());
@@ -113,7 +114,7 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRole, String> impleme
             throw new GlobleException(CodeMsg.ROLE_NOT_EXIST);
         }
 
-        BeanUtil.copyProperties(sysRoleDto, sysRoleDb);
+        BeanUtil.copyProperties(sysRoleDto, sysRoleDb, CopyOptions.create().setIgnoreNullValue(true).setIgnoreError(true));
 
         sysRoleDb.setUpdateTime(new Date());
         save(sysRoleDb);

@@ -1,6 +1,7 @@
 package com.chengxiaoxiao.web.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.bean.copier.CopyOptions;
 import com.chengxiaoxiao.common.utils.IdWorker;
 import com.chengxiaoxiao.model.common.dtos.result.CodeMsg;
 import com.chengxiaoxiao.model.repository.BaseDao;
@@ -50,7 +51,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser, String> impleme
     @Override
     public SysUser insert(SysUserModelDto userDto) {
         SysUser user = new SysUser();
-        BeanUtil.copyProperties(userDto, user);
+        BeanUtil.copyProperties(userDto, user,CopyOptions.create().setIgnoreNullValue(true).setIgnoreError(true));
 
         user.setId(idWorker.nextId() + "");
         user.setLocked(0);
@@ -69,7 +70,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser, String> impleme
             throw new GlobleException(CodeMsg.USER_NOT_EXIST);
         }
 
-        BeanUtil.copyProperties(userDto, userDb);
+        BeanUtil.copyProperties(userDto, userDb, CopyOptions.create().setIgnoreNullValue(true).setIgnoreError(true));
 
         userDb.setUpdateTime(new Date());
         save(userDb);

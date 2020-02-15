@@ -2,7 +2,9 @@ package com.chengxiaoxiao.model.web.dtos;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import java.util.Date;
@@ -14,6 +16,8 @@ import java.util.Date;
  */
 @ApiModel("用户搜索条件")
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class SysUserSearchDto {
     @ApiModelProperty("用户名")
     private String userName;

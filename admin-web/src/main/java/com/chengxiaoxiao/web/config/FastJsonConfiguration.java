@@ -28,7 +28,7 @@ public class FastJsonConfiguration implements WebMvcConfigurer {
         FastJsonHttpMessageConverter fastJsonConverter = new FastJsonHttpMessageConverter();
         FastJsonConfig config = new FastJsonConfig();
         config.setCharset(Charset.forName("UTF-8"));
-        config.setDateFormat("yyyy-MM-dd HH:mm:ssS");
+        config.setDateFormat("yyyy-MM-dd HH:mm:ss");
         fastJsonConverter.setFastJsonConfig(config);
         List<MediaType> list = new ArrayList<>();
         list.add(MediaType.APPLICATION_JSON_UTF8);

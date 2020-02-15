@@ -2,6 +2,9 @@ package com.chengxiaoxiao.model.web.dtos;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
@@ -12,7 +15,10 @@ import java.util.Date;
  * @Date: 2020/2/15 10:19 下午
  * @Description:
  */
-@ApiModel("用户操作对象模型")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@ApiModel("角色操作对象模型")
 public class SysRoleModelDto {
     @ApiModelProperty("角色名")
     private String name;

@@ -16,6 +16,8 @@ import java.util.Date;
  * @Description:
  */
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @ApiModel("角色搜索条件")
 public class SysRoleSearchDto {
 
