@@ -28,15 +28,18 @@ public class CodeMsg implements Serializable {
     public static CodeMsg AUTHENTICATION_TOKEN_EXPIRED = new CodeMsg(403000, "抱歉，TOKEN已过期");
     public static CodeMsg AUTHENTICATION_ERROR = new CodeMsg(403001, "抱歉，您没有权限访问本页面");
 
-    public static CodeMsg ENTITY_NOT_EXIST = new CodeMsg(404000, "实体不存在");
+    public static CodeMsg ENTITY_NOT_EXIST = new CodeMsg(404, "实体不存在");
 
     //用户异常
     public static CodeMsg LOGIN_SUCCESS = new CodeMsg(CODE_SUCCESS, "登录成功");
     public static CodeMsg LOGOUT_SUCCESS = new CodeMsg(CODE_SUCCESS, "登出成功");
 
-    public static CodeMsg USER_NOT_EXIST = new CodeMsg(100, "用户信息不存在");
-    public static CodeMsg USER_LOCKED = new CodeMsg(200, "用户被冻结");
-    public static CodeMsg USER_PASSWORD_INCORRENT = new CodeMsg(200, "用户名密码不正确");
+    public static CodeMsg USER_NOT_EXIST = new CodeMsg(100001, "用户信息不存在");
+    public static CodeMsg USER_LOCKED = new CodeMsg(100002, "用户被冻结");
+    public static CodeMsg USER_PASSWORD_INCORRENT = new CodeMsg(100003, "用户名密码不正确");
+
+    //角色异常
+    public static CodeMsg ROLE_NOT_EXIST = new CodeMsg(200001, "角色信息不存在");
 
 
     private Integer code;

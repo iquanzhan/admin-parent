@@ -648,6 +648,10 @@ public class Employee {
 
 [http:localhost:9001/swagger-ui.html]()
 
+忽略接口显示：
+
+
+
 ### 3.8 利用spring-boot-devtools进行项目热部署与加载
 
 添加依赖

@@ -97,8 +97,8 @@ public class BaseController {
                     sort.and(new Sort(Direction.ASC, sortName));
                 }
             }
-            page = Integer.parseInt(request.getParameter("pageNumber")) - 1;
-            size = Integer.parseInt(request.getParameter("pageSize"));
+            page = Integer.parseInt(request.getParameter("page")) - 1;
+            size = Integer.parseInt(request.getParameter("size"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -128,12 +128,12 @@ public class BaseController {
                     sort = new Sort(Direction.ASC, sortName);
                 }
             }
-            String pageNumber = request.getParameter("pageNumber");
+            String pageNumber = request.getParameter("page");
             if (!StringUtils.isBlank(pageNumber)) {
                 page = Integer.parseInt(pageNumber);
             }
             page--;
-            String pageSize = request.getParameter("pageSize");
+            String pageSize = request.getParameter("size");
             if (!StringUtils.isBlank(pageSize)) {
                 size = Integer.parseInt(pageSize);
             }

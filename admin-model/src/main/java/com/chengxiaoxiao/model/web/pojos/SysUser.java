@@ -31,7 +31,7 @@ import java.util.Date;
 @Table(name = "sys_user")
 @NoArgsConstructor
 @AllArgsConstructor
-public class User implements Serializable {
+public class SysUser implements Serializable {
 
     @Id
     private String id;

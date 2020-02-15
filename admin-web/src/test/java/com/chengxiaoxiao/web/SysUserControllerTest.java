@@ -24,7 +24,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = WebApplication.class)
-public class UserControllerTest {
+public class SysUserControllerTest {
 
     @Before
     public void initUser() {

@@ -28,7 +28,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @ApiModel(value = "用户操作对象模型")
-public class UserModelDto {
+public class SysUserModelDto {
 
     @NotBlank(message = "请输入正确的用户名")
     @ApiModelProperty(value = "用户名", required = true)

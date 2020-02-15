@@ -1,6 +1,5 @@
 package com.chengxiaoxiao.model.web.dtos;
 
-import com.chengxiaoxiao.model.web.pojos.User;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -15,7 +14,7 @@ import java.util.Date;
  */
 @ApiModel("用户搜索条件")
 @Data
-public class UserSearchDto {
+public class SysUserSearchDto {
     @ApiModelProperty("用户名")
     private String userName;
     @ApiModelProperty("手机号码")
