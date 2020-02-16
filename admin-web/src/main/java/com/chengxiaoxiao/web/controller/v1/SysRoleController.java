@@ -24,7 +24,7 @@ import javax.validation.Valid;
  * @Description:
  */
 @RestController
-@RequestMapping("sys-role")
+@RequestMapping("/v1/sys-role")
 public class SysRoleController extends BaseController implements SysRoleControllerApi {
 
     @Autowired
@@ -32,26 +32,26 @@ public class SysRoleController extends BaseController implements SysRoleControll
 
     @GetMapping("")
     @Override
-    public Result search(SysRoleSearchDto sysRoleSearchDto, PageQueryDtos dtos) {
+    public Result<PageResult<SysRole>> search(SysRoleSearchDto sysRoleSearchDto, PageQueryDtos dtos) {
         Page<SysRole> search = sysRoleService.search(sysRoleSearchDto, getPageRequest());
         return Result.success(new PageResult<>(search));
     }
 
     @GetMapping("/{id}")
     @Override
-    public Result find(@PathVariable String id) {
+    public Result<SysRole> find(@PathVariable String id) {
         return Result.success(sysRoleService.find(id));
     }
 
     @PostMapping("")
     @Override
-    public Result insert(@Valid @RequestBody SysRoleModelDto sysRole) {
+    public Result<SysRole> insert(@Valid @RequestBody SysRoleModelDto sysRole) {
         return Result.success(sysRoleService.insert(sysRole));
     }
 
     @PutMapping("/{id}")
     @Override
-    public Result update(@PathVariable String id, @Valid @RequestBody SysRoleModelDto sysRole) {
+    public Result<SysRole> update(@PathVariable String id, @Valid @RequestBody SysRoleModelDto sysRole) {
         return Result.success(sysRoleService.update(id, sysRole));
     }
 

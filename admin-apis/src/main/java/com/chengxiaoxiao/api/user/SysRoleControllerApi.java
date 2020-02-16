@@ -1,9 +1,12 @@
 package com.chengxiaoxiao.api.user;
 
 import com.chengxiaoxiao.model.common.dtos.query.PageQueryDtos;
+import com.chengxiaoxiao.model.common.dtos.result.PageResult;
 import com.chengxiaoxiao.model.common.dtos.result.Result;
 import com.chengxiaoxiao.model.web.dtos.SysRoleModelDto;
 import com.chengxiaoxiao.model.web.dtos.SysRoleSearchDto;
+import com.chengxiaoxiao.model.web.pojos.SysResource;
+import com.chengxiaoxiao.model.web.pojos.SysRole;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -28,7 +31,7 @@ public interface SysRoleControllerApi {
      * @return
      */
     @ApiOperation("条件查询")
-    Result search(SysRoleSearchDto search, PageQueryDtos dtos);
+    Result<PageResult<SysRole>> search(SysRoleSearchDto search, PageQueryDtos dtos);
 
     /**
      * 根据Id获取对象信息
@@ -38,7 +41,7 @@ public interface SysRoleControllerApi {
      */
     @ApiOperation("根据角色Id查询信息")
     @ApiImplicitParam(name = "id", value = "角色Id", required = true, dataType = "String", paramType = "path")
-    Result find(String id);
+    Result<SysRole> find(String id);
 
     /**
      * 添加
@@ -47,7 +50,7 @@ public interface SysRoleControllerApi {
      * @return
      */
     @ApiOperation("添加角色信息")
-    Result insert(SysRoleModelDto sysRole);
+    Result<SysRole> insert(@ApiParam(name = "角色对象", value = "传入json格式", required = true) SysRoleModelDto sysRole);
 
     /**
      * 根据Id更新信息
@@ -58,7 +61,7 @@ public interface SysRoleControllerApi {
      */
     @ApiOperation("修改角色信息")
     @ApiImplicitParam(name = "id", value = "角色ID", dataType = "string", required = true, paramType = "path")
-    Result update(String id, SysRoleModelDto sysRole);
+    Result<SysRole> update(String id, @ApiParam(name = "角色对象", value = "传入json格式", required = true) SysRoleModelDto sysRole);
 
     /**
      * 根据Id删除角色信息

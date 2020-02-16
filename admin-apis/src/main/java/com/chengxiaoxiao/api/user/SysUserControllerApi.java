@@ -1,12 +1,16 @@
 package com.chengxiaoxiao.api.user;
 
 import com.chengxiaoxiao.model.common.dtos.query.PageQueryDtos;
+import com.chengxiaoxiao.model.common.dtos.result.PageResult;
 import com.chengxiaoxiao.model.common.dtos.result.Result;
 import com.chengxiaoxiao.model.web.dtos.SysUserModelDto;
 import com.chengxiaoxiao.model.web.dtos.SysUserSearchDto;
+import com.chengxiaoxiao.model.web.pojos.SysRole;
+import com.chengxiaoxiao.model.web.pojos.SysUser;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 
 /**
  * 用户接口类
@@ -19,17 +23,17 @@ import io.swagger.annotations.ApiOperation;
 public interface SysUserControllerApi {
     @ApiOperation("根据Id查询用户信息")
     @ApiImplicitParam(name = "id", value = "用户ID", required = true, dataType = "String", paramType = "path")
-    Result findById(String id);
+    Result<SysUser> findById(String id);
 
     @ApiOperation("条件查询用户信息")
-    Result search(SysUserSearchDto sysUserSearchDto, PageQueryDtos pageQueryDtos);
+    Result<PageResult<SysUser>> search(SysUserSearchDto sysUserSearchDto, PageQueryDtos pageQueryDtos);
 
     @ApiOperation("添加用户")
-    Result insert(SysUserModelDto user);
+    Result<SysUser> insert(@ApiParam(name = "用户对象", value = "传入json格式", required = true) SysUserModelDto user);
 
     @ApiOperation("更新用户信息")
     @ApiImplicitParam(name = "id", value = "用户ID", required = true, dataType = "String", paramType = "path")
-    Result update(String id, SysUserModelDto user);
+    Result<SysUser> update(String id, @ApiParam(name = "用户对象", value = "传入json格式", required = true) SysUserModelDto user);
 
     @ApiOperation("删除用户")
     @ApiImplicitParam(name = "id", value = "用户ID", required = true, dataType = "String", paramType = "path")

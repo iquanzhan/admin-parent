@@ -6,6 +6,7 @@ import com.chengxiaoxiao.model.common.dtos.result.PageResult;
 import com.chengxiaoxiao.model.common.dtos.result.Result;
 import com.chengxiaoxiao.model.web.dtos.SysUserModelDto;
 import com.chengxiaoxiao.model.web.dtos.SysUserSearchDto;
+import com.chengxiaoxiao.model.web.pojos.SysRole;
 import com.chengxiaoxiao.model.web.pojos.SysUser;
 import com.chengxiaoxiao.web.controller.BaseController;
 import com.chengxiaoxiao.web.service.SysUserService;
@@ -30,13 +31,13 @@ public class SysUserController extends BaseController implements SysUserControll
 
     @Override
     @GetMapping("/{id}")
-    public Result findById(@PathVariable String id) {
+    public Result<SysUser> findById(@PathVariable String id) {
         return Result.success(sysUserService.find(id));
     }
 
     @Override
     @GetMapping(value = {""})
-    public Result search(SysUserSearchDto sysUserSearchDto, PageQueryDtos pageQueryDtos) {
+    public Result<PageResult<SysUser>> search(SysUserSearchDto sysUserSearchDto, PageQueryDtos pageQueryDtos) {
         Page<SysUser> search = sysUserService.search(sysUserSearchDto, getPageRequest());
 
         return Result.success(new PageResult<SysUser>(search));
@@ -44,13 +45,13 @@ public class SysUserController extends BaseController implements SysUserControll
 
     @Override
     @PostMapping("")
-    public Result insert(@Valid @RequestBody SysUserModelDto user) {
+    public Result<SysUser> insert(@Valid @RequestBody SysUserModelDto user) {
         return Result.success(sysUserService.insert(user));
     }
 
     @Override
     @PutMapping("/{id}")
-    public Result update(@PathVariable String id, @RequestBody SysUserModelDto user) {
+    public Result<SysUser> update(@PathVariable String id, @RequestBody SysUserModelDto user) {
         return Result.success(sysUserService.update(id, user));
     }
 
