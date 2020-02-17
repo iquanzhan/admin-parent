@@ -5,11 +5,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
 import com.chengxiaoxiao.model.repository.BaseDao;
 import com.chengxiaoxiao.web.service.BaseService;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +23,49 @@ import org.springframework.data.jpa.domain.Specification;
 public abstract class BaseServiceImpl<T, ID extends Serializable> implements BaseService<T, ID> {
 
     public abstract BaseDao<T, ID> getBaseDao();
+
+    @PersistenceContext
+    protected EntityManager em;
+
+    /**
+     * 批量增加修改的size
+     */
+    @Value("${spring.jpa.batch-operate-size}")
+    private int BATCH_SIZE = 10;
+
+    @Override
+    @Transactional
+    public void batchInsert(List list) {
+        int size = list.size();
+        for (int i = 0; i < size; i++) {
+            em.persist(list.get(i));
+            if (i % BATCH_SIZE == 0) {
+                em.flush();
+                em.clear();
+            }
+        }
+        if (size % BATCH_SIZE != 0) {
+            em.flush();
+            em.clear();
+        }
+    }
+
+    @Override
+    @Transactional
+    public void batchUpdate(List list) {
+        int size = list.size();
+        for (int i = 0; i < size; i++) {
+            em.merge(list.get(i));
+            if (i % BATCH_SIZE == 0) {
+                em.flush();
+                em.clear();
+            }
+        }
+        if (size % BATCH_SIZE != 0) {
+            em.flush();
+            em.clear();
+        }
+    }
 
     @Override
     public T find(ID id) {

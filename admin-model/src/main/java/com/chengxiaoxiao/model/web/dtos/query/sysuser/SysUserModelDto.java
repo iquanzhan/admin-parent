@@ -1,4 +1,4 @@
-package com.chengxiaoxiao.model.web.dtos;
+package com.chengxiaoxiao.model.web.dtos.query.sysuser;
 
 import com.chengxiaoxiao.model.annotation.validator.IsMobile;
 import io.swagger.annotations.ApiModel;

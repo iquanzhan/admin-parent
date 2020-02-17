@@ -1,8 +1,7 @@
 package com.chengxiaoxiao.web.service;
 
-import com.chengxiaoxiao.model.common.dtos.result.Result;
-import com.chengxiaoxiao.model.web.dtos.SysRoleModelDto;
-import com.chengxiaoxiao.model.web.dtos.SysRoleSearchDto;
+import com.chengxiaoxiao.model.web.dtos.query.sysrole.SysRoleModelDto;
+import com.chengxiaoxiao.model.web.dtos.query.sysrole.SysRoleSearchDto;
 import com.chengxiaoxiao.model.web.pojos.SysRole;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

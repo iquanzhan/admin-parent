@@ -1,12 +1,11 @@
 package com.chengxiaoxiao.web.controller.v1;
 
 import com.chengxiaoxiao.api.user.SysResourceControllerApi;
-import com.chengxiaoxiao.api.user.SysResourceControllerApi;
 import com.chengxiaoxiao.model.common.dtos.query.PageQueryDtos;
 import com.chengxiaoxiao.model.common.dtos.result.PageResult;
 import com.chengxiaoxiao.model.common.dtos.result.Result;
-import com.chengxiaoxiao.model.web.dtos.SysResourceModelDto;
-import com.chengxiaoxiao.model.web.dtos.SysResourceSearchDto;
+import com.chengxiaoxiao.model.web.dtos.query.sysresource.SysResourceModelDto;
+import com.chengxiaoxiao.model.web.dtos.query.sysresource.SysResourceSearchDto;
 import com.chengxiaoxiao.model.web.pojos.SysResource;
 import com.chengxiaoxiao.web.controller.BaseController;
 import com.chengxiaoxiao.web.service.SysResourceService;

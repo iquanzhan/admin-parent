@@ -3,17 +3,13 @@ package com.chengxiaoxiao.api.user;
 import com.chengxiaoxiao.model.common.dtos.query.PageQueryDtos;
 import com.chengxiaoxiao.model.common.dtos.result.PageResult;
 import com.chengxiaoxiao.model.common.dtos.result.Result;
-import com.chengxiaoxiao.model.web.dtos.SysRoleModelDto;
-import com.chengxiaoxiao.model.web.dtos.SysRoleSearchDto;
-import com.chengxiaoxiao.model.web.pojos.SysResource;
+import com.chengxiaoxiao.model.web.dtos.query.sysrole.SysRoleModelDto;
+import com.chengxiaoxiao.model.web.dtos.query.sysrole.SysRoleSearchDto;
 import com.chengxiaoxiao.model.web.pojos.SysRole;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 /**
  * @Author: Cheng XiaoXiao  (🍊 ^_^ ^_^)

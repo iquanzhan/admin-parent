@@ -4,9 +4,9 @@ import com.chengxiaoxiao.api.user.SysUserControllerApi;
 import com.chengxiaoxiao.model.common.dtos.query.PageQueryDtos;
 import com.chengxiaoxiao.model.common.dtos.result.PageResult;
 import com.chengxiaoxiao.model.common.dtos.result.Result;
-import com.chengxiaoxiao.model.web.dtos.SysUserModelDto;
-import com.chengxiaoxiao.model.web.dtos.SysUserSearchDto;
-import com.chengxiaoxiao.model.web.pojos.SysRole;
+import com.chengxiaoxiao.model.web.dtos.query.sysuser.SysLoginModelDto;
+import com.chengxiaoxiao.model.web.dtos.query.sysuser.SysUserModelDto;
+import com.chengxiaoxiao.model.web.dtos.query.sysuser.SysUserSearchDto;
 import com.chengxiaoxiao.model.web.pojos.SysUser;
 import com.chengxiaoxiao.web.controller.BaseController;
 import com.chengxiaoxiao.web.service.SysUserService;
@@ -15,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 /**
  * 用户相关请求接口
@@ -59,6 +60,26 @@ public class SysUserController extends BaseController implements SysUserControll
     @DeleteMapping("/{id}")
     public Result delete(@PathVariable String id) {
         sysUserService.delete(id);
+        return Result.success(null);
+    }
+
+    @Override
+    @PostMapping("/login")
+    public Result login(@RequestBody @Valid SysLoginModelDto loginModelDto) {
+        String token = sysUserService.login(loginModelDto);
+        return Result.success(token);
+    }
+
+    @Override
+    @DeleteMapping("/logout/{id}")
+    public Result logout(@PathVariable("id") @NotNull(message = "用户Id不允许为空") String id) {
+        return null;
+    }
+
+    @Override
+    @PostMapping("/dispatchRoleByUserId/{userId}")
+    public Result dispatchRoleByUserId(@PathVariable @NotNull(message = "用户ID不允许为空") String userId, @RequestBody @NotNull(message = "角色ID数组不能为空") String[] roldIds) {
+        sysUserService.dispatchRoleByUserId(userId,roldIds);
         return Result.success(null);
     }
 }

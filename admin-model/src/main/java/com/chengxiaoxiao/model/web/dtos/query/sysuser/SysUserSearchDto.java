@@ -1,4 +1,4 @@
-package com.chengxiaoxiao.model.web.dtos;
+package com.chengxiaoxiao.model.web.dtos.query.sysuser;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

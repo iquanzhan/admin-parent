@@ -1,4 +1,4 @@
-package com.chengxiaoxiao.model.web.dtos;
+package com.chengxiaoxiao.model.web.dtos.query.sysrole;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -9,17 +9,18 @@ import lombok.NoArgsConstructor;
 import java.util.Date;
 
 /**
- * 添加或者更新时的MODEL
+ * 角色信息查询条件
  *
  * @Author: Cheng XiaoXiao  (🍊 ^_^ ^_^)
- * @Date: 2020/2/15 10:19 下午
+ * @Date: 2020/2/15 10:12 下午
  * @Description:
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ApiModel("角色操作对象模型")
-public class SysRoleModelDto {
+@ApiModel("角色搜索条件")
+public class SysRoleSearchDto {
+
     @ApiModelProperty("角色名")
     private String name;
     @ApiModelProperty("角色Key")
@@ -28,6 +29,12 @@ public class SysRoleModelDto {
     private String descript;
     @ApiModelProperty("角色父Id")
     private String parentId;
-    @ApiModelProperty("排序")
-    private Integer sort;
+    @ApiModelProperty("创建人")
+    private String createUser;
+    @ApiModelProperty("创建时间-开始时间")
+    private Date startCreateTime;
+    @ApiModelProperty("创建时间-结束时间")
+    private Date endCreateTime;
+    @ApiModelProperty("删除状态")
+    private Integer deleteStatus;
 }

@@ -2,16 +2,22 @@ package com.chengxiaoxiao.web.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
+import com.chengxiaoxiao.common.jwt.JwtUtil;
 import com.chengxiaoxiao.common.utils.IdWorker;
+import com.chengxiaoxiao.common.utils.ResultUtil;
 import com.chengxiaoxiao.model.common.dtos.result.CodeMsg;
+import com.chengxiaoxiao.model.common.dtos.result.Result;
 import com.chengxiaoxiao.model.repository.BaseDao;
-import com.chengxiaoxiao.model.web.dtos.SysUserModelDto;
-import com.chengxiaoxiao.model.web.dtos.SysUserSearchDto;
+import com.chengxiaoxiao.model.web.dtos.query.sysuser.SysLoginModelDto;
+import com.chengxiaoxiao.model.web.dtos.query.sysuser.SysUserModelDto;
+import com.chengxiaoxiao.model.web.dtos.query.sysuser.SysUserSearchDto;
 import com.chengxiaoxiao.model.web.pojos.SysUser;
 import com.chengxiaoxiao.model.repository.SysUserRepository;
+import com.chengxiaoxiao.model.web.pojos.SysUserRole;
 import com.chengxiaoxiao.web.exception.GlobleException;
+import com.chengxiaoxiao.web.service.SysRoleService;
+import com.chengxiaoxiao.web.service.SysUserRoleService;
 import com.chengxiaoxiao.web.service.SysUserService;
-import io.swagger.annotations.ApiModelProperty;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -24,9 +30,11 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @Author: Cheng XiaoXiao  (🍊 ^_^ ^_^)
@@ -39,9 +47,16 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser, String> impleme
     @Autowired
     SysUserRepository sysUserRepository;
     @Autowired
+    SysUserRoleService sysUserRoleService;
+    @Autowired
+    SysRoleService sysRoleService;
+
+    @Autowired
     IdWorker idWorker;
     @Autowired
     BCryptPasswordEncoder encoder;
+    @Autowired
+    private JwtUtil jwtUtil;
 
     @Override
     public BaseDao<SysUser, String> getBaseDao() {
@@ -51,7 +66,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser, String> impleme
     @Override
     public SysUser insert(SysUserModelDto userDto) {
         SysUser user = new SysUser();
-        BeanUtil.copyProperties(userDto, user,CopyOptions.create().setIgnoreNullValue(true).setIgnoreError(true));
+        BeanUtil.copyProperties(userDto, user, CopyOptions.create().setIgnoreNullValue(true).setIgnoreError(true));
 
         user.setId(idWorker.nextId() + "");
         user.setLocked(0);
@@ -147,5 +162,44 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser, String> impleme
     @Override
     public SysUser findUserByUserName(String userName) {
         return this.sysUserRepository.findByUserName(userName);
+    }
+
+    @Override
+    public String login(SysLoginModelDto loginModelDto) {
+        //根据用户名查询用户是否存在
+        SysUser user = this.sysUserRepository.findByUserName(loginModelDto.getUserName());
+        if (user == null) {
+            throw new GlobleException(CodeMsg.USER_PASSWORD_INCORRENT);
+        }
+
+        if (!encoder.matches(loginModelDto.getPassword(), user.getPassword())) {
+            throw new GlobleException(CodeMsg.USER_PASSWORD_INCORRENT);
+        }
+
+        String token = jwtUtil.createJWT(user.getId(), user.getUserName(), "roles");
+
+        return token;
+    }
+
+    @Transactional
+    @Override
+    public void dispatchRoleByUserId(String userId, String[] roldIds) {
+        //判断用户是否存在
+        Optional<SysUser> user = sysUserRepository.findById(userId);
+        if (!user.isPresent()) {
+            throw new GlobleException(CodeMsg.USER_NOT_EXIST);
+        }
+
+        //删除用户之前的角色信息
+        sysUserRoleService.deleteByUserId(userId);
+
+        List<SysUserRole> list = new ArrayList<>();
+        for (String roldId : roldIds) {
+            if (sysRoleService.exists(roldId)) {
+                list.add(new SysUserRole(idWorker.nextId() + "", userId, roldId));
+            }
+        }
+        //给用户添加角色信息
+        batchInsert(list);
     }
 }

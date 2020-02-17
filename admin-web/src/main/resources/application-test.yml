@@ -59,6 +59,8 @@ spring:
   jpa:
     show-sql: true
     open-in-view: false
+    # 自定义批量增加修改的size
+    batch-operate-size: 10
   redis:
     host: 192.168.4.188
 

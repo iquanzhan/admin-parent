@@ -1,8 +1,9 @@
 package com.chengxiaoxiao.web.service;
 
 
-import com.chengxiaoxiao.model.web.dtos.SysUserModelDto;
-import com.chengxiaoxiao.model.web.dtos.SysUserSearchDto;
+import com.chengxiaoxiao.model.web.dtos.query.sysuser.SysLoginModelDto;
+import com.chengxiaoxiao.model.web.dtos.query.sysuser.SysUserModelDto;
+import com.chengxiaoxiao.model.web.dtos.query.sysuser.SysUserSearchDto;
 import com.chengxiaoxiao.model.web.pojos.SysUser;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -35,7 +36,7 @@ public interface SysUserService extends BaseService<SysUser, String> {
      * 条件查询用户信息
      *
      * @param sysUserSearchDto 用户信息的查询条件
-     * @param pageRequest   分页、排序的查询条件
+     * @param pageRequest      分页、排序的查询条件
      * @return 更具查询条件查询出来的实体
      */
     Page<SysUser> search(SysUserSearchDto sysUserSearchDto, PageRequest pageRequest);
@@ -47,4 +48,20 @@ public interface SysUserService extends BaseService<SysUser, String> {
      * @return 单个用户信息
      */
     SysUser findUserByUserName(String userName);
+
+    /**
+     * 用户登录接口
+     *
+     * @param loginModelDto 用户登录对象模型
+     * @return
+     */
+    String login(SysLoginModelDto loginModelDto);
+
+    /**
+     * 根据用户Id分配用户的角色
+     *
+     * @param userId 用户Id
+     * @param roldIds 用户角色ID数组
+     */
+    void dispatchRoleByUserId(String userId, String[] roldIds);
 }

@@ -3,24 +3,23 @@ package com.chengxiaoxiao.web.service;
 import com.chengxiaoxiao.model.web.dtos.query.sysresource.SysResourceModelDto;
 import com.chengxiaoxiao.model.web.dtos.query.sysresource.SysResourceSearchDto;
 import com.chengxiaoxiao.model.web.pojos.SysResource;
+import com.chengxiaoxiao.model.web.pojos.SysUserRole;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
 /**
+ * 用户角色关联
+ *
  * @Author: Cheng XiaoXiao  (🍊 ^_^ ^_^)
  * @Date: 2020/2/15 10:05 下午
  * @Description:
  */
-public interface SysResourceService extends BaseService<SysResource,String>{
+public interface SysUserRoleService extends BaseService<SysUserRole, String> {
+
     /**
-     * 条件搜索
-     * @param search
-     * @param pageRequest
-     * @return
+     * 根据用户Id删除信息
+     *
+     * @param userId
      */
-    Page search(SysResourceSearchDto search, PageRequest pageRequest);
-
-    SysResource insert(SysResourceModelDto sysRole);
-
-    SysResource update(String id, SysResourceModelDto sysRole);
+    void deleteByUserId(String userId);
 }

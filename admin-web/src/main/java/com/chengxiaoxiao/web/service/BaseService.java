@@ -9,6 +9,11 @@ import java.io.Serializable;
 import java.util.List;
 
 public interface BaseService<T, ID extends Serializable> {
+
+    void batchInsert(List list);
+
+    void batchUpdate(List list);
+
     public abstract T find(ID id);
 
     public abstract List<T> findAll();

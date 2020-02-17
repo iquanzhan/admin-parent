@@ -1,5 +1,6 @@
 package com.chengxiaoxiao.common.jwt;
 
+import com.alibaba.fastjson.JSON;
 import lombok.Data;
 import org.apache.tomcat.util.http.parser.Authorization;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,24 +30,34 @@ public class JwtUtil {
     @Value("${jwt.expiration}")
     private long expiration;
 
+
     /**
-     * 生成JWT
+     * 生成Jwt Token
      *
-     * @param id
-     * @param subject
-     * @return
+     * @param id          用户Id
+     * @param subject     用户名
+     * @param authorities 用户所拥有的的权限
+     * @return token
      */
-    public String createJWT(String id, String subject, String roles) {
-        long nowMillis = System.currentTimeMillis();
-        Date now = new Date(nowMillis);
-        JwtBuilder builder = Jwts.builder().setId(id)
+    public String createJWT(String id, String subject, String authorities) {
+        // 登陆成功生成JWT
+        String token = Jwts.builder()
+                // 用户ID
+                .setId(id)
+                // 主题-暂存用户名
                 .setSubject(subject)
-                .setIssuedAt(now)
-                .signWith(SignatureAlgorithm.HS256, secret).claim("roles", roles);
-        if (expiration > 0) {
-            builder.setExpiration(new Date(nowMillis + expiration));
-        }
-        return builder.compact();
+                // 签发时间
+                .setIssuedAt(new Date())
+                // 签发者
+                .setIssuer("sans")
+                // 自定义属性 放入用户拥有权限
+                .claim("authorities", authorities)
+                // 失效时间
+                .setExpiration(new Date(System.currentTimeMillis() + expiration))
+                // 签名算法和密钥
+                .signWith(SignatureAlgorithm.HS512, secret)
+                .compact();
+        return token;
     }
 
     /**
