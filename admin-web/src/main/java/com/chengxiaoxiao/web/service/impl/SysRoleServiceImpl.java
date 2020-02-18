@@ -50,16 +50,10 @@ import java.util.List;
 public class SysRoleServiceImpl extends BaseServiceImpl<SysRole, String> implements SysRoleService {
     @Autowired
     private SysRoleRepository sysRoleRepository;
-    @Autowired
-    private SysRoleResourceRepository sysRoleResourceRepository;
 
-
-    @Autowired
-    private SysUserMapper sysUserMapper;
     @Autowired
     private SysRoleMapper sysRoleMapper;
-    @Autowired
-    private SysRoleResourceMapper sysRoleResourceMapper;
+
 
 
     @Autowired
@@ -166,31 +160,6 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRole, String> impleme
         sysRoleTreeDto.setChildren(getRolesByParentId(parentId));
 
         return sysRoleTreeDto;
-    }
-
-    @Override
-    public List<SysUser> findUsersByRoleId(String roleId) {
-        return sysUserMapper.findUsersByRoleId(roleId);
-    }
-
-    @Override
-    public List<SysResource> findResourcesByRoleId(String roleId) {
-        return sysRoleResourceMapper.finResourceByRoleId(roleId);
-    }
-
-    @Override
-    public void dispatchResourceByRoleId(String roleId, String[] resourceIds) {
-        if (StringUtils.isBlank(roleId)) {
-            throw new GlobleException(CodeMsg.ROLE_ID_NOT_EXIST);
-        }
-        //删除之前的信息
-        sysRoleResourceRepository.deleteByRoleId(roleId);
-
-        List<SysRoleResource> sysRoleResourceList = new ArrayList<>();
-        for (String resourceId : resourceIds) {
-            sysRoleResourceList.add(new SysRoleResource(idWorker.nextId() + "", roleId, resourceId));
-        }
-        sysRoleResourceMapper.batchInsert(sysRoleResourceList);
     }
 
     /**

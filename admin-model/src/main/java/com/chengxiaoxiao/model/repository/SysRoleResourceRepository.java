@@ -1,5 +1,6 @@
 package com.chengxiaoxiao.model.repository;
 
+import com.chengxiaoxiao.model.web.pojos.SysRoleResource;
 import com.chengxiaoxiao.model.web.pojos.SysUserRole;
 
 /**
@@ -9,7 +10,7 @@ import com.chengxiaoxiao.model.web.pojos.SysUserRole;
  * @Date: 2020/2/15 10:04 下午
  * @Description:
  */
-public interface SysRoleResourceRepository extends BaseDao<SysUserRole, String> {
+public interface SysRoleResourceRepository extends BaseDao<SysRoleResource, String> {
     /**
      * 根据角色Id删除信息
      *

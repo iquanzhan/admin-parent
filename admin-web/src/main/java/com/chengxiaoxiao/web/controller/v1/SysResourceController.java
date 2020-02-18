@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * 角色信息接口
@@ -58,6 +59,19 @@ public class SysResourceController extends BaseController implements SysResource
     @DeleteMapping("/{id}")
     public Result delete(@PathVariable String id) {
         sysResourceService.delete(id);
+        return Result.success(null);
+    }
+
+    @Override
+    @GetMapping("/role/{roleId}")
+    public Result<List<SysResource>> getResourcesByRoleId(@PathVariable String roleId) {
+        return Result.success(sysResourceService.findResourcesByRoleId(roleId));
+    }
+
+    @Override
+    @PostMapping("/role/{roleId}")
+    public Result dispatchResourceByRoleId(@PathVariable String roleId, @RequestBody String[] resourceIds) {
+        sysResourceService.dispatchResourceByRoleId(roleId,resourceIds);
         return Result.success(null);
     }
 }

@@ -11,6 +11,8 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 
+import java.util.List;
+
 /**
  * @Author: Cheng XiaoXiao  (🍊 ^_^ ^_^)
  * @Date: 2020/2/15 10:08 下午
@@ -67,4 +69,24 @@ public interface SysResourceControllerApi {
      */
     @ApiImplicitParam(name = "id", value = "资源ID", dataType = "string", required = true, paramType = "path")
     Result delete(String id);
+
+    /**
+     * 获取角色下的资源列表
+     *
+     * @param roleId 角色Id
+     * @return
+     */
+    @ApiOperation("获取角色下的资源列表")
+    Result<List<SysResource>> getResourcesByRoleId(@ApiParam(name = "roleId", value = "角色Id", required = true) String roleId);
+
+    /**
+     * 给角色分配资源
+     *
+     * @param roleId      角色Id
+     * @param resourceIds 资源Id数组
+     * @return
+     */
+    @ApiOperation("给角色分配资源")
+    Result dispatchResourceByRoleId(@ApiParam(name = "roleId", value = "角色Id", required = true) String roleId, @ApiParam(name = "resourceIds", value = "资源Id数组", required = true, type = "array") String[] resourceIds);
+
 }

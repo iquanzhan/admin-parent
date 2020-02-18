@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 /**
  * 用户相关请求接口
@@ -81,5 +82,11 @@ public class SysUserController extends BaseController implements SysUserControll
     public Result dispatchRoleByUserId(@PathVariable @NotNull(message = "用户ID不允许为空") String userId, @RequestBody @NotNull(message = "角色ID数组不能为空") String[] roldIds) {
         sysUserService.dispatchRoleByUserId(userId,roldIds);
         return Result.success(null);
+    }
+
+    @Override
+    @GetMapping("/role/{roleId}")
+    public Result<List<SysUser>> getUsersByRoleId(@PathVariable("roleId") String roleId) {
+        return Result.success(sysUserService.findUsersByRoleId(roleId));
     }
 }

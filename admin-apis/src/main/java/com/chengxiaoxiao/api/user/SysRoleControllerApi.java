@@ -92,33 +92,4 @@ public interface SysRoleControllerApi {
      */
     @ApiOperation("根据父Id获取树形角色树")
     Result<SysRoleTreeDto> treeRoleByParent(@ApiParam(name = "parentId", value = "角色父Id") String parentId);
-
-    /**
-     * 根据角色Id查询角色下的用户信息
-     *
-     * @param roleId 角色Id
-     * @return
-     */
-    @ApiOperation("查询角色下的用户信息")
-    Result<List<SysUser>> getUsersByRoleId(@ApiParam(name = "roleId", value = "角色Id", required = true) String roleId);
-
-    /**
-     * 给角色分配资源
-     *
-     * @param roleId      角色Id
-     * @param resourceIds 资源Id数组
-     * @return
-     */
-    @ApiOperation("给用户分配角色")
-    Result dispatchResourceByRoleId(@ApiParam(name = "roleId", value = "角色Id", required = true) String roleId, @ApiParam(name = "resourceIds", value = "资源Id数组", required = true, type = "array") String[] resourceIds);
-
-    /**
-     * 获取角色下的资源列表
-     *
-     * @param roleId 角色Id
-     * @return
-     */
-    @ApiOperation("获取角色下的资源列表")
-    Result<List<SysResource>> getResourcesByRoleId(@ApiParam(name = "roleId", value = "角色Id", required = true) String roleId);
-
 }

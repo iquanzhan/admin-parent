@@ -8,6 +8,8 @@ import com.chengxiaoxiao.model.web.pojos.SysUser;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
+import java.util.List;
+
 /**
  * @Author: Cheng XiaoXiao  (🍊 ^_^ ^_^)
  * @Date: 2020/1/21 10:44 下午
@@ -64,4 +66,12 @@ public interface SysUserService extends BaseService<SysUser, String> {
      * @param roldIds 用户角色ID数组
      */
     void dispatchRoleByUserId(String userId, String[] roldIds);
+
+    /**
+     * 根据角色Id查询其拥有的用户
+     *
+     * @param roleId
+     * @return
+     */
+    List<SysUser> findUsersByRoleId(String roleId);
 }

@@ -61,27 +61,4 @@ public interface SysRoleService extends BaseService<SysRole, String> {
      */
     SysRoleTreeDto treeRolesByParentId(String parentId);
 
-    /**
-     * 根据角色Id查询其拥有的用户
-     *
-     * @param roleId
-     * @return
-     */
-    List<SysUser> findUsersByRoleId(String roleId);
-
-    /**
-     * 查询角色下所拥有的的资源信息
-     *
-     * @param roleId
-     * @return
-     */
-    List<SysResource> findResourcesByRoleId(String roleId);
-
-    /**
-     * 给角色分配资源
-     *
-     * @param roleId
-     * @param resourceIds
-     */
-    void dispatchResourceByRoleId(String roleId, String[] resourceIds);
 }

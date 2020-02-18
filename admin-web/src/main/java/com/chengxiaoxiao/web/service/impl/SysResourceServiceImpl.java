@@ -4,11 +4,14 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import com.chengxiaoxiao.common.utils.IdWorker;
 import com.chengxiaoxiao.model.common.dtos.result.CodeMsg;
+import com.chengxiaoxiao.model.mappers.web.SysRoleResourceMapper;
 import com.chengxiaoxiao.model.repository.BaseDao;
 import com.chengxiaoxiao.model.repository.SysResourceRepository;
+import com.chengxiaoxiao.model.repository.SysRoleResourceRepository;
 import com.chengxiaoxiao.model.web.dtos.query.sysresource.SysResourceModelDto;
 import com.chengxiaoxiao.model.web.dtos.query.sysresource.SysResourceSearchDto;
 import com.chengxiaoxiao.model.web.pojos.SysResource;
+import com.chengxiaoxiao.model.web.pojos.SysRoleResource;
 import com.chengxiaoxiao.web.exception.GlobleException;
 import com.chengxiaoxiao.web.service.SysResourceService;
 import org.apache.commons.lang3.StringUtils;
@@ -34,9 +37,16 @@ import java.util.List;
  * @Description:
  */
 @Service
+@SuppressWarnings("all")
 public class SysResourceServiceImpl extends BaseServiceImpl<SysResource, String> implements SysResourceService {
     @Autowired
     private SysResourceRepository sysResourceRepository;
+    @Autowired
+    private SysRoleResourceRepository sysRoleResourceRepository;
+
+    @Autowired
+    private SysRoleResourceMapper sysRoleResourceMapper;
+
     @Autowired
     private IdWorker idWorker;
 
@@ -133,5 +143,25 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysResource, String>
         sysResourceDb.setUpdateTime(new Date());
         save(sysResourceDb);
         return sysResourceDb;
+    }
+
+    @Override
+    public List<SysResource> findResourcesByRoleId(String roleId) {
+        return sysRoleResourceMapper.finResourceByRoleId(roleId);
+    }
+
+    @Override
+    public void dispatchResourceByRoleId(String roleId, String[] resourceIds) {
+        if (StringUtils.isBlank(roleId)) {
+            throw new GlobleException(CodeMsg.ROLE_ID_NOT_EXIST);
+        }
+        //删除之前的信息
+        sysRoleResourceRepository.deleteByRoleId(roleId);
+
+        List<SysRoleResource> sysRoleResourceList = new ArrayList<>();
+        for (String resourceId : resourceIds) {
+            sysRoleResourceList.add(new SysRoleResource(idWorker.nextId() + "", roleId, resourceId));
+        }
+        sysRoleResourceMapper.batchInsert(sysRoleResourceList);
     }
 }

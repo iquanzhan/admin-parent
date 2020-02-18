@@ -7,6 +7,7 @@ import com.chengxiaoxiao.common.utils.IdWorker;
 import com.chengxiaoxiao.common.utils.ResultUtil;
 import com.chengxiaoxiao.model.common.dtos.result.CodeMsg;
 import com.chengxiaoxiao.model.common.dtos.result.Result;
+import com.chengxiaoxiao.model.mappers.web.SysUserMapper;
 import com.chengxiaoxiao.model.repository.BaseDao;
 import com.chengxiaoxiao.model.web.dtos.query.sysuser.SysLoginModelDto;
 import com.chengxiaoxiao.model.web.dtos.query.sysuser.SysUserModelDto;
@@ -42,6 +43,7 @@ import java.util.Optional;
  * @Description:
  */
 @Service
+@SuppressWarnings("all")
 public class SysUserServiceImpl extends BaseServiceImpl<SysUser, String> implements SysUserService {
 
     @Autowired
@@ -50,6 +52,9 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser, String> impleme
     SysUserRoleService sysUserRoleService;
     @Autowired
     SysRoleService sysRoleService;
+
+    @Autowired
+    private SysUserMapper sysUserMapper;
 
     @Autowired
     IdWorker idWorker;
@@ -201,5 +206,10 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser, String> impleme
         }
         //给用户添加角色信息
         batchInsert(list);
+    }
+
+    @Override
+    public List<SysUser> findUsersByRoleId(String roleId) {
+        return sysUserMapper.findUsersByRoleId(roleId);
     }
 }

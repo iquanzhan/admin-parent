@@ -82,22 +82,4 @@ public class SysRoleController extends BaseController implements SysRoleControll
         return Result.success(sysRoleService.treeRolesByParentId(parentId));
     }
 
-    @Override
-    @GetMapping("/users/{roleId}")
-    public Result<List<SysUser>> getUsersByRoleId(@PathVariable("roleId") String roleId) {
-        return Result.success(sysRoleService.findUsersByRoleId(roleId));
-    }
-
-    @Override
-    @PostMapping("/resource/{roleId}")
-    public Result dispatchResourceByRoleId(@PathVariable String roleId, @RequestBody String[] resourceIds) {
-        sysRoleService.dispatchResourceByRoleId(roleId,resourceIds);
-        return Result.success(null);
-    }
-
-    @Override
-    @GetMapping("/resource/{roleId}")
-    public Result<List<SysResource>> getResourcesByRoleId(@PathVariable String roleId) {
-        return Result.success(sysRoleService.findResourcesByRoleId(roleId));
-    }
 }
