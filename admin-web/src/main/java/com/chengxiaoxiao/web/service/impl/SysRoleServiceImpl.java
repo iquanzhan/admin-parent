@@ -7,6 +7,7 @@ import com.chengxiaoxiao.common.utils.IdWorker;
 import com.chengxiaoxiao.model.common.dtos.result.CodeMsg;
 import com.chengxiaoxiao.model.common.dtos.result.Result;
 import com.chengxiaoxiao.model.mappers.web.SysRoleMapper;
+import com.chengxiaoxiao.model.mappers.web.SysRoleResourceMapper;
 import com.chengxiaoxiao.model.mappers.web.SysUserMapper;
 import com.chengxiaoxiao.model.repository.BaseDao;
 import com.chengxiaoxiao.model.repository.SysRoleRepository;
@@ -51,8 +52,16 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRole, String> impleme
     private SysRoleRepository sysRoleRepository;
     @Autowired
     private SysRoleResourceRepository sysRoleResourceRepository;
+
+
+    @Autowired
+    private SysUserMapper sysUserMapper;
     @Autowired
     private SysRoleMapper sysRoleMapper;
+    @Autowired
+    private SysRoleResourceMapper sysRoleResourceMapper;
+
+
     @Autowired
     private IdWorker idWorker;
     @Autowired
@@ -161,12 +170,12 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRole, String> impleme
 
     @Override
     public List<SysUser> findUsersByRoleId(String roleId) {
-        return sysRoleMapper.findUsersByRoleId(roleId);
+        return sysUserMapper.findUsersByRoleId(roleId);
     }
 
     @Override
     public List<SysResource> findResourcesByRoleId(String roleId) {
-        return null;
+        return sysRoleResourceMapper.finResourceByRoleId(roleId);
     }
 
     @Override
@@ -174,7 +183,6 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRole, String> impleme
         if (StringUtils.isBlank(roleId)) {
             throw new GlobleException(CodeMsg.ROLE_ID_NOT_EXIST);
         }
-
         //删除之前的信息
         sysRoleResourceRepository.deleteByRoleId(roleId);
 
@@ -182,7 +190,7 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRole, String> impleme
         for (String resourceId : resourceIds) {
             sysRoleResourceList.add(new SysRoleResource(idWorker.nextId() + "", roleId, resourceId));
         }
-        sysRoleMapper.batchInsert(sysRoleResourceList);
+        sysRoleResourceMapper.batchInsert(sysRoleResourceList);
     }
 
     /**

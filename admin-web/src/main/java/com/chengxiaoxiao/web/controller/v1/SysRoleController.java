@@ -96,7 +96,8 @@ public class SysRoleController extends BaseController implements SysRoleControll
     }
 
     @Override
-    public Result<List<SysResource>> getResourcesByRoleId(String roleId) {
+    @GetMapping("/resource/{roleId}")
+    public Result<List<SysResource>> getResourcesByRoleId(@PathVariable String roleId) {
         return Result.success(sysRoleService.findResourcesByRoleId(roleId));
     }
 }

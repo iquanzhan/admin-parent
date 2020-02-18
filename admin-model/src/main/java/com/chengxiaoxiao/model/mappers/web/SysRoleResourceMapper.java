@@ -9,34 +9,27 @@ import com.chengxiaoxiao.model.web.pojos.SysUser;
 import java.util.List;
 
 /**
- * SysRoleMapper
+ * 角色资源关联表
+ * SysRoleResourceMapper
  *
  * @Author: Cheng XiaoXiao  (🍊 ^_^ ^_^)
  * @Date: 2020/2/18 4:09 下午
  * @Description:
  */
-public interface SysRoleMapper {
+public interface SysRoleResourceMapper {
     /**
-     * 根据用户Id获取所属角色信息
+     * 批量添加数据
      *
-     * @param id
+     * @param list
      * @return
      */
-    List<SysRoleSimpleDtos> getRolesByUserId(String id);
+    int batchInsert(List<SysRoleResource> list);
 
     /**
-     * 查询父Id下子元素的内容
+     * 根据角色Id获取资源列表
      *
      * @param roleId
      * @return
      */
-    List<SysRoleTreeDto> getRolesByParentId(String roleId);
-
-    /**
-     * 根据Id查询角色信息
-     *
-     * @param roleId
-     * @return
-     */
-    SysRoleTreeDto getRoleById(String roleId);
+    List<SysResource> finResourceByRoleId(String roleId);
 }

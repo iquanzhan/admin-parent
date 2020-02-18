@@ -12,5 +12,11 @@ import java.util.List;
  * @Description:
  */
 public interface SysUserMapper {
-    List<SysUser> getUsers();
+    /**
+     * 根据角色Id查询用户列表
+     *
+     * @param roleId
+     * @return
+     */
+    List<SysUser> findUsersByRoleId(String roleId);
 }
