@@ -59,13 +59,6 @@ public interface SysUserService extends BaseService<SysUser, String> {
      */
     String login(SysLoginModelDto loginModelDto);
 
-    /**
-     * 根据用户Id分配用户的角色
-     *
-     * @param userId 用户Id
-     * @param roldIds 用户角色ID数组
-     */
-    void dispatchRoleByUserId(String userId, String[] roldIds);
 
     /**
      * 根据角色Id查询其拥有的用户

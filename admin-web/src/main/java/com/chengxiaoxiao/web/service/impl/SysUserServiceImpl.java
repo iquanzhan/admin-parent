@@ -186,28 +186,6 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser, String> impleme
         return token;
     }
 
-    @Transactional
-    @Override
-    public void dispatchRoleByUserId(String userId, String[] roldIds) {
-        //判断用户是否存在
-        Optional<SysUser> user = sysUserRepository.findById(userId);
-        if (!user.isPresent()) {
-            throw new GlobleException(CodeMsg.USER_NOT_EXIST);
-        }
-
-        //删除用户之前的角色信息
-        sysUserRoleService.deleteByUserId(userId);
-
-        List<SysUserRole> list = new ArrayList<>();
-        for (String roldId : roldIds) {
-            if (sysRoleService.exists(roldId)) {
-                list.add(new SysUserRole(idWorker.nextId() + "", userId, roldId));
-            }
-        }
-        //给用户添加角色信息
-        batchInsert(list);
-    }
-
     @Override
     public List<SysUser> findUsersByRoleId(String roleId) {
         return sysUserMapper.findUsersByRoleId(roleId);

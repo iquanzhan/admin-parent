@@ -75,6 +75,9 @@ public interface SysRoleControllerApi {
     @ApiImplicitParam(name = "id", value = "角色ID", dataType = "string", required = true, paramType = "path")
     Result delete(String id);
 
+    @ApiOperation("为用户分配角色")
+    Result dispatchRoleByUserId(@ApiParam(name = "userId", value = "用户Id") String userId, @ApiParam(name = "roldIds", value = "角色Id数组", type = "array", example = "id,id,id,id") String[] roldIds);
+
     /**
      * 根据用户Id获取角色列表
      *

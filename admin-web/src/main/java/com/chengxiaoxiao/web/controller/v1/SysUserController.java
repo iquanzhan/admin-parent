@@ -77,12 +77,7 @@ public class SysUserController extends BaseController implements SysUserControll
         return null;
     }
 
-    @Override
-    @PostMapping("/dispatchRoleByUserId/{userId}")
-    public Result dispatchRoleByUserId(@PathVariable @NotNull(message = "用户ID不允许为空") String userId, @RequestBody @NotNull(message = "角色ID数组不能为空") String[] roldIds) {
-        sysUserService.dispatchRoleByUserId(userId,roldIds);
-        return Result.success(null);
-    }
+
 
     @Override
     @GetMapping("/role/{roleId}")

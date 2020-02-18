@@ -12,16 +12,15 @@ import com.chengxiaoxiao.model.mappers.web.SysUserMapper;
 import com.chengxiaoxiao.model.repository.BaseDao;
 import com.chengxiaoxiao.model.repository.SysRoleRepository;
 import com.chengxiaoxiao.model.repository.SysRoleResourceRepository;
+import com.chengxiaoxiao.model.repository.SysUserRepository;
 import com.chengxiaoxiao.model.web.dtos.query.sysrole.SysRoleModelDto;
 import com.chengxiaoxiao.model.web.dtos.query.sysrole.SysRoleSearchDto;
 import com.chengxiaoxiao.model.web.dtos.result.SysRoleSimpleDtos;
 import com.chengxiaoxiao.model.web.dtos.result.SysRoleTreeDto;
-import com.chengxiaoxiao.model.web.pojos.SysResource;
-import com.chengxiaoxiao.model.web.pojos.SysRole;
-import com.chengxiaoxiao.model.web.pojos.SysRoleResource;
-import com.chengxiaoxiao.model.web.pojos.SysUser;
+import com.chengxiaoxiao.model.web.pojos.*;
 import com.chengxiaoxiao.web.exception.GlobleException;
 import com.chengxiaoxiao.web.service.SysRoleService;
+import com.chengxiaoxiao.web.service.SysUserRoleService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -33,10 +32,8 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import javax.transaction.Transactional;
+import java.util.*;
 
 /**
  * 角色信息处理
@@ -50,9 +47,18 @@ import java.util.List;
 public class SysRoleServiceImpl extends BaseServiceImpl<SysRole, String> implements SysRoleService {
     @Autowired
     private SysRoleRepository sysRoleRepository;
+    @Autowired
+    private SysUserRepository sysUserRepository;
+
 
     @Autowired
     private SysRoleMapper sysRoleMapper;
+
+    @Autowired
+    private SysUserRoleService sysUserRoleService;
+    @Autowired
+    private SysRoleService sysRoleService;
+
 
 
 
@@ -175,5 +181,27 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRole, String> impleme
             childrenRole.get(i).setChildren(getRolesByParentId(childrenRole.get(i).getId()));
         }
         return childrenRole;
+    }
+
+    @Transactional
+    @Override
+    public void dispatchRoleByUserId(String userId, String[] roldIds) {
+        //判断用户是否存在
+        Optional<SysUser> user = sysUserRepository.findById(userId);
+        if (!user.isPresent()) {
+            throw new GlobleException(CodeMsg.USER_NOT_EXIST);
+        }
+
+        //删除用户之前的角色信息
+        sysUserRoleService.deleteByUserId(userId);
+
+        List<SysUserRole> list = new ArrayList<>();
+        for (String roldId : roldIds) {
+            if (sysRoleService.exists(roldId)) {
+                list.add(new SysUserRole(idWorker.nextId() + "", userId, roldId));
+            }
+        }
+        //给用户添加角色信息
+        batchInsert(list);
     }
 }

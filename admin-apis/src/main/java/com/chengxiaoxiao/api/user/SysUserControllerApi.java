@@ -47,9 +47,6 @@ public interface SysUserControllerApi {
     @ApiOperation("用户注销")
     Result logout(@ApiParam(name = "id", value = "用户ID", required = true) String id);
 
-    @ApiOperation("为用户分配角色")
-    Result dispatchRoleByUserId(@ApiParam(name = "userId", value = "用户Id") String userId, @ApiParam(name = "roldIds", value = "角色Id数组", type = "array", example = "id,id,id,id") String[] roldIds);
-
     /**
      * 根据角色Id查询角色下的用户信息
      *
