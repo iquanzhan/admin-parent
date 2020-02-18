@@ -209,6 +209,30 @@
                     <fork>true</fork> <!-- 如果没有该配置，devtools不会生效 -->
                 </configuration>
             </plugin>
+            <!-- mybatis generator 自动生成代码插件 -->
+            <plugin>
+                <groupId>org.mybatis.generator</groupId>
+                <artifactId>mybatis-generator-maven-plugin</artifactId>
+                <version>1.3.2</version>
+                <configuration>
+                    <configurationFile>${basedir}/src/main/resources/generator/generatorConfig.xml</configurationFile>
+                    <overwrite>true</overwrite>
+                    <verbose>true</verbose>
+                </configuration>
+                <!-- 配置数据库链接及mybatis generator core依赖 生成mapper时使用 -->
+                <dependencies>
+                    <dependency>
+                        <groupId>mysql</groupId>
+                        <artifactId>mysql-connector-java</artifactId>
+                        <version>${mysql.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.mybatis.generator</groupId>
+                        <artifactId>mybatis-generator-core</artifactId>
+                        <version>1.3.2</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
         </plugins>
     </build>
 

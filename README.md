@@ -902,6 +902,9 @@ Claims claims=(Claims)request.getAttribute("admin_claims");
 mybatis:
   mapper-locations: classpath:mapping/*.xml  #注意：一定要对应mapper映射xml文件的所在路径
   type-aliases-package: com.chengxiaoxiao.model.web.pojos  # 注意：对应实体类的路径
+  configuration:
+    # 开启驼峰映射
+    map-underscore-to-camel-case: true
 ```
 
 ### 3.22 pagehelper
