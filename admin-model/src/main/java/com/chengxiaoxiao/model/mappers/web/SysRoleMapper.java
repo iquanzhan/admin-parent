@@ -1,6 +1,7 @@
 package com.chengxiaoxiao.model.mappers.web;
 
 import com.chengxiaoxiao.model.web.dtos.result.SysRoleSimpleDtos;
+import com.chengxiaoxiao.model.web.dtos.result.SysRoleTreeDto;
 import com.chengxiaoxiao.model.web.pojos.SysUser;
 
 import java.util.List;
@@ -15,8 +16,24 @@ import java.util.List;
 public interface SysRoleMapper {
     /**
      * 根据用户Id获取所属角色信息
+     *
      * @param id
      * @return
      */
     List<SysRoleSimpleDtos> getRolesByUserId(String id);
+
+    /**
+     * 查询父Id下子元素的内容
+     *
+     * @param roleId
+     * @return
+     */
+    List<SysRoleTreeDto> getRolesByParentId(String roleId);
+
+    /**
+     * 根据Id查询角色信息
+     * @param roleId
+     * @return
+     */
+    SysRoleTreeDto getRoleById(String roleId);
 }

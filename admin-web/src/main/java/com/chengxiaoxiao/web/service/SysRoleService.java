@@ -4,6 +4,7 @@ import com.chengxiaoxiao.model.common.dtos.result.Result;
 import com.chengxiaoxiao.model.web.dtos.query.sysrole.SysRoleModelDto;
 import com.chengxiaoxiao.model.web.dtos.query.sysrole.SysRoleSearchDto;
 import com.chengxiaoxiao.model.web.dtos.result.SysRoleSimpleDtos;
+import com.chengxiaoxiao.model.web.dtos.result.SysRoleTreeDto;
 import com.chengxiaoxiao.model.web.pojos.SysRole;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -49,4 +50,11 @@ public interface SysRoleService extends BaseService<SysRole, String> {
      * @return
      */
     List<SysRoleSimpleDtos> getRolesByUserId(String id);
+
+    /**
+     * 根据父Id获取角色树
+     * @param parentId
+     * @return
+     */
+    SysRoleTreeDto treeRolesByParentId(String parentId);
 }

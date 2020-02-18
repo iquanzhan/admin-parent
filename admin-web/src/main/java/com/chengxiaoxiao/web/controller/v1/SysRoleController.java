@@ -73,7 +73,7 @@ public class SysRoleController extends BaseController implements SysRoleControll
 
     @Override
     @GetMapping("/tree/{parentId}")
-    public Result<List<SysRoleTreeDto>> treeRoleByParent(@NotNull @PathVariable String parentId) {
-        return null;
+    public Result<SysRoleTreeDto> treeRoleByParent(@NotNull @PathVariable String parentId) {
+        return Result.success(sysRoleService.treeRolesByParentId(parentId));
     }
 }

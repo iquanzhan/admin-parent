@@ -13,6 +13,7 @@ import com.chengxiaoxiao.model.repository.SysRoleRepository;
 import com.chengxiaoxiao.model.web.dtos.query.sysrole.SysRoleModelDto;
 import com.chengxiaoxiao.model.web.dtos.query.sysrole.SysRoleSearchDto;
 import com.chengxiaoxiao.model.web.dtos.result.SysRoleSimpleDtos;
+import com.chengxiaoxiao.model.web.dtos.result.SysRoleTreeDto;
 import com.chengxiaoxiao.model.web.pojos.SysRole;
 import com.chengxiaoxiao.model.web.pojos.SysUser;
 import com.chengxiaoxiao.web.exception.GlobleException;
@@ -41,6 +42,7 @@ import java.util.List;
  * @Description:
  */
 @Service
+@SuppressWarnings("all")
 public class SysRoleServiceImpl extends BaseServiceImpl<SysRole, String> implements SysRoleService {
     @Autowired
     private SysRoleRepository sysRoleRepository;
@@ -134,5 +136,36 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRole, String> impleme
     @Override
     public List<SysRoleSimpleDtos> getRolesByUserId(String id) {
         return sysRoleMapper.getRolesByUserId(id);
+    }
+
+    @Override
+    public SysRoleTreeDto treeRolesByParentId(String parentId) {
+        SysRoleTreeDto sysRoleTreeDto;
+        if (parentId.equalsIgnoreCase("0")) {
+            sysRoleTreeDto = new SysRoleTreeDto();
+            sysRoleTreeDto.setId("0");
+            sysRoleTreeDto.setName("根节点");
+            sysRoleTreeDto.setDescript("根节点不可进行编辑");
+        } else {
+            sysRoleTreeDto = sysRoleMapper.getRoleById(parentId);
+        }
+        sysRoleTreeDto.setChildren(getRolesByParentId(parentId));
+
+        return sysRoleTreeDto;
+    }
+
+    /**
+     * 根据父ID递归调用角色信息
+     *
+     * @param roleId
+     * @return
+     */
+    private List<SysRoleTreeDto> getRolesByParentId(String roleId) {
+        //获取parentId获取角色信息其子元素
+        List<SysRoleTreeDto> childrenRole = sysRoleMapper.getRolesByParentId(roleId);
+        for (int i = 0; i < childrenRole.size(); i++) {
+            childrenRole.get(i).setChildren(getRolesByParentId(childrenRole.get(i).getId()));
+        }
+        return childrenRole;
     }
 }

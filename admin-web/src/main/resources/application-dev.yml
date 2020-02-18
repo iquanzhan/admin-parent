@@ -75,6 +75,13 @@ mybatis:
   configuration:
     # 开启驼峰映射
     map-underscore-to-camel-case: true
+    
+logging:
+  level:
+    com:
+      chengxiaoxiao:
+        model:
+          mappers: debug
 
 #pagehelper分页插件
 pagehelper:

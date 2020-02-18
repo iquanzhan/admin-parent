@@ -75,7 +75,7 @@ public interface SysRoleControllerApi {
     @ApiOperation("根据用户Id获取角色列表")
     Result<List<SysRoleSimpleDtos>> getRolesByUserId(@ApiParam(name = "id", value = "用Id",required = true) String id);
 
-    @ApiOperation("根据父Id获取树形角色列表")
-    Result<List<SysRoleTreeDto>> treeRoleByParent(@ApiParam(name = "parentId", value = "角色父Id") String parentId);
+    @ApiOperation("根据父Id获取树形角色树")
+    Result<SysRoleTreeDto> treeRoleByParent(@ApiParam(name = "parentId", value = "角色父Id") String parentId);
 
 }
