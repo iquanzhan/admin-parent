@@ -29,6 +29,7 @@ public class CodeMsg implements Serializable {
     public static CodeMsg AUTHENTICATION_ERROR = new CodeMsg(403001, "抱歉，您没有权限访问本页面");
 
     public static CodeMsg ENTITY_NOT_EXIST = new CodeMsg(404, "实体不存在");
+    public static CodeMsg ENTITY_CONVERT_ERROR = new CodeMsg(404, "数据传输实体：%s，转换异常！");
 
     //用户异常
     public static CodeMsg LOGIN_SUCCESS = new CodeMsg(CODE_SUCCESS, "登录成功");

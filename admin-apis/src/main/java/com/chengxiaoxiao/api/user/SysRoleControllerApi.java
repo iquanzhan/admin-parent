@@ -5,11 +5,15 @@ import com.chengxiaoxiao.model.common.dtos.result.PageResult;
 import com.chengxiaoxiao.model.common.dtos.result.Result;
 import com.chengxiaoxiao.model.web.dtos.query.sysrole.SysRoleModelDto;
 import com.chengxiaoxiao.model.web.dtos.query.sysrole.SysRoleSearchDto;
+import com.chengxiaoxiao.model.web.dtos.result.SysRoleSimpleDtos;
+import com.chengxiaoxiao.model.web.dtos.result.SysRoleTreeDto;
 import com.chengxiaoxiao.model.web.pojos.SysRole;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+
+import java.util.List;
 
 /**
  * @Author: Cheng XiaoXiao  (🍊 ^_^ ^_^)
@@ -67,4 +71,11 @@ public interface SysRoleControllerApi {
      */
     @ApiImplicitParam(name = "id", value = "角色ID", dataType = "string", required = true, paramType = "path")
     Result delete(String id);
+
+    @ApiOperation("根据用户Id获取角色列表")
+    Result<List<SysRoleSimpleDtos>> getRolesByUserId(@ApiParam(name = "id", value = "用Id",required = true) String id);
+
+    @ApiOperation("根据父Id获取树形角色列表")
+    Result<List<SysRoleTreeDto>> treeRoleByParent(@ApiParam(name = "parentId", value = "角色父Id") String parentId);
+
 }

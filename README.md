@@ -881,3 +881,50 @@ Claims claims=(Claims)request.getAttribute("admin_claims");
 ### 3.19 接口幂等性验证
 
 ### 3.20 activiti
+
+### 3.21 mybatis引入
+
+添加依赖
+
+```
+        <!--        mybatis依赖-->
+        <dependency>
+            <groupId>org.mybatis.spring.boot</groupId>
+            <artifactId>mybatis-spring-boot-starter</artifactId>
+            <version>${mybatis-spring-boot-starter.version}</version>
+        </dependency>
+```
+
+添加配置
+
+```
+## 该配置节点为独立的节点，有很多同学容易将这个配置放在spring的节点下，导致配置无法被识别
+mybatis:
+  mapper-locations: classpath:mapping/*.xml  #注意：一定要对应mapper映射xml文件的所在路径
+  type-aliases-package: com.chengxiaoxiao.model.web.pojos  # 注意：对应实体类的路径
+```
+
+### 3.22 pagehelper
+
+添加依赖
+
+```
+        <!--pagehelper依赖-->
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper-spring-boot-starter</artifactId>
+            <version>${pagehelper.version}</version>
+        </dependency>
+```
+
+添加配置：
+
+```
+#pagehelper分页插件
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql
+```
+

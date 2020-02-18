@@ -2,13 +2,18 @@ package com.chengxiaoxiao.web.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
+import com.chengxiaoxiao.common.utils.CastEntityUtil;
 import com.chengxiaoxiao.common.utils.IdWorker;
 import com.chengxiaoxiao.model.common.dtos.result.CodeMsg;
+import com.chengxiaoxiao.model.common.dtos.result.Result;
+import com.chengxiaoxiao.model.mappers.web.SysUserMapper;
 import com.chengxiaoxiao.model.repository.BaseDao;
 import com.chengxiaoxiao.model.repository.SysRoleRepository;
 import com.chengxiaoxiao.model.web.dtos.query.sysrole.SysRoleModelDto;
 import com.chengxiaoxiao.model.web.dtos.query.sysrole.SysRoleSearchDto;
+import com.chengxiaoxiao.model.web.dtos.result.SysRoleSimpleDtos;
 import com.chengxiaoxiao.model.web.pojos.SysRole;
+import com.chengxiaoxiao.model.web.pojos.SysUser;
 import com.chengxiaoxiao.web.exception.GlobleException;
 import com.chengxiaoxiao.web.service.SysRoleService;
 import org.apache.commons.lang3.StringUtils;
@@ -23,6 +28,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -39,6 +45,10 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRole, String> impleme
     private SysRoleRepository sysRoleRepository;
     @Autowired
     private IdWorker idWorker;
+    @Autowired
+    private CastEntityUtil castEntityUtil;
+    @Autowired
+    SysUserMapper sysUserMapper;
 
     @Override
     public BaseDao<SysRole, String> getBaseDao() {
@@ -117,5 +127,19 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRole, String> impleme
         sysRoleDb.setUpdateTime(new Date());
         save(sysRoleDb);
         return sysRoleDb;
+    }
+
+    @Override
+    public List<SysRoleSimpleDtos> getRolesByUserId(String id) {
+//        List<Object[]> roleList = sysRoleRepository.findRoleListByUserId(id);
+//
+//        try {
+//            return castEntityUtil.castEntity(roleList, SysRoleSimpleDtos.class);
+//        } catch (Exception e) {
+//            throw new GlobleException(CodeMsg.ENTITY_CONVERT_ERROR.fillArgs("SysRoleSimpleDtos"));
+//        }
+
+        List<SysUser> users = sysUserMapper.getUsers();
+        return null;
     }
 }

@@ -6,6 +6,8 @@ import com.chengxiaoxiao.model.common.dtos.result.PageResult;
 import com.chengxiaoxiao.model.common.dtos.result.Result;
 import com.chengxiaoxiao.model.web.dtos.query.sysrole.SysRoleModelDto;
 import com.chengxiaoxiao.model.web.dtos.query.sysrole.SysRoleSearchDto;
+import com.chengxiaoxiao.model.web.dtos.result.SysRoleSimpleDtos;
+import com.chengxiaoxiao.model.web.dtos.result.SysRoleTreeDto;
 import com.chengxiaoxiao.model.web.pojos.SysRole;
 import com.chengxiaoxiao.web.controller.BaseController;
 import com.chengxiaoxiao.web.service.SysRoleService;
@@ -14,6 +16,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import java.util.List;
 
 /**
  * 角色信息接口
@@ -59,5 +63,17 @@ public class SysRoleController extends BaseController implements SysRoleControll
     public Result delete(@PathVariable String id) {
         sysRoleService.delete(id);
         return Result.success(null);
+    }
+
+    @Override
+    @GetMapping("/user/{id}")
+    public Result<List<SysRoleSimpleDtos>> getRolesByUserId(@NotNull @PathVariable String id) {
+        return Result.success(sysRoleService.getRolesByUserId(id));
+    }
+
+    @Override
+    @GetMapping("/tree/{parentId}")
+    public Result<List<SysRoleTreeDto>> treeRoleByParent(@NotNull @PathVariable String parentId) {
+        return null;
     }
 }

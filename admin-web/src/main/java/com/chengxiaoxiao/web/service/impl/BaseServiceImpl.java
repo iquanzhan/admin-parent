@@ -50,6 +50,7 @@ public abstract class BaseServiceImpl<T, ID extends Serializable> implements Bas
         }
     }
 
+
     @Override
     @Transactional
     public void batchUpdate(List list) {
