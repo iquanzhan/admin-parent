@@ -41,6 +41,7 @@ public class CodeMsg implements Serializable {
 
     //角色异常
     public static CodeMsg ROLE_NOT_EXIST = new CodeMsg(200001, "角色信息不存在");
+    public static CodeMsg ROLE_ID_NOT_EXIST = new CodeMsg(200002, "请输入角色ID");
 
 
     private Integer code;

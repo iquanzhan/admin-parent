@@ -10,11 +10,14 @@ import com.chengxiaoxiao.model.mappers.web.SysRoleMapper;
 import com.chengxiaoxiao.model.mappers.web.SysUserMapper;
 import com.chengxiaoxiao.model.repository.BaseDao;
 import com.chengxiaoxiao.model.repository.SysRoleRepository;
+import com.chengxiaoxiao.model.repository.SysRoleResourceRepository;
 import com.chengxiaoxiao.model.web.dtos.query.sysrole.SysRoleModelDto;
 import com.chengxiaoxiao.model.web.dtos.query.sysrole.SysRoleSearchDto;
 import com.chengxiaoxiao.model.web.dtos.result.SysRoleSimpleDtos;
 import com.chengxiaoxiao.model.web.dtos.result.SysRoleTreeDto;
+import com.chengxiaoxiao.model.web.pojos.SysResource;
 import com.chengxiaoxiao.model.web.pojos.SysRole;
+import com.chengxiaoxiao.model.web.pojos.SysRoleResource;
 import com.chengxiaoxiao.model.web.pojos.SysUser;
 import com.chengxiaoxiao.web.exception.GlobleException;
 import com.chengxiaoxiao.web.service.SysRoleService;
@@ -46,6 +49,8 @@ import java.util.List;
 public class SysRoleServiceImpl extends BaseServiceImpl<SysRole, String> implements SysRoleService {
     @Autowired
     private SysRoleRepository sysRoleRepository;
+    @Autowired
+    private SysRoleResourceRepository sysRoleResourceRepository;
     @Autowired
     private SysRoleMapper sysRoleMapper;
     @Autowired
@@ -141,7 +146,7 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRole, String> impleme
     @Override
     public SysRoleTreeDto treeRolesByParentId(String parentId) {
         SysRoleTreeDto sysRoleTreeDto;
-        if (parentId.equalsIgnoreCase("0")) {
+        if ("0".equalsIgnoreCase(parentId)) {
             sysRoleTreeDto = new SysRoleTreeDto();
             sysRoleTreeDto.setId("0");
             sysRoleTreeDto.setName("根节点");
@@ -152,6 +157,32 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRole, String> impleme
         sysRoleTreeDto.setChildren(getRolesByParentId(parentId));
 
         return sysRoleTreeDto;
+    }
+
+    @Override
+    public List<SysUser> findUsersByRoleId(String roleId) {
+        return sysRoleMapper.findUsersByRoleId(roleId);
+    }
+
+    @Override
+    public List<SysResource> findResourcesByRoleId(String roleId) {
+        return null;
+    }
+
+    @Override
+    public void dispatchResourceByRoleId(String roleId, String[] resourceIds) {
+        if (StringUtils.isBlank(roleId)) {
+            throw new GlobleException(CodeMsg.ROLE_ID_NOT_EXIST);
+        }
+
+        //删除之前的信息
+        sysRoleResourceRepository.deleteByRoleId(roleId);
+
+        List<SysRoleResource> sysRoleResourceList = new ArrayList<>();
+        for (String resourceId : resourceIds) {
+            sysRoleResourceList.add(new SysRoleResource(idWorker.nextId() + "", roleId, resourceId));
+        }
+        sysRoleMapper.batchInsert(sysRoleResourceList);
     }
 
     /**

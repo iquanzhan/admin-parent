@@ -8,15 +8,20 @@ import com.chengxiaoxiao.model.web.dtos.query.sysrole.SysRoleModelDto;
 import com.chengxiaoxiao.model.web.dtos.query.sysrole.SysRoleSearchDto;
 import com.chengxiaoxiao.model.web.dtos.result.SysRoleSimpleDtos;
 import com.chengxiaoxiao.model.web.dtos.result.SysRoleTreeDto;
+import com.chengxiaoxiao.model.web.pojos.SysResource;
 import com.chengxiaoxiao.model.web.pojos.SysRole;
+import com.chengxiaoxiao.model.web.pojos.SysRoleResource;
+import com.chengxiaoxiao.model.web.pojos.SysUser;
 import com.chengxiaoxiao.web.controller.BaseController;
 import com.chengxiaoxiao.web.service.SysRoleService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -73,7 +78,25 @@ public class SysRoleController extends BaseController implements SysRoleControll
 
     @Override
     @GetMapping("/tree/{parentId}")
-    public Result<SysRoleTreeDto> treeRoleByParent(@NotNull @PathVariable String parentId) {
+    public Result<SysRoleTreeDto> treeRoleByParent(@Valid @NotNull(message = "父Id不允许为Null") @PathVariable String parentId) {
         return Result.success(sysRoleService.treeRolesByParentId(parentId));
+    }
+
+    @Override
+    @GetMapping("/users/{roleId}")
+    public Result<List<SysUser>> getUsersByRoleId(@PathVariable("roleId") String roleId) {
+        return Result.success(sysRoleService.findUsersByRoleId(roleId));
+    }
+
+    @Override
+    @PostMapping("/resource/{roleId}")
+    public Result dispatchResourceByRoleId(@PathVariable String roleId, @RequestBody String[] resourceIds) {
+        sysRoleService.dispatchResourceByRoleId(roleId,resourceIds);
+        return Result.success(null);
+    }
+
+    @Override
+    public Result<List<SysResource>> getResourcesByRoleId(String roleId) {
+        return Result.success(sysRoleService.findResourcesByRoleId(roleId));
     }
 }

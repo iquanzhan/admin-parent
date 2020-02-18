@@ -40,7 +40,7 @@ public class SysResourceModelDto {
     private String icon;
     @NotNull(message = "请选择是否显示")
     @ApiModelProperty("是否显示")
-    private String isShow;
+    private Integer isShow;
     @ApiModelProperty("排序")
     private Integer sort;
     @ApiModelProperty("父ID")

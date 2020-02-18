@@ -41,7 +41,7 @@ public class SysResource {
     @ApiModelProperty("资源图标")
     private String icon;
     @ApiModelProperty("是否展示")
-    private String isShow;
+    private Integer isShow;
     @ApiModelProperty("排序")
     private Integer sort;
     @ApiModelProperty("父Id")
