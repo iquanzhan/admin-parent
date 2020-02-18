@@ -6,6 +6,7 @@ import com.chengxiaoxiao.common.utils.CastEntityUtil;
 import com.chengxiaoxiao.common.utils.IdWorker;
 import com.chengxiaoxiao.model.common.dtos.result.CodeMsg;
 import com.chengxiaoxiao.model.common.dtos.result.Result;
+import com.chengxiaoxiao.model.mappers.web.SysRoleMapper;
 import com.chengxiaoxiao.model.mappers.web.SysUserMapper;
 import com.chengxiaoxiao.model.repository.BaseDao;
 import com.chengxiaoxiao.model.repository.SysRoleRepository;
@@ -44,11 +45,12 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRole, String> impleme
     @Autowired
     private SysRoleRepository sysRoleRepository;
     @Autowired
+    private SysRoleMapper sysRoleMapper;
+    @Autowired
     private IdWorker idWorker;
     @Autowired
     private CastEntityUtil castEntityUtil;
-    @Autowired
-    SysUserMapper sysUserMapper;
+
 
     @Override
     public BaseDao<SysRole, String> getBaseDao() {
@@ -131,15 +133,6 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRole, String> impleme
 
     @Override
     public List<SysRoleSimpleDtos> getRolesByUserId(String id) {
-//        List<Object[]> roleList = sysRoleRepository.findRoleListByUserId(id);
-//
-//        try {
-//            return castEntityUtil.castEntity(roleList, SysRoleSimpleDtos.class);
-//        } catch (Exception e) {
-//            throw new GlobleException(CodeMsg.ENTITY_CONVERT_ERROR.fillArgs("SysRoleSimpleDtos"));
-//        }
-
-        List<SysUser> users = sysUserMapper.getUsers();
-        return null;
+        return sysRoleMapper.getRolesByUserId(id);
     }
 }
