@@ -32,4 +32,11 @@ public interface SysRoleResourceMapper {
      * @return
      */
     List<SysResource> finResourceByRoleId(String roleId);
+
+    /**
+     * 根据roleId数组获取资源信息
+     * @param roles
+     * @return
+     */
+    List<SysResource> findResourcesByRoles(List<SysRoleSimpleDtos> roles);
 }

@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Map;
 
 /**
@@ -18,11 +19,17 @@ public class ResultUtil {
         String json = JSONObject.toJSONString(resultData);
 
         response.setContentType("text/json;charset=utf-8");
+        PrintWriter writer = null;
         try {
-            response.getWriter().write(json);
-
+            writer =response.getWriter();
+            writer.write(json);
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            if (writer != null) {
+                writer.flush();
+                writer.close();
+            }
         }
     }
 }

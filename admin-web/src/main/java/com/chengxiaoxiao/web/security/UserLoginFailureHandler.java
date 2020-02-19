@@ -1,10 +1,5 @@
 package com.chengxiaoxiao.web.security;
 
-/**
- * @Author: Cheng XiaoXiao  (🍊 ^_^ ^_^)
- * @Date: 2020/2/2 8:38 下午
- * @Description:
- */
 
 import com.chengxiaoxiao.common.utils.ResultUtil;
 import com.chengxiaoxiao.model.common.dtos.result.CodeMsg;
@@ -22,7 +17,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-
+/**
+ * 登录失败处理类
+ *
+ * @Author: Cheng XiaoXiao  (🍊 ^_^ ^_^)
+ * @Date: 2020/2/2 8:38 下午
+ * @Description:
+ */
 @Slf4j
 @Component
 public class UserLoginFailureHandler implements AuthenticationFailureHandler {
@@ -42,6 +43,6 @@ public class UserLoginFailureHandler implements AuthenticationFailureHandler {
             log.info("【登录失败】" + exception.getMessage());
             ResultUtil.responseJson(response, Result.error(CodeMsg.USER_PASSWORD_INCORRENT));
         }
-        ResultUtil.responseJson(response, Result.success(null));
+        ResultUtil.responseJson(response, Result.error(CodeMsg.ERROR));
     }
 }

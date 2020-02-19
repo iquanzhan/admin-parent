@@ -27,8 +27,44 @@ public class JwtUtil {
     @Value("${jwt.secret}")
     private String secret;
 
+    @Value("${jwt.tokenHeader}")
+    public String tokenHeader;
+
+    @Value("${jwt.tokenPrefix}")
+    private String tokenPrefix;
+
     @Value("${jwt.expiration}")
-    private long expiration;
+    private Integer expiration;
+
+
+    /**
+     * 生成WebToken
+     *
+     * @param id
+     * @param subject
+     * @param authorities
+     * @return
+     */
+    public String createWebJWT(String id, String subject, String authorities) {
+        String jwt = createJWT(id, subject, authorities);
+        return tokenPrefix + jwt;
+    }
+
+    /**
+     * 解析Web token
+     * @param jwtStr
+     * @return
+     */
+    public Claims getWebClaims(String jwtStr) {
+        if (null != jwtStr && jwtStr.startsWith(tokenPrefix)) {
+            // 截取JWT前缀
+            String token = jwtStr.replace(tokenPrefix, "");
+            // 解析JWT
+            Claims claims = parseJWT(token);
+            return claims;
+        }
+        return null;
+    }
 
 
     /**

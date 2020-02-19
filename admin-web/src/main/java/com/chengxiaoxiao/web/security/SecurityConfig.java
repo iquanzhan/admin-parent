@@ -1,11 +1,5 @@
 package com.chengxiaoxiao.web.security;
 
-/**
- * @Author: Cheng XiaoXiao  (🍊 ^_^ ^_^)
- * @Date: 2020/2/2 8:40 下午
- * @Description:
- */
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -13,16 +7,19 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
+import org.springframework.util.DigestUtils;
 
 /**
- * SpringSecurity核心配置类
- * @Author Sans
- * @CreateTime 2019/10/1 9:40
+ * @Author: Cheng XiaoXiao  (🍊 ^_^ ^_^)
+ * @Date: 2020/2/2 8:40 下午
+ * @Description:
  */
 @Configuration
 @EnableWebSecurity
@@ -64,20 +61,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserAuthenticationProvider userAuthenticationProvider;
 
-    /**
-     * 加密方式
-     * @Author Sans
-     * @CreateTime 2019/10/1 14:00
-     */
-    @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder(){
-        return new BCryptPasswordEncoder();
-    }
+
     /**
      * 注入自定义PermissionEvaluator
      */
     @Bean
-    public DefaultWebSecurityExpressionHandler userSecurityExpressionHandler(){
+    public DefaultWebSecurityExpressionHandler userSecurityExpressionHandler() {
         DefaultWebSecurityExpressionHandler handler = new DefaultWebSecurityExpressionHandler();
         handler.setPermissionEvaluator(new UserPermissionEvaluator());
         return handler;
@@ -87,21 +76,32 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      * 配置登录验证逻辑
      */
     @Override
-    protected void configure(AuthenticationManagerBuilder auth){
+    protected void configure(AuthenticationManagerBuilder auth) {
         //这里可启用我们自己的登陆验证逻辑
         auth.authenticationProvider(userAuthenticationProvider);
     }
+
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers("/swagger-ui.html")
+                .antMatchers("/webjars/**")
+                .antMatchers("/v2/**")
+                .antMatchers("/swagger-resources/**")
+                .antMatchers("/druid/**");
+    }
+
     /**
      * 配置security的控制逻辑
+     *
      * @Author Sans
-     * @CreateTime 2019/10/1 16:56
-     * @Param  http 请求
+     * @CreateTime 2020/02/19 16:56
+     * @Param http 请求
      */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 //不进行权限验证的请求或资源(从配置文件中读取)
-                .antMatchers("/**").permitAll()
+                .antMatchers(antMatchers.split(",")).permitAll()
                 //其他的需要登陆后才能访问
                 .anyRequest().authenticated()
                 .and()
@@ -137,4 +137,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // 添加JWT过滤器
         http.addFilter(new JWTAuthenticationTokenFilter(authenticationManager()));
     }
+
+
 }

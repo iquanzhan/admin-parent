@@ -1,10 +1,6 @@
 package com.chengxiaoxiao.web.security;
 
-/**
- * @Author: Cheng XiaoXiao  (🍊 ^_^ ^_^)
- * @Date: 2020/2/2 8:39 下午
- * @Description:
- */
+
 
 import com.chengxiaoxiao.common.utils.ResultUtil;
 import com.chengxiaoxiao.model.common.dtos.result.CodeMsg;
@@ -18,11 +14,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
-
 /**
  * 用户登出类
- * @Author Sans
- * @CreateTime 2019/10/3 9:42
+ * @Author: Cheng XiaoXiao  (🍊 ^_^ ^_^)
+ * @Date: 2020/2/2 8:39 下午
+ * @Description:
  */
 @Component
 public class UserLogoutSuccessHandler implements LogoutSuccessHandler {

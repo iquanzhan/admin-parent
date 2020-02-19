@@ -28,6 +28,7 @@ public class CodeMsg implements Serializable {
 
     public static CodeMsg AUTHENTICATION_TOKEN_EXPIRED = new CodeMsg(403000, "抱歉，TOKEN已过期");
     public static CodeMsg AUTHENTICATION_ERROR = new CodeMsg(403001, "抱歉，您没有权限访问本页面");
+    public static CodeMsg USER_NOT_LOGIN_ERROR = new CodeMsg(403002, "抱歉，用户未登录");
 
     public static CodeMsg ENTITY_NOT_EXIST = new CodeMsg(404, "实体不存在");
     public static CodeMsg ENTITY_CONVERT_ERROR = new CodeMsg(404, "数据传输实体：%s，转换异常！");

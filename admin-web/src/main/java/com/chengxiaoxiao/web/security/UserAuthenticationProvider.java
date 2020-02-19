@@ -1,12 +1,14 @@
 package com.chengxiaoxiao.web.security;
 
-/**
- * @Author: Cheng XiaoXiao  (🍊 ^_^ ^_^)
- * @Date: 2020/2/2 8:39 下午
- * @Description:
- */
 
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.bean.copier.CopyOptions;
+import com.chengxiaoxiao.model.mappers.web.SysRoleMapper;
+import com.chengxiaoxiao.model.mappers.web.SysRoleResourceMapper;
+import com.chengxiaoxiao.model.web.dtos.result.SysRoleSimpleDtos;
+import com.chengxiaoxiao.model.web.pojos.SysResource;
 import com.chengxiaoxiao.model.web.pojos.SysUser;
+import com.chengxiaoxiao.model.web.dtos.UserEntitySecurity;
 import com.chengxiaoxiao.web.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -22,12 +24,26 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
+/**
+ * 用户登录处理类
+ *
+ * @Author: Cheng XiaoXiao  (🍊 ^_^ ^_^)
+ * @Date: 2020/2/2 8:39 下午
+ * @Description:
+ */
 @Component
+@SuppressWarnings("all")
 public class UserAuthenticationProvider implements AuthenticationProvider {
 
+    @Autowired
     private SysUserService sysUserService;
+    @Autowired
+    private SysRoleMapper sysRoleMapper;
+    @Autowired
+    private SysRoleResourceMapper sysRoleResourceMapper;
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -45,20 +61,29 @@ public class UserAuthenticationProvider implements AuthenticationProvider {
             throw new BadCredentialsException("密码不正确");
         }
         // 还可以加一些其他信息的判断，比如用户账号已停用等判断
-        if (userInfo.getDeleteStatus().equals(1)){
+        if (userInfo.getDeleteStatus().equals(1)) {
             throw new LockedException("该用户已被冻结");
         }
-//        // 角色集合
-//        Set<GrantedAuthority> authorities = new HashSet<>();
-//        // 查询用户角色
-//        List<SysRoleEntity> sysRoleEntityList = sysUserService.selectSysRoleByUserId(userInfo.getUserId());
-//        for (SysRoleEntity sysRoleEntity: sysRoleEntityList){
-//            authorities.add(new SimpleGrantedAuthority("ROLE_" + sysRoleEntity.getRoleName()));
-//        }
-//        userInfo.setAuthorities(authorities);
+        UserEntitySecurity userEntitySecurity = new UserEntitySecurity();
+        BeanUtil.copyProperties(userInfo, userEntitySecurity, CopyOptions.create().setIgnoreNullValue(true).setIgnoreError(true));
+
+        // 角色集合
+        Set<GrantedAuthority> authorities = new HashSet<>();
+        // 查询用户角色
+        List<SysRoleSimpleDtos> roles = sysRoleMapper.getRolesByUserId(userInfo.getId());
+        if (roles.size() > 0) {
+            List<SysResource> auths = sysRoleResourceMapper.findResourcesByRoles(roles);
+
+            for (SysResource auth : auths) {
+                authorities.add(new SimpleGrantedAuthority(auth.getScourceKey()));
+            }
+            userEntitySecurity.setAuthorities(authorities);
+        }
+        userEntitySecurity.setRoles(roles);
         // 进行登录
-        return new UsernamePasswordAuthenticationToken(userInfo, password);
+        return new UsernamePasswordAuthenticationToken(userEntitySecurity, password);
     }
+
     @Override
     public boolean supports(Class<?> authentication) {
         return true;

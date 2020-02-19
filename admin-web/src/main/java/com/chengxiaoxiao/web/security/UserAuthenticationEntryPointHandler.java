@@ -1,10 +1,6 @@
 package com.chengxiaoxiao.web.security;
 
-/**
- * @Author: Cheng XiaoXiao  (🍊 ^_^ ^_^)
- * @Date: 2020/2/2 8:37 下午
- * @Description:
- */
+
 
 import com.chengxiaoxiao.common.utils.ResultUtil;
 import com.chengxiaoxiao.model.common.dtos.result.CodeMsg;
@@ -18,8 +14,9 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * 用户未登录处理类
- * @Author Sans
- * @CreateTime 2019/10/3 8:55
+ * @Author: Cheng XiaoXiao  (🍊 ^_^ ^_^)
+ * @Date: 2020/2/2 8:37 下午
+ * @Description:
  */
 @Component
 public class UserAuthenticationEntryPointHandler implements AuthenticationEntryPoint {
@@ -30,6 +27,7 @@ public class UserAuthenticationEntryPointHandler implements AuthenticationEntryP
      */
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception){
-        ResultUtil.responseJson(response, Result.success(CodeMsg.USER_PASSWORD_INCORRENT));
+
+        ResultUtil.responseJson(response, Result.success(CodeMsg.USER_NOT_LOGIN_ERROR));
     }
 }

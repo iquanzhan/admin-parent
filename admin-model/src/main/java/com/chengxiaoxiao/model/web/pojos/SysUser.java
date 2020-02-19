@@ -13,6 +13,8 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -20,7 +22,10 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.*;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @Author: Cheng XiaoXiao  (🍊 ^_^ ^_^)
@@ -62,7 +67,7 @@ public class SysUser implements Serializable {
     @ApiModelProperty("创建时间")
     private Date createTime;
     @ApiModelProperty("更新时间")
-    private Date UpdateTime;
+    private Date updateTime;
     @ApiModelProperty("删除状态")
     private Integer deleteStatus;
 }

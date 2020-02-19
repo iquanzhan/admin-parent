@@ -1053,3 +1053,22 @@ jdbc_password=123456
 mvn mybatis-generator:generate
 ```
 
+### 3.24 Swagger和spring Security的整合
+
+在WebSecurityConfigurerAdapter里添加如下代码
+
+```java
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+ 
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring(). antMatchers("/swagger-ui.html")
+                .antMatchers("/webjars/**")
+                .antMatchers("/v2/**")
+                .antMatchers("/swagger-resources/**");
+    }
+
+}
+```
+
