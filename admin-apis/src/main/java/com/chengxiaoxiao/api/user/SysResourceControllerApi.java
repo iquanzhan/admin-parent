@@ -5,13 +5,12 @@ import com.chengxiaoxiao.model.common.dtos.result.PageResult;
 import com.chengxiaoxiao.model.common.dtos.result.Result;
 import com.chengxiaoxiao.model.web.dtos.query.sysresource.SysResourceModelDto;
 import com.chengxiaoxiao.model.web.dtos.query.sysresource.SysResourceSearchDto;
+import com.chengxiaoxiao.model.web.dtos.result.SysResourceTreeDto;
 import com.chengxiaoxiao.model.web.pojos.SysResource;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-
-import java.util.List;
 
 /**
  * @Author: Cheng XiaoXiao  (🍊 ^_^ ^_^)
@@ -69,5 +68,14 @@ public interface SysResourceControllerApi {
      */
     @ApiImplicitParam(name = "id", value = "资源ID", dataType = "string", required = true, paramType = "path")
     Result delete(String id);
+
+    /**
+     * 根据parentId树形显示资源信息
+     *
+     * @param parentId 资源父Id
+     * @return
+     */
+    @ApiOperation("树形展示资源信息")
+    Result<SysResourceTreeDto> tree(String parentId);
 
 }

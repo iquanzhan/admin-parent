@@ -2,6 +2,7 @@ package com.chengxiaoxiao.web.service;
 
 import com.chengxiaoxiao.model.web.dtos.query.sysresource.SysResourceModelDto;
 import com.chengxiaoxiao.model.web.dtos.query.sysresource.SysResourceSearchDto;
+import com.chengxiaoxiao.model.web.dtos.result.SysResourceTreeDto;
 import com.chengxiaoxiao.model.web.pojos.SysResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -41,4 +42,11 @@ public interface SysResourceService extends BaseService<SysResource,String>{
      * @param resourceIds
      */
     void dispatchResourceByRoleId(String roleId, String[] resourceIds);
+
+    /**
+     * 显示资源书结构
+     * @param parentId
+     * @return
+     */
+    SysResourceTreeDto treeResourcesByParentId(String parentId);
 }

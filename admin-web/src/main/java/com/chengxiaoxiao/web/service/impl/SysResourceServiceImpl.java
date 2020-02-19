@@ -4,12 +4,15 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import com.chengxiaoxiao.common.utils.IdWorker;
 import com.chengxiaoxiao.model.common.dtos.result.CodeMsg;
+import com.chengxiaoxiao.model.mappers.web.SysResourceMapper;
 import com.chengxiaoxiao.model.mappers.web.SysRoleResourceMapper;
 import com.chengxiaoxiao.model.repository.BaseDao;
 import com.chengxiaoxiao.model.repository.SysResourceRepository;
 import com.chengxiaoxiao.model.repository.SysRoleResourceRepository;
 import com.chengxiaoxiao.model.web.dtos.query.sysresource.SysResourceModelDto;
 import com.chengxiaoxiao.model.web.dtos.query.sysresource.SysResourceSearchDto;
+import com.chengxiaoxiao.model.web.dtos.result.SysResourceTreeDto;
+import com.chengxiaoxiao.model.web.dtos.result.SysRoleTreeDto;
 import com.chengxiaoxiao.model.web.pojos.SysResource;
 import com.chengxiaoxiao.model.web.pojos.SysRoleResource;
 import com.chengxiaoxiao.web.exception.GlobleException;
@@ -46,6 +49,8 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysResource, String>
 
     @Autowired
     private SysRoleResourceMapper sysRoleResourceMapper;
+    @Autowired
+    private SysResourceMapper sysResourceMapper;
 
     @Autowired
     private IdWorker idWorker;
@@ -65,7 +70,7 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysResource, String>
                     Predicate predicate = criteriaBuilder.like(root.get("name").as(String.class), "%" + sysResourceSearchDto.getName() + "%");
                     list.add(predicate);
                 }
-                if (sysResourceSearchDto.getType()!=null) {
+                if (sysResourceSearchDto.getType() != null) {
                     Predicate predicate = criteriaBuilder.equal(root.get("type").as(String.class), sysResourceSearchDto.getType());
                     list.add(predicate);
                 }
@@ -76,26 +81,26 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysResource, String>
                 }
 
                 if (!StringUtils.isBlank(sysResourceSearchDto.getSourceUrl())) {
-                    Predicate predicate = criteriaBuilder.like(root.get("sourceUrl").as(String.class), "%" +sysResourceSearchDto.getSourceUrl()+"");
+                    Predicate predicate = criteriaBuilder.like(root.get("sourceUrl").as(String.class), "%" + sysResourceSearchDto.getSourceUrl() + "");
                     list.add(predicate);
                 }
 
                 if (!StringUtils.isBlank(sysResourceSearchDto.getDescript())) {
-                    Predicate predicate = criteriaBuilder.like(root.get("descript").as(String.class), "%" +sysResourceSearchDto.getDescript()+"%");
+                    Predicate predicate = criteriaBuilder.like(root.get("descript").as(String.class), "%" + sysResourceSearchDto.getDescript() + "%");
                     list.add(predicate);
                 }
 
-                if (sysResourceSearchDto.getIsShow()!=null) {
+                if (sysResourceSearchDto.getIsShow() != null) {
                     Predicate predicate = criteriaBuilder.equal(root.get("isShow").as(String.class), sysResourceSearchDto.getIsShow());
                     list.add(predicate);
                 }
 
-                if (sysResourceSearchDto.getParentId()!=null) {
+                if (sysResourceSearchDto.getParentId() != null) {
                     Predicate predicate = criteriaBuilder.equal(root.get("parentId").as(String.class), sysResourceSearchDto.getParentId());
                     list.add(predicate);
                 }
 
-                if (sysResourceSearchDto.getCreateUser()!=null) {
+                if (sysResourceSearchDto.getCreateUser() != null) {
                     Predicate predicate = criteriaBuilder.equal(root.get("createUser").as(String.class), sysResourceSearchDto.getCreateUser());
                     list.add(predicate);
                 }
@@ -163,5 +168,35 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysResource, String>
             sysRoleResourceList.add(new SysRoleResource(idWorker.nextId() + "", roleId, resourceId));
         }
         sysRoleResourceMapper.batchInsert(sysRoleResourceList);
+    }
+
+    @Override
+    public SysResourceTreeDto treeResourcesByParentId(String parentId) {
+        SysResourceTreeDto sysResourceTreeDto;
+        if ("0".equalsIgnoreCase(parentId)) {
+            sysResourceTreeDto = new SysResourceTreeDto();
+            sysResourceTreeDto.setId("0");
+            sysResourceTreeDto.setName("根节点");
+            sysResourceTreeDto.setDescript("根节点不可进行编辑");
+        } else {
+            sysResourceTreeDto = sysResourceMapper.getResourceById(parentId);
+        }
+        sysResourceTreeDto.setChildren(getResourcesByParentId(parentId));
+
+        return sysResourceTreeDto;
+    }
+
+    /**
+     * 递归查询子元素
+     *
+     * @param parentId
+     * @return
+     */
+    private List<SysResourceTreeDto> getResourcesByParentId(String parentId) {
+        List<SysResourceTreeDto> list = sysResourceMapper.getResourceByParentId(parentId);
+        for (int i = 0; i < list.size(); i++) {
+            list.get(i).setChildren(getResourcesByParentId(list.get(i).getId()));
+        }
+        return list;
     }
 }

@@ -6,6 +6,7 @@ import com.chengxiaoxiao.model.common.dtos.result.PageResult;
 import com.chengxiaoxiao.model.common.dtos.result.Result;
 import com.chengxiaoxiao.model.web.dtos.query.sysresource.SysResourceModelDto;
 import com.chengxiaoxiao.model.web.dtos.query.sysresource.SysResourceSearchDto;
+import com.chengxiaoxiao.model.web.dtos.result.SysResourceTreeDto;
 import com.chengxiaoxiao.model.web.pojos.SysResource;
 import com.chengxiaoxiao.web.controller.BaseController;
 import com.chengxiaoxiao.web.service.SysResourceService;
@@ -14,7 +15,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 /**
  * 角色信息接口
@@ -60,6 +60,12 @@ public class SysResourceController extends BaseController implements SysResource
     public Result delete(@PathVariable String id) {
         sysResourceService.delete(id);
         return Result.success(null);
+    }
+
+    @Override
+    @GetMapping("/tree/{parentId}")
+    public Result<SysResourceTreeDto> tree(@PathVariable String parentId) {
+        return Result.success(sysResourceService.treeResourcesByParentId(parentId));
     }
 
 
