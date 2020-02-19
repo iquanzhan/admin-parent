@@ -3,6 +3,7 @@ package com.chengxiaoxiao.model.mappers.web;
 import com.chengxiaoxiao.model.web.dtos.result.SysRoleSimpleDtos;
 import com.chengxiaoxiao.model.web.dtos.result.SysRoleTreeDto;
 import com.chengxiaoxiao.model.web.pojos.SysResource;
+import com.chengxiaoxiao.model.web.pojos.SysRole;
 import com.chengxiaoxiao.model.web.pojos.SysRoleResource;
 import com.chengxiaoxiao.model.web.pojos.SysUser;
 
@@ -39,4 +40,11 @@ public interface SysRoleMapper {
      * @return
      */
     SysRoleTreeDto getRoleById(String roleId);
+
+    /**
+     * 根据资源Id获取角色列表
+     * @param resourceId
+     * @return
+     */
+    List<SysRole> getRolesByResourceId(String resourceId);
 }

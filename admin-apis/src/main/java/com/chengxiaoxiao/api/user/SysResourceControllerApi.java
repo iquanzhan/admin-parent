@@ -7,10 +7,13 @@ import com.chengxiaoxiao.model.web.dtos.query.sysresource.SysResourceModelDto;
 import com.chengxiaoxiao.model.web.dtos.query.sysresource.SysResourceSearchDto;
 import com.chengxiaoxiao.model.web.dtos.result.SysResourceTreeDto;
 import com.chengxiaoxiao.model.web.pojos.SysResource;
+import com.chengxiaoxiao.model.web.pojos.SysRole;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+
+import java.util.List;
 
 /**
  * @Author: Cheng XiaoXiao  (🍊 ^_^ ^_^)
@@ -76,6 +79,9 @@ public interface SysResourceControllerApi {
      * @return
      */
     @ApiOperation("树形展示资源信息")
-    Result<SysResourceTreeDto> tree(String parentId);
+    Result<SysResourceTreeDto> tree(@ApiParam(value = "资源父Id",required = true) String parentId);
+
+    @ApiOperation("查询资源被分配的角色信息")
+    Result<List<SysRole>> getRolesByResourceId(@ApiParam(value = "资源Id",required = true) String resourceId);
 
 }

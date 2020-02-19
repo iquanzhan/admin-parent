@@ -16,4 +16,12 @@
         select * from sys_role where parent_id=#{id} and delete_status=0 ORDER BY sort asc
     </select>
 
+    <!--    根据资源Id获取角色信息-->
+    <select id="getRolesByResourceId" resultType="sysRole"
+            parameterType="String">
+        select sys_role.* from sys_role INNER JOIN sys_role_resource on sys_role.id=sys_role_resource.role_id where delete_status=0 and resource_id=#{resourceId} ORDER BY sort asc
+    </select>
+
+
+
 </mapper>

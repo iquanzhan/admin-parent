@@ -8,13 +8,17 @@ import com.chengxiaoxiao.model.web.dtos.query.sysresource.SysResourceModelDto;
 import com.chengxiaoxiao.model.web.dtos.query.sysresource.SysResourceSearchDto;
 import com.chengxiaoxiao.model.web.dtos.result.SysResourceTreeDto;
 import com.chengxiaoxiao.model.web.pojos.SysResource;
+import com.chengxiaoxiao.model.web.pojos.SysRole;
+import com.chengxiaoxiao.model.web.pojos.SysRoleResource;
 import com.chengxiaoxiao.web.controller.BaseController;
 import com.chengxiaoxiao.web.service.SysResourceService;
+import com.chengxiaoxiao.web.service.SysRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * 角色信息接口
@@ -29,6 +33,8 @@ public class SysResourceController extends BaseController implements SysResource
 
     @Autowired
     private SysResourceService sysResourceService;
+    @Autowired
+    private SysRoleService sysRoleService;
 
     @GetMapping("")
     @Override
@@ -66,6 +72,12 @@ public class SysResourceController extends BaseController implements SysResource
     @GetMapping("/tree/{parentId}")
     public Result<SysResourceTreeDto> tree(@PathVariable String parentId) {
         return Result.success(sysResourceService.treeResourcesByParentId(parentId));
+    }
+
+    @Override
+    @GetMapping("/role/resourceId")
+    public Result<List<SysRole>> getRolesByResourceId(@PathVariable String resourceId) {
+        return Result.success(sysRoleService.getRolesByResourceId(resourceId));
     }
 
 

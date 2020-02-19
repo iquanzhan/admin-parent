@@ -226,4 +226,9 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRole, String> impleme
         //批量添加
         batchInsert(list);
     }
+
+    @Override
+    public List<SysRole> getRolesByResourceId(String resourceId) {
+        return sysRoleMapper.getRolesByResourceId(resourceId);
+    }
 }

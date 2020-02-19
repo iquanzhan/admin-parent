@@ -75,4 +75,11 @@ public interface SysRoleService extends BaseService<SysRole, String> {
      * @param userIds
      */
     void dispatchUserByRoleId(String roleId, String[] userIds);
+
+    /**
+     * 根据资源Id获取角色列表
+     * @param resourceId
+     * @return
+     */
+    List<SysRole> getRolesByResourceId(String resourceId);
 }
