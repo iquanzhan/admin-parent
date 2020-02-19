@@ -7,8 +7,10 @@ import com.chengxiaoxiao.model.common.dtos.result.Result;
 import com.chengxiaoxiao.model.web.dtos.query.sysuser.SysLoginModelDto;
 import com.chengxiaoxiao.model.web.dtos.query.sysuser.SysUserModelDto;
 import com.chengxiaoxiao.model.web.dtos.query.sysuser.SysUserSearchDto;
+import com.chengxiaoxiao.model.web.dtos.result.SysRoleSimpleDtos;
 import com.chengxiaoxiao.model.web.pojos.SysUser;
 import com.chengxiaoxiao.web.controller.BaseController;
+import com.chengxiaoxiao.web.service.SysRoleService;
 import com.chengxiaoxiao.web.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -30,6 +32,8 @@ import java.util.List;
 public class SysUserController extends BaseController implements SysUserControllerApi {
     @Autowired
     SysUserService sysUserService;
+    @Autowired
+    SysRoleService sysRoleService;
 
     @Override
     @GetMapping("/{id}")
@@ -65,6 +69,12 @@ public class SysUserController extends BaseController implements SysUserControll
     }
 
     @Override
+    @GetMapping("/user/{id}")
+    public Result<List<SysRoleSimpleDtos>> getRolesByUserId(@NotNull @PathVariable String id) {
+        return Result.success(sysRoleService.getRolesByUserId(id));
+    }
+
+    @Override
     @PostMapping("/login")
     public Result login(@RequestBody @Valid SysLoginModelDto loginModelDto) {
         String token = sysUserService.login(loginModelDto);
@@ -77,11 +87,12 @@ public class SysUserController extends BaseController implements SysUserControll
         return null;
     }
 
-
-
     @Override
-    @GetMapping("/role/{roleId}")
-    public Result<List<SysUser>> getUsersByRoleId(@PathVariable("roleId") String roleId) {
-        return Result.success(sysUserService.findUsersByRoleId(roleId));
+    @PostMapping("/role/{userId}")
+    public Result dispatchRoleByUserId(@PathVariable @NotNull(message = "用户ID不允许为空") String userId, @RequestBody @NotNull(message = "角色ID数组不能为空") String[] roldIds) {
+        sysRoleService.dispatchRoleByUserId(userId,roldIds);
+        return Result.success(null);
     }
+
+
 }

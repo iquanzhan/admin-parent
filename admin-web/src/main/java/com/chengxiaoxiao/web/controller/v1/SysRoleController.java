@@ -13,7 +13,9 @@ import com.chengxiaoxiao.model.web.pojos.SysRole;
 import com.chengxiaoxiao.model.web.pojos.SysRoleResource;
 import com.chengxiaoxiao.model.web.pojos.SysUser;
 import com.chengxiaoxiao.web.controller.BaseController;
+import com.chengxiaoxiao.web.service.SysResourceService;
 import com.chengxiaoxiao.web.service.SysRoleService;
+import com.chengxiaoxiao.web.service.SysUserService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -37,6 +39,11 @@ public class SysRoleController extends BaseController implements SysRoleControll
 
     @Autowired
     private SysRoleService sysRoleService;
+    @Autowired
+    private SysUserService sysUserService;
+    @Autowired
+    private SysResourceService sysResourceService;
+
 
     @GetMapping("")
     @Override
@@ -71,9 +78,9 @@ public class SysRoleController extends BaseController implements SysRoleControll
     }
 
     @Override
-    @GetMapping("/user/{id}")
-    public Result<List<SysRoleSimpleDtos>> getRolesByUserId(@NotNull @PathVariable String id) {
-        return Result.success(sysRoleService.getRolesByUserId(id));
+    @GetMapping("/user/{roleId}")
+    public Result<List<SysUser>> getUsersByRoleId(@PathVariable("roleId") String roleId) {
+        return Result.success(sysUserService.findUsersByRoleId(roleId));
     }
 
     @Override
@@ -83,10 +90,18 @@ public class SysRoleController extends BaseController implements SysRoleControll
     }
 
     @Override
-    @PostMapping("/user/{userId}")
-    public Result dispatchRoleByUserId(@PathVariable @NotNull(message = "用户ID不允许为空") String userId, @RequestBody @NotNull(message = "角色ID数组不能为空") String[] roldIds) {
-        sysRoleService.dispatchRoleByUserId(userId,roldIds);
+    @GetMapping("/resource/{roleId}")
+    public Result<List<SysResource>> getResourcesByRoleId(@PathVariable String roleId) {
+        return Result.success(sysResourceService.findResourcesByRoleId(roleId));
+    }
+
+    @Override
+    @PostMapping("/resource/{roleId}")
+    public Result dispatchResourceByRoleId(@PathVariable String roleId, @RequestBody String[] resourceIds) {
+        sysResourceService.dispatchResourceByRoleId(roleId,resourceIds);
         return Result.success(null);
     }
+
+
 
 }

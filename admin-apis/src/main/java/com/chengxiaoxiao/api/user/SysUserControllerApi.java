@@ -6,6 +6,7 @@ import com.chengxiaoxiao.model.common.dtos.result.Result;
 import com.chengxiaoxiao.model.web.dtos.query.sysuser.SysLoginModelDto;
 import com.chengxiaoxiao.model.web.dtos.query.sysuser.SysUserModelDto;
 import com.chengxiaoxiao.model.web.dtos.query.sysuser.SysUserSearchDto;
+import com.chengxiaoxiao.model.web.dtos.result.SysRoleSimpleDtos;
 import com.chengxiaoxiao.model.web.pojos.SysUser;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -41,18 +42,23 @@ public interface SysUserControllerApi {
     @ApiImplicitParam(name = "id", value = "用户ID", required = true, dataType = "String", paramType = "path")
     Result delete(String id);
 
+    /**
+     * 根据用户Id获取角色列表
+     *
+     * @param id 用户Id
+     * @return
+     */
+    @ApiOperation("根据用户Id获取角色列表")
+    Result<List<SysRoleSimpleDtos>> getRolesByUserId(@ApiParam(name = "id", value = "用Id", required = true) String id);
+
     @ApiOperation("用户登录")
     Result login(@ApiParam(value = "用户对象模型", required = true) SysLoginModelDto loginModelDto);
 
     @ApiOperation("用户注销")
     Result logout(@ApiParam(name = "id", value = "用户ID", required = true) String id);
 
-    /**
-     * 根据角色Id查询角色下的用户信息
-     *
-     * @param roleId 角色Id
-     * @return
-     */
-    @ApiOperation("查询某角色的用户列表")
-    Result<List<SysUser>> getUsersByRoleId(@ApiParam(name = "roleId", value = "角色Id", required = true) String roleId);
+
+    @ApiOperation("为用户分配角色")
+    Result dispatchRoleByUserId(@ApiParam(name = "userId", value = "用户Id") String userId, @ApiParam(name = "roldIds", value = "角色Id数组", type = "array", example = "id,id,id,id") String[] roldIds);
+
 }
