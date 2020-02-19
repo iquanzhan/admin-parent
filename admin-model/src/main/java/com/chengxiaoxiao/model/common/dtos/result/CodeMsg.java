@@ -17,6 +17,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CodeMsg implements Serializable {
+
     //成功的code
     private static Integer CODE_SUCCESS = 0;
 
@@ -42,6 +43,11 @@ public class CodeMsg implements Serializable {
     //角色异常
     public static CodeMsg ROLE_NOT_EXIST = new CodeMsg(200001, "角色信息不存在");
     public static CodeMsg ROLE_ID_NOT_EXIST = new CodeMsg(200002, "请输入角色ID");
+
+
+    //资源异常
+    public static final CodeMsg RESOURCE_ID_NOT_EXIST = new CodeMsg(300001, "请输入资源ID");
+    public static final CodeMsg RESOURCE_NOT_EXIST = new CodeMsg(300002, "资源信息不存在");
 
 
     private Integer code;

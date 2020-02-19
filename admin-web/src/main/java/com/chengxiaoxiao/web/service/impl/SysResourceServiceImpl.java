@@ -8,6 +8,7 @@ import com.chengxiaoxiao.model.mappers.web.SysResourceMapper;
 import com.chengxiaoxiao.model.mappers.web.SysRoleResourceMapper;
 import com.chengxiaoxiao.model.repository.BaseDao;
 import com.chengxiaoxiao.model.repository.SysResourceRepository;
+import com.chengxiaoxiao.model.repository.SysRoleRepository;
 import com.chengxiaoxiao.model.repository.SysRoleResourceRepository;
 import com.chengxiaoxiao.model.web.dtos.query.sysresource.SysResourceModelDto;
 import com.chengxiaoxiao.model.web.dtos.query.sysresource.SysResourceSearchDto;
@@ -46,6 +47,8 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysResource, String>
     private SysResourceRepository sysResourceRepository;
     @Autowired
     private SysRoleResourceRepository sysRoleResourceRepository;
+    @Autowired
+    private SysRoleRepository sysRoleRepository;
 
     @Autowired
     private SysRoleResourceMapper sysRoleResourceMapper;
@@ -160,12 +163,17 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysResource, String>
         if (StringUtils.isBlank(roleId)) {
             throw new GlobleException(CodeMsg.ROLE_ID_NOT_EXIST);
         }
+        if (!sysRoleRepository.existsById(roleId)) {
+            throw new GlobleException(CodeMsg.ROLE_NOT_EXIST);
+        }
         //删除之前的信息
         sysRoleResourceRepository.deleteByRoleId(roleId);
 
         List<SysRoleResource> sysRoleResourceList = new ArrayList<>();
         for (String resourceId : resourceIds) {
-            sysRoleResourceList.add(new SysRoleResource(idWorker.nextId() + "", roleId, resourceId));
+            if (sysResourceRepository.existsById(resourceId)) {
+                sysRoleResourceList.add(new SysRoleResource(idWorker.nextId() + "", roleId, resourceId));
+            }
         }
         sysRoleResourceMapper.batchInsert(sysRoleResourceList);
     }
@@ -184,6 +192,26 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysResource, String>
         sysResourceTreeDto.setChildren(getResourcesByParentId(parentId));
 
         return sysResourceTreeDto;
+    }
+
+    @Override
+    public void dispatchRoleByResourceId(String resourceId, String[] roleIds) {
+        if (StringUtils.isBlank(resourceId)) {
+            throw new GlobleException(CodeMsg.RESOURCE_ID_NOT_EXIST);
+        }
+        if(!sysResourceRepository.existsById(resourceId)){
+            throw new GlobleException(CodeMsg.RESOURCE_NOT_EXIST);
+        }
+        //删除之前的信息
+        sysRoleResourceRepository.deleteByResourceId(resourceId);
+
+        List<SysRoleResource> sysRoleResourceList = new ArrayList<>();
+        for (String roleId : roleIds) {
+            if(sysRoleRepository.existsById(roleId)){
+                sysRoleResourceList.add(new SysRoleResource(idWorker.nextId() + "", roleId, resourceId));
+            }
+        }
+        sysRoleResourceMapper.batchInsert(sysRoleResourceList);
     }
 
     /**

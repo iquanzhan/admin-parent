@@ -79,9 +79,12 @@ public interface SysResourceControllerApi {
      * @return
      */
     @ApiOperation("树形展示资源信息")
-    Result<SysResourceTreeDto> tree(@ApiParam(value = "资源父Id",required = true) String parentId);
+    Result<SysResourceTreeDto> tree(@ApiParam(value = "资源父Id", required = true) String parentId);
 
     @ApiOperation("查询资源被分配的角色信息")
-    Result<List<SysRole>> getRolesByResourceId(@ApiParam(value = "资源Id",required = true) String resourceId);
+    Result<List<SysRole>> getRolesByResourceId(@ApiParam(value = "资源Id", required = true) String resourceId);
+
+    @ApiOperation("为资源分配角色信息")
+    Result dispathchRoleByResourceId(@ApiParam(value = "资源Id", required = true) String resourceId, @ApiParam(value = "角色Id数组", required = true) String[] roleIds);
 
 }

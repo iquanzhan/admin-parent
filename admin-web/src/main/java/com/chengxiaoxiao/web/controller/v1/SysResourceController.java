@@ -75,9 +75,16 @@ public class SysResourceController extends BaseController implements SysResource
     }
 
     @Override
-    @GetMapping("/role/resourceId")
+    @GetMapping("/role/{resourceId}")
     public Result<List<SysRole>> getRolesByResourceId(@PathVariable String resourceId) {
         return Result.success(sysRoleService.getRolesByResourceId(resourceId));
+    }
+
+    @Override
+    @PostMapping("/role/{resourceId}")
+    public Result dispathchRoleByResourceId(@PathVariable String resourceId, @RequestBody String[] roleIds) {
+        sysResourceService.dispatchRoleByResourceId(resourceId,roleIds);
+        return Result.success(null);
     }
 
 

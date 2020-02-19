@@ -44,9 +44,16 @@ public interface SysResourceService extends BaseService<SysResource,String>{
     void dispatchResourceByRoleId(String roleId, String[] resourceIds);
 
     /**
-     * 显示资源书结构
+     * 显示资源树结构
      * @param parentId
      * @return
      */
     SysResourceTreeDto treeResourcesByParentId(String parentId);
+
+    /**
+     * 给资源分配角色
+     * @param resourceId
+     * @param roleIds
+     */
+    void dispatchRoleByResourceId(String resourceId, String[] roleIds);
 }
