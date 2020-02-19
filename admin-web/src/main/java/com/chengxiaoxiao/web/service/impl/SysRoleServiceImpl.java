@@ -21,6 +21,7 @@ import com.chengxiaoxiao.model.web.pojos.*;
 import com.chengxiaoxiao.web.exception.GlobleException;
 import com.chengxiaoxiao.web.service.SysRoleService;
 import com.chengxiaoxiao.web.service.SysUserRoleService;
+import com.chengxiaoxiao.web.service.SysUserService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -58,8 +59,8 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRole, String> impleme
     private SysUserRoleService sysUserRoleService;
     @Autowired
     private SysRoleService sysRoleService;
-
-
+    @Autowired
+    private SysUserService sysUserService;
 
 
     @Autowired
@@ -202,6 +203,27 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRole, String> impleme
             }
         }
         //给用户添加角色信息
+        batchInsert(list);
+    }
+
+    @Override
+    public void dispatchUserByRoleId(String roleId, String[] userIds) {
+        //判断用户是否存在
+        Optional<SysRole> role = sysRoleRepository.findById(roleId);
+        if (!role.isPresent()) {
+            throw new GlobleException(CodeMsg.ROLE_NOT_EXIST);
+        }
+
+        //删除用户之前的角色信息
+        sysUserRoleService.deleteByRoleId(roleId);
+
+        List<SysUserRole> list = new ArrayList<>();
+        for (String userId : userIds) {
+            if (sysUserService.exists(userId)) {
+                list.add(new SysUserRole(idWorker.nextId() + "", userId, roleId));
+            }
+        }
+        //批量添加
         batchInsert(list);
     }
 }

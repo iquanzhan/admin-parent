@@ -50,4 +50,9 @@ public class SysUserRoleServiceImpl extends BaseServiceImpl<SysUserRole, String>
     public void deleteByUserId(String userId) {
         sysUserRoleRepository.deleteByUserId(userId);
     }
+
+    @Override
+    public void deleteByRoleId(String roleId) {
+        sysUserRoleRepository.deleteByRoleId(roleId);
+    }
 }

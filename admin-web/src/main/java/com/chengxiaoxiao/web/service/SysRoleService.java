@@ -62,10 +62,17 @@ public interface SysRoleService extends BaseService<SysRole, String> {
     SysRoleTreeDto treeRolesByParentId(String parentId);
 
     /**
-     * 根据用户Id分配用户的角色
+     * 为用户分配角色
      *
      * @param userId 用户Id
      * @param roldIds 用户角色ID数组
      */
     void dispatchRoleByUserId(String userId, String[] roldIds);
+
+    /**
+     * 为角色分配用户
+     * @param roleId
+     * @param userIds
+     */
+    void dispatchUserByRoleId(String roleId, String[] userIds);
 }

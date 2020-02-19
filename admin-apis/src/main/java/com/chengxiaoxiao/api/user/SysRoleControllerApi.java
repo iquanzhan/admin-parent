@@ -72,6 +72,7 @@ public interface SysRoleControllerApi {
      * @param id
      * @return
      */
+    @ApiOperation("删除角色信息")
     @ApiImplicitParam(name = "id", value = "角色ID", dataType = "string", required = true, paramType = "path")
     Result delete(String id);
 
@@ -102,6 +103,16 @@ public interface SysRoleControllerApi {
      */
     @ApiOperation("给角色分配资源")
     Result dispatchResourceByRoleId(@ApiParam(name = "roleId", value = "角色Id", required = true) String roleId, @ApiParam(name = "resourceIds", value = "资源Id数组", required = true, type = "array") String[] resourceIds);
+
+    /**
+     * 为角色分配用户
+     *
+     * @param roleId  角色Id
+     * @param userIds 用户Id数组
+     * @return
+     */
+    @ApiOperation("为角色分配用户")
+    Result dispatchUserByRoleId(@ApiParam(name = "roleId", value = "角色Id", required = true) String roleId, @ApiParam(name = "userIds", value = "资源Id数组", required = true, type = "array") String[] userIds);
 
     /**
      * 获取角色下的资源列表

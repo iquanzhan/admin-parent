@@ -17,4 +17,11 @@ public interface SysUserRoleRepository extends BaseDao<SysUserRole, String> {
      * @param userId
      */
     void deleteByUserId(String userId);
+
+    /**
+     * 根据角色Id删除信息
+     *
+     * @param roleId
+     */
+    void deleteByRoleId(String roleId);
 }

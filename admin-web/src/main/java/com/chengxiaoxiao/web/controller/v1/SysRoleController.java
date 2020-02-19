@@ -102,6 +102,10 @@ public class SysRoleController extends BaseController implements SysRoleControll
         return Result.success(null);
     }
 
-
-
+    @Override
+    @PostMapping("/user/{roleId}")
+    public Result dispatchUserByRoleId(@PathVariable("roleId") String roleId, @RequestBody String[] userIds) {
+        sysRoleService.dispatchUserByRoleId(roleId,userIds);
+        return Result.success(null);
+    }
 }
