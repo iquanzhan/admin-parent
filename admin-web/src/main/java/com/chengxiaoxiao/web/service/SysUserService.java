@@ -1,6 +1,7 @@
 package com.chengxiaoxiao.web.service;
 
 
+import com.chengxiaoxiao.model.web.dtos.UserEntitySecurity;
 import com.chengxiaoxiao.model.web.dtos.query.sysuser.SysLoginModelDto;
 import com.chengxiaoxiao.model.web.dtos.query.sysuser.SysUserModelDto;
 import com.chengxiaoxiao.model.web.dtos.query.sysuser.SysUserSearchDto;
@@ -67,4 +68,11 @@ public interface SysUserService extends BaseService<SysUser, String> {
      * @return
      */
     List<SysUser> findUsersByRoleId(String roleId);
+
+    /**
+     * 根据用户名查询，反悔security类
+     * @param username
+     * @return
+     */
+    SysUser selectUserByName(String username);
 }

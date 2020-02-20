@@ -1,9 +1,15 @@
-package com.chengxiaoxiao.web.security;
+package com.chengxiaoxiao.web.security.config;
 
+import com.chengxiaoxiao.common.config.JwtConfig;
+import com.chengxiaoxiao.web.security.evaluator.UserPermissionEvaluator;
+import com.chengxiaoxiao.web.security.handler.*;
+import com.chengxiaoxiao.web.security.jwt.JWTAuthenticationTokenFilter;
+import com.chengxiaoxiao.web.security.provider.UserAuthenticationProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -11,10 +17,8 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
-import org.springframework.util.DigestUtils;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
  * @Author: Cheng XiaoXiao  (🍊 ^_^ ^_^)
@@ -26,8 +30,13 @@ import org.springframework.util.DigestUtils;
 @EnableGlobalMethodSecurity(prePostEnabled = true) //开启权限注解,默认是关闭的
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Value("${jwt.antMatchers}")
-    private String antMatchers;
+    @Autowired
+    JwtConfig jwtConfig;
+
+    @Bean
+    public JWTAuthenticationTokenFilter authenticationTokenFilterBean() throws Exception {
+        return new JWTAuthenticationTokenFilter();
+    }
 
 
     /**
@@ -100,8 +109,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
+                // 允许对于网站静态资源的无授权访问
+                .antMatchers(
+                        HttpMethod.GET,
+                        "/",
+                        "/*.html",
+                        "/favicon.ico",
+                        "/**/*.html",
+                        "/**/*.css",
+                        "/**/*.js"
+                ).permitAll()
                 //不进行权限验证的请求或资源(从配置文件中读取)
-                .antMatchers(antMatchers.split(",")).permitAll()
+                .antMatchers(jwtConfig.getAntMatchers().split(",")).permitAll()
                 //其他的需要登陆后才能访问
                 .anyRequest().authenticated()
                 .and()
@@ -134,8 +153,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         // 禁用缓存
         http.headers().cacheControl();
-        // 添加JWT过滤器
-        http.addFilter(new JWTAuthenticationTokenFilter(authenticationManager()));
+        // 添加JWT filter
+        http.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
     }
 
 

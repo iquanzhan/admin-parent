@@ -38,36 +38,6 @@ public class JwtUtil {
 
 
     /**
-     * 生成WebToken
-     *
-     * @param id
-     * @param subject
-     * @param authorities
-     * @return
-     */
-    public String createWebJWT(String id, String subject, String authorities) {
-        String jwt = createJWT(id, subject, authorities);
-        return tokenPrefix + jwt;
-    }
-
-    /**
-     * 解析Web token
-     * @param jwtStr
-     * @return
-     */
-    public Claims getWebClaims(String jwtStr) {
-        if (null != jwtStr && jwtStr.startsWith(tokenPrefix)) {
-            // 截取JWT前缀
-            String token = jwtStr.replace(tokenPrefix, "");
-            // 解析JWT
-            Claims claims = parseJWT(token);
-            return claims;
-        }
-        return null;
-    }
-
-
-    /**
      * 生成Jwt Token
      *
      * @param id          用户Id
@@ -89,7 +59,7 @@ public class JwtUtil {
                 // 自定义属性 放入用户拥有权限
                 .claim("authorities", authorities)
                 // 失效时间
-                .setExpiration(new Date(System.currentTimeMillis() + expiration))
+                .setExpiration(new Date(System.currentTimeMillis() + (expiration*1000)))
                 // 签名算法和密钥
                 .signWith(SignatureAlgorithm.HS512, secret)
                 .compact();

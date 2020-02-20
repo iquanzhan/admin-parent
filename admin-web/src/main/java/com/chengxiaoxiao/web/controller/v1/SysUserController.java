@@ -14,6 +14,7 @@ import com.chengxiaoxiao.web.service.SysRoleService;
 import com.chengxiaoxiao.web.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -43,6 +44,7 @@ public class SysUserController extends BaseController implements SysUserControll
 
     @Override
     @GetMapping(value = {""})
+    @PreAuthorize("hasRole('ADMIN')")
     public Result<PageResult<SysUser>> search(SysUserSearchDto sysUserSearchDto, PageQueryDtos pageQueryDtos) {
         Page<SysUser> search = sysUserService.search(sysUserSearchDto, getPageRequest());
 

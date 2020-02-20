@@ -1,4 +1,4 @@
-package com.chengxiaoxiao.web.security;
+package com.chengxiaoxiao.web.security.handler;
 
 import com.chengxiaoxiao.common.utils.ResultUtil;
 import com.chengxiaoxiao.model.common.dtos.result.CodeMsg;
@@ -18,11 +18,6 @@ import org.springframework.security.web.access.AccessDeniedHandler;
  */
 @Component
 public class UserAuthAccessDeniedHandler implements AccessDeniedHandler{
-    /**
-     * 暂无权限返回结果
-     * @Author Sans
-     * @CreateTime 2019/10/3 8:41
-     */
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException exception){
         ResultUtil.responseJson(response, Result.success(CodeMsg.AUTHENTICATION_ERROR));

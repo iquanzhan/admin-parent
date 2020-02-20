@@ -1,4 +1,4 @@
-package com.chengxiaoxiao.web.security;
+package com.chengxiaoxiao.web.security.handler;
 
 
 
@@ -20,11 +20,6 @@ import javax.servlet.http.HttpServletResponse;
  */
 @Component
 public class UserAuthenticationEntryPointHandler implements AuthenticationEntryPoint {
-    /**
-     * 用户未登录返回结果
-     * @Author Sans
-     * @CreateTime 2019/10/3 9:01
-     */
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception){
 

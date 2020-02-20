@@ -1,4 +1,4 @@
-package com.chengxiaoxiao.web.security;
+package com.chengxiaoxiao.web.security.jwt;
 
 /**
  * @Author: Cheng XiaoXiao  (🍊 ^_^ ^_^)
@@ -7,6 +7,7 @@ package com.chengxiaoxiao.web.security;
  */
 
 import com.alibaba.fastjson.JSONObject;
+import com.chengxiaoxiao.common.config.JwtConfig;
 import com.chengxiaoxiao.common.jwt.JwtUtil;
 import com.chengxiaoxiao.common.utils.ResultUtil;
 import com.chengxiaoxiao.model.common.dtos.result.CodeMsg;
@@ -22,12 +23,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -44,35 +48,30 @@ import java.util.*;
  * @CreateTime 2019/10/5 16:41
  */
 @Slf4j
-public class JWTAuthenticationTokenFilter extends BasicAuthenticationFilter {
+@Component
+public class JWTAuthenticationTokenFilter extends OncePerRequestFilter {
 
     @Autowired
-    JwtUtil jwtUtil;
+    private JwtUtil jwtUtil;
 
-
-    public JWTAuthenticationTokenFilter(AuthenticationManager authenticationManager) {
-        super(authenticationManager);
-    }
+    @Autowired
+    JwtConfig jwtConfig;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         // 获取请求头中JWT的Token
-        String tokenHeader = request.getHeader("Authorization");
+        String tokenHeaderAuth = request.getHeader(jwtConfig.getTokenHeader());
 
         try {
-            if (null != tokenHeader && tokenHeader.startsWith("Sans-")) {
+            if (null != tokenHeaderAuth && tokenHeaderAuth.startsWith(jwtConfig.getTokenPrefix())) {
                 // 截取JWT前缀
-                String token = tokenHeader.replace("Sans-", "");
-                // 解析JWT
-                Claims claims = Jwts.parser()
-                        .setSigningKey("JWTSecret")
-                        .parseClaimsJws(token)
-                        .getBody();
+                String token = tokenHeaderAuth.replace(jwtConfig.getTokenPrefix(), "");
+                Claims claims = jwtUtil.parseJWT(token);
 
                 // 获取用户名
                 String username = claims.getSubject();
                 String userId = claims.getId();
-                if (!StringUtils.isEmpty(username) && !StringUtils.isEmpty(userId)) {
+                if (!StringUtils.isEmpty(username) && !StringUtils.isEmpty(userId) && SecurityContextHolder.getContext().getAuthentication() == null) {
                     // 获取角色
                     Set<GrantedAuthority> authorities = new HashSet<>();
                     String authority = claims.get("authorities").toString();
@@ -82,15 +81,15 @@ public class JWTAuthenticationTokenFilter extends BasicAuthenticationFilter {
                             authorities.add(new SimpleGrantedAuthority(s));
                         }
                     }
+
                     //组装参数
                     UserEntitySecurity selfUserEntity = new UserEntitySecurity();
                     selfUserEntity.setUserName(claims.getSubject());
                     selfUserEntity.setId(userId);
                     selfUserEntity.setAuthorities(authorities);
-                    UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(selfUserEntity, userId, authorities);
-
+                    UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(selfUserEntity, null, selfUserEntity.getAuthorities());
+                    authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authentication);
-
                 }
             }
         } catch (ExpiredJwtException e) {
@@ -99,5 +98,7 @@ public class JWTAuthenticationTokenFilter extends BasicAuthenticationFilter {
             ResultUtil.responseJson(response, Result.success(CodeMsg.AUTHENTICATION_ERROR));
         }
         filterChain.doFilter(request, response);
+        return;
     }
+
 }

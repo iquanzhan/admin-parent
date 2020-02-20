@@ -2,6 +2,7 @@ package com.chengxiaoxiao.web.exception;
 
 import com.chengxiaoxiao.model.common.dtos.result.CodeMsg;
 import com.chengxiaoxiao.model.common.dtos.result.Result;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -24,6 +25,7 @@ public class GlobleExceptionHandler {
         e.printStackTrace();
 
         if (e instanceof BindException) {
+            //JSR349 参数校验产生的异常
             BindException ex = (BindException) e;
             List<ObjectError> errors = ex.getAllErrors();
             ObjectError error = errors.get(0);
@@ -31,13 +33,19 @@ public class GlobleExceptionHandler {
 
             return Result.error(CodeMsg.BIND_ERROR.fillArgs(msg));
         } else if (e instanceof MethodArgumentNotValidException) {
+            //兼容低版本JSR303异常
             MethodArgumentNotValidException ex = (MethodArgumentNotValidException) e;
 
             return Result.error(CodeMsg.BIND_ERROR.fillArgs(ex.getBindingResult().getAllErrors().get(0).getDefaultMessage()));
         } else if (e instanceof GlobleException) {
+            //处理系统逻辑产生的异常
             GlobleException ex = (GlobleException) e;
             return Result.error(ex.getCm());
-        }else {
+        }else if(e instanceof AccessDeniedException){
+            return Result.error(CodeMsg.AUTHENTICATION_ERROR);
+        }
+        else {
+            //其他异常
             return Result.error(CodeMsg.OTHER_ERROR);
         }
     }

@@ -1,5 +1,6 @@
 package com.chengxiaoxiao.model.mappers.web;
 
+import com.chengxiaoxiao.model.web.dtos.UserEntitySecurity;
 import com.chengxiaoxiao.model.web.pojos.SysUser;
 
 import java.util.List;

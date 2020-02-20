@@ -1,7 +1,8 @@
-package com.chengxiaoxiao.web.security;
+package com.chengxiaoxiao.web.security.handler;
 
 
 import com.alibaba.fastjson.JSON;
+import com.chengxiaoxiao.common.config.JwtConfig;
 import com.chengxiaoxiao.common.jwt.JwtUtil;
 import com.chengxiaoxiao.common.utils.ResultUtil;
 import com.chengxiaoxiao.model.common.dtos.result.CodeMsg;
@@ -9,6 +10,7 @@ import com.chengxiaoxiao.model.common.dtos.result.Result;
 import com.chengxiaoxiao.model.web.dtos.UserEntitySecurity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -37,13 +39,10 @@ public class UserLoginSuccessHandler implements AuthenticationSuccessHandler {
     @Autowired
     private JwtUtil jwtUtil;
 
-    /**
-     * 登录成功返回结果
-     *
-     * @param request
-     * @param response
-     * @param authentication
-     */
+    @Autowired
+    private JwtConfig jwtConfig;
+
+
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
         UserEntitySecurity userEntitySecurity = (UserEntitySecurity) authentication.getPrincipal();
@@ -52,7 +51,7 @@ public class UserLoginSuccessHandler implements AuthenticationSuccessHandler {
             authoritys.add(authority.getAuthority());
         }
 
-        String jwt = jwtUtil.createWebJWT(userEntitySecurity.getId(), userEntitySecurity.getUsername(), JSON.toJSONString(authoritys));
+        String jwt = jwtConfig.getTokenPrefix() + jwtUtil.createJWT(userEntitySecurity.getId(), userEntitySecurity.getUsername(), JSON.toJSONString(authoritys));
         ResultUtil.responseJson(response, Result.success(jwt));
     }
 }

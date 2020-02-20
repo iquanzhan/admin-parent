@@ -1,5 +1,6 @@
 package com.chengxiaoxiao.web;
 
+import com.chengxiaoxiao.common.config.JwtConfig;
 import com.chengxiaoxiao.common.jwt.JwtUtil;
 import com.chengxiaoxiao.common.utils.CastEntityUtil;
 import com.chengxiaoxiao.common.utils.IdWorker;
@@ -54,5 +55,10 @@ public class WebApplication extends SpringBootServletInitializer {
     @Bean
     public CastEntityUtil castEntityUtil() {
         return new CastEntityUtil();
+    }
+
+    @Bean
+    public JwtConfig jwtConfig(){
+        return new JwtConfig();
     }
 }

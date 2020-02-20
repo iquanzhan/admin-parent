@@ -9,6 +9,7 @@ import com.chengxiaoxiao.model.common.dtos.result.CodeMsg;
 import com.chengxiaoxiao.model.common.dtos.result.Result;
 import com.chengxiaoxiao.model.mappers.web.SysUserMapper;
 import com.chengxiaoxiao.model.repository.BaseDao;
+import com.chengxiaoxiao.model.web.dtos.UserEntitySecurity;
 import com.chengxiaoxiao.model.web.dtos.query.sysuser.SysLoginModelDto;
 import com.chengxiaoxiao.model.web.dtos.query.sysuser.SysUserModelDto;
 import com.chengxiaoxiao.model.web.dtos.query.sysuser.SysUserSearchDto;
@@ -189,5 +190,10 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser, String> impleme
     @Override
     public List<SysUser> findUsersByRoleId(String roleId) {
         return sysUserMapper.findUsersByRoleId(roleId);
+    }
+
+    @Override
+    public SysUser selectUserByName(String username) {
+        return sysUserRepository.findByUserName(username);
     }
 }
