@@ -61,4 +61,6 @@ public interface SysUserControllerApi {
     @ApiOperation("为用户分配角色")
     Result dispatchRoleByUserId(@ApiParam(name = "userId", value = "用户Id") String userId, @ApiParam(name = "roldIds", value = "角色Id数组", type = "array", example = "id,id,id,id") String[] roldIds);
 
+    @ApiOperation("根据TOKEN获取用户基本信息")
+    Result<SysUser> info(@ApiParam(name = "token", value = "TOKEN") String token);
 }

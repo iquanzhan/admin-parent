@@ -1055,33 +1055,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 2.自定义登录成功处理器
 
 ```java
-package com.chengxiaoxiao.web.security.handler;
-
-
-import com.alibaba.fastjson.JSON;
-import com.chengxiaoxiao.common.config.JwtConfig;
-import com.chengxiaoxiao.common.jwt.JwtUtil;
-import com.chengxiaoxiao.common.utils.ResultUtil;
-import com.chengxiaoxiao.model.common.dtos.result.CodeMsg;
-import com.chengxiaoxiao.model.common.dtos.result.Result;
-import com.chengxiaoxiao.model.web.dtos.UserEntitySecurity;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.stereotype.Component;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
 /**
  * 登录成功处理类
  *
@@ -1117,25 +1090,6 @@ public class UserLoginSuccessHandler implements AuthenticationSuccessHandler {
 3.自定义登录失败处理器
 
 ```java
-package com.chengxiaoxiao.web.security.handler;
-
-
-import com.chengxiaoxiao.common.utils.ResultUtil;
-import com.chengxiaoxiao.model.common.dtos.result.CodeMsg;
-import com.chengxiaoxiao.model.common.dtos.result.Result;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.LockedException;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-import org.springframework.stereotype.Component;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-
 /**
  * 登录失败处理类
  *
@@ -1171,22 +1125,7 @@ public class UserLoginFailureHandler implements AuthenticationFailureHandler {
 4.自定义注销成功处理器
 
 ```java
-package com.chengxiaoxiao.web.security.handler;
 
-
-
-import com.chengxiaoxiao.common.utils.ResultUtil;
-import com.chengxiaoxiao.model.common.dtos.result.CodeMsg;
-import com.chengxiaoxiao.model.common.dtos.result.Result;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
-import org.springframework.stereotype.Component;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
-import java.util.Map;
 /**
  * 用户登出类
  * @Author: Cheng XiaoXiao  (🍊 ^_^ ^_^)
@@ -1590,21 +1529,6 @@ public class MyFilterSecurityMetadataSource implements FilterInvocationSecurityM
 重写UsernamePasswordAnthenticationFilter：
 
 ```java
-package com.template.filter;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.template.bean.AuthenticationBean;
-import org.springframework.http.MediaType;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.InputStream;
-
 public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
