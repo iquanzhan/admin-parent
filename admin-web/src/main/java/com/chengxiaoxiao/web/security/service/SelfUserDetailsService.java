@@ -14,8 +14,9 @@ import org.springframework.stereotype.Service;
 /**
  * SpringSecurity用户的业务实现
  *
- * @Author Sans
- * @CreateTime 2019/10/1 17:21
+ * @Author: Cheng XiaoXiao  (🍊 ^_^ ^_^)
+ * @Date: 2020/2/2 8:39 下午
+ * @Description:
  */
 @Service
 public class SelfUserDetailsService implements UserDetailsService {

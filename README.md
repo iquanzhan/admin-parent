@@ -846,6 +846,830 @@ Claims claims=(Claims)request.getAttribute("admin_claims");
 
 添加依赖
 
+```xml
+     <!-- spring-boot-starter-security-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+```
+
+引入spring-security：
+
+1.添加config
+
+```java
+package com.chengxiaoxiao.web.security.config;
+
+import com.chengxiaoxiao.common.config.JwtConfig;
+import com.chengxiaoxiao.web.security.datasource.DynamicallyUrlAccessDecisionManager;
+import com.chengxiaoxiao.web.security.datasource.DynamicallyUrlInterceptor;
+import com.chengxiaoxiao.web.security.datasource.MyFilterSecurityMetadataSource;
+import com.chengxiaoxiao.web.security.evaluator.UserPermissionEvaluator;
+import com.chengxiaoxiao.web.security.handler.*;
+import com.chengxiaoxiao.web.security.jwt.JWTAuthenticationTokenFilter;
+import com.chengxiaoxiao.web.security.provider.UserAuthenticationProvider;
+import com.chengxiaoxiao.web.service.SysResourceService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.access.AccessDecisionVoter;
+import org.springframework.security.access.vote.RoleVoter;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
+import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * @Author: Cheng XiaoXiao  (🍊 ^_^ ^_^)
+ * @Date: 2020/2/2 8:40 下午
+ * @Description:
+ */
+@Configuration
+@EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true) //开启权限注解,默认是关闭的
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    JwtConfig jwtConfig;
+
+    @Autowired
+    SysResourceService sysResourceService;
+
+    @Bean
+    public JWTAuthenticationTokenFilter authenticationTokenFilterBean() throws Exception {
+        return new JWTAuthenticationTokenFilter();
+    }
+
+
+    /**
+     * 自定义登录成功处理器
+     */
+    @Autowired
+    private UserLoginSuccessHandler userLoginSuccessHandler;
+    /**
+     * 自定义登录失败处理器
+     */
+    @Autowired
+    private UserLoginFailureHandler userLoginFailureHandler;
+    /**
+     * 自定义注销成功处理器
+     */
+    @Autowired
+    private UserLogoutSuccessHandler userLogoutSuccessHandler;
+    /**
+     * 自定义暂无权限处理器
+     */
+    @Autowired
+    private UserAuthAccessDeniedHandler userAuthAccessDeniedHandler;
+    /**
+     * 自定义未登录的处理器
+     */
+    @Autowired
+    private UserAuthenticationEntryPointHandler userAuthenticationEntryPointHandler;
+    /**
+     * 自定义登录逻辑验证器
+     */
+    @Autowired
+    private UserAuthenticationProvider userAuthenticationProvider;
+
+
+    /**
+     * 注入自定义PermissionEvaluator
+     */
+    @Bean
+    public DefaultWebSecurityExpressionHandler userSecurityExpressionHandler() {
+        DefaultWebSecurityExpressionHandler handler = new DefaultWebSecurityExpressionHandler();
+        handler.setPermissionEvaluator(new UserPermissionEvaluator());
+        return handler;
+    }
+
+    /**
+     * 配置登录验证逻辑
+     */
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) {
+        //这里可启用我们自己的登陆验证逻辑
+        auth.authenticationProvider(userAuthenticationProvider);
+    }
+
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers("/swagger-ui.html")
+                .antMatchers("/webjars/**")
+                .antMatchers("/v2/**")
+                .antMatchers("/swagger-resources/**")
+                .antMatchers("/druid/**");
+    }
+
+
+    @Bean
+    public DynamicallyUrlInterceptor dynamicallyUrlInterceptor() {
+        DynamicallyUrlInterceptor interceptor = new DynamicallyUrlInterceptor();
+        interceptor.setSecurityMetadataSource(new MyFilterSecurityMetadataSource(sysResourceService));
+
+        //配置RoleVoter决策
+        List<AccessDecisionVoter<? extends Object>> decisionVoters = new ArrayList<AccessDecisionVoter<? extends Object>>();
+        decisionVoters.add(new RoleVoter());
+        //设置认证决策管理器
+        interceptor.setAccessDecisionManager(new DynamicallyUrlAccessDecisionManager(decisionVoters));
+        return interceptor;
+    }
+
+    /**
+     * 配置security的控制逻辑
+     *
+     * @Author Sans
+     * @CreateTime 2020/02/19 16:56
+     * @Param http 请求
+     */
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.authorizeRequests()
+                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                // 允许对于网站静态资源的无授权访问
+                .antMatchers(
+                        HttpMethod.GET,
+                        "/",
+                        "/*.html",
+                        "/favicon.ico",
+                        "/**/*.html",
+                        "/**/*.css",
+                        "/**/*.js"
+                ).permitAll()
+                //不进行权限验证的请求或资源(从配置文件中读取)
+                .antMatchers(jwtConfig.getAntMatchers().split(",")).permitAll()
+                //其他的需要登陆后才能访问
+                .anyRequest().authenticated()
+                .and()
+                //配置未登录自定义处理类
+                .httpBasic().authenticationEntryPoint(userAuthenticationEntryPointHandler)
+                .and()
+                //配置登录地址
+                .formLogin()
+                .loginProcessingUrl("/user/login")
+                //配置登录成功自定义处理类
+                .successHandler(userLoginSuccessHandler)
+                //配置登录失败自定义处理类
+                .failureHandler(userLoginFailureHandler)
+                .and()
+                //配置登出地址
+                .logout()
+                .logoutUrl("/user/logout")
+                //配置用户登出自定义处理类
+                .logoutSuccessHandler(userLogoutSuccessHandler)
+                .and()
+                //配置没有权限自定义处理类
+                .exceptionHandling().accessDeniedHandler(userAuthAccessDeniedHandler)
+                .and()
+                // 开启跨域
+                .cors()
+                .and()
+                // 取消跨站请求伪造防护
+                .csrf().disable();
+        // 基于Token不需要session
+        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        // 禁用缓存
+        http.headers().cacheControl();
+        // 添加JWT filter
+        http.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(dynamicallyUrlInterceptor(), FilterSecurityInterceptor.class);
+    }
+
+
+}
+
+```
+
+2.自定义登录成功处理器
+
+```java
+package com.chengxiaoxiao.web.security.handler;
+
+
+import com.alibaba.fastjson.JSON;
+import com.chengxiaoxiao.common.config.JwtConfig;
+import com.chengxiaoxiao.common.jwt.JwtUtil;
+import com.chengxiaoxiao.common.utils.ResultUtil;
+import com.chengxiaoxiao.model.common.dtos.result.CodeMsg;
+import com.chengxiaoxiao.model.common.dtos.result.Result;
+import com.chengxiaoxiao.model.web.dtos.UserEntitySecurity;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.stereotype.Component;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
+/**
+ * 登录成功处理类
+ *
+ * @Author: Cheng XiaoXiao  (🍊 ^_^ ^_^)
+ * @Date: 2020/2/2 8:38 下午
+ * @Description:
+ */
+@Slf4j
+@Component
+public class UserLoginSuccessHandler implements AuthenticationSuccessHandler {
+
+    @Autowired
+    private JwtUtil jwtUtil;
+
+    @Autowired
+    private JwtConfig jwtConfig;
+
+
+    @Override
+    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
+        UserEntitySecurity userEntitySecurity = (UserEntitySecurity) authentication.getPrincipal();
+        Set<String> authoritys = new HashSet<>();
+        for (GrantedAuthority authority : userEntitySecurity.getAuthorities()) {
+            authoritys.add(authority.getAuthority());
+        }
+
+        String jwt = jwtConfig.getTokenPrefix() + jwtUtil.createJWT(userEntitySecurity.getId(), userEntitySecurity.getUsername(), JSON.toJSONString(authoritys));
+        ResultUtil.responseJson(response, Result.success(jwt));
+    }
+}
+```
+
+3.自定义登录失败处理器
+
+```java
+package com.chengxiaoxiao.web.security.handler;
+
+
+import com.chengxiaoxiao.common.utils.ResultUtil;
+import com.chengxiaoxiao.model.common.dtos.result.CodeMsg;
+import com.chengxiaoxiao.model.common.dtos.result.Result;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.LockedException;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.stereotype.Component;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
+/**
+ * 登录失败处理类
+ *
+ * @Author: Cheng XiaoXiao  (🍊 ^_^ ^_^)
+ * @Date: 2020/2/2 8:38 下午
+ * @Description:
+ */
+@Slf4j
+@Component
+public class UserLoginFailureHandler implements AuthenticationFailureHandler {
+
+    @Override
+    public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) {
+        // 这些对于操作的处理类可以根据不同异常进行不同处理
+        if (exception instanceof UsernameNotFoundException) {
+            log.info("【登录失败】" + exception.getMessage());
+            ResultUtil.responseJson(response, Result.error(CodeMsg.USER_NOT_EXIST));
+        }
+        if (exception instanceof LockedException) {
+            log.info("【登录失败】" + exception.getMessage());
+            ResultUtil.responseJson(response, Result.error(CodeMsg.USER_LOCKED));
+        }
+        if (exception instanceof BadCredentialsException) {
+            log.info("【登录失败】" + exception.getMessage());
+            ResultUtil.responseJson(response, Result.error(CodeMsg.USER_PASSWORD_INCORRENT));
+        }
+        ResultUtil.responseJson(response, Result.error(CodeMsg.ERROR));
+    }
+}
+
+```
+
+4.自定义注销成功处理器
+
+```java
+package com.chengxiaoxiao.web.security.handler;
+
+
+
+import com.chengxiaoxiao.common.utils.ResultUtil;
+import com.chengxiaoxiao.model.common.dtos.result.CodeMsg;
+import com.chengxiaoxiao.model.common.dtos.result.Result;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
+import org.springframework.stereotype.Component;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
+import java.util.Map;
+/**
+ * 用户登出类
+ * @Author: Cheng XiaoXiao  (🍊 ^_^ ^_^)
+ * @Date: 2020/2/2 8:39 下午
+ * @Description:
+ */
+@Component
+public class UserLogoutSuccessHandler implements LogoutSuccessHandler {
+    @Override
+    public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication){
+        SecurityContextHolder.clearContext();
+        ResultUtil.responseJson(response, Result.success(null));
+    }
+}
+
+```
+
+5.自定义暂无权限处理器
+
+```java
+/**
+ * 暂无权限处理类
+ * @Author: Cheng XiaoXiao  (🍊 ^_^ ^_^)
+ * @Date: 2020/2/2 8:37 下午
+ * @Description:
+ */
+@Component
+public class UserAuthAccessDeniedHandler implements AccessDeniedHandler{
+    @Override
+    public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException exception){
+        ResultUtil.responseJson(response, Result.success(CodeMsg.AUTHENTICATION_ERROR));
+    }
+}
+
+```
+
+6.自定义未登录的处理器
+
+```java
+/**
+ * 用户未登录处理类
+ * @Author: Cheng XiaoXiao  (🍊 ^_^ ^_^)
+ * @Date: 2020/2/2 8:37 下午
+ * @Description:
+ */
+@Component
+public class UserAuthenticationEntryPointHandler implements AuthenticationEntryPoint {
+    @Override
+    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception){
+
+        ResultUtil.responseJson(response, Result.success(CodeMsg.USER_NOT_LOGIN_ERROR));
+    }
+}
+```
+
+7.自定义登录逻辑验证器
+
+```java
+/**
+ * 用户登录处理类
+ *
+ * @Author: Cheng XiaoXiao  (🍊 ^_^ ^_^)
+ * @Date: 2020/2/2 8:39 下午
+ * @Description:
+ */
+@Component
+@SuppressWarnings("all")
+public class UserAuthenticationProvider implements AuthenticationProvider {
+
+    @Autowired
+    private SelfUserDetailsService sysUserService;
+    @Autowired
+    private SysRoleService sysRoleService;
+    @Autowired
+    private SysRoleResourceMapper sysRoleResourceMapper;
+
+    @Override
+    public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+        // 获取表单输入中返回的用户名
+        String userName = (String) authentication.getPrincipal();
+        // 获取表单中输入的密码
+        String password = (String) authentication.getCredentials();
+
+        // 查询用户是否存在
+        UserEntitySecurity userEntitySecurity = sysUserService.loadUserByUsername(userName);
+        if (userEntitySecurity == null) {
+            throw new UsernameNotFoundException("用户名不存在");
+        }
+        // 我们还要判断密码是否正确，这里我们的密码使用BCryptPasswordEncoder进行加密的
+        if (!new BCryptPasswordEncoder().matches(password, userEntitySecurity.getPassword())) {
+            throw new BadCredentialsException("密码不正确");
+        }
+        // 还可以加一些其他信息的判断，比如用户账号已停用等判断
+        if (userEntitySecurity.getDeleteStatus().equals(1)) {
+            throw new LockedException("该用户已被冻结");
+        }
+
+        // 角色集合
+        Set<GrantedAuthority> authorities = new HashSet<>();
+        // 查询用户角色
+        List<SysRoleSimpleDtos> roles = sysRoleService.getRolesByUserId(userEntitySecurity.getId());
+        if (roles.size() > 0) {
+            List<SysResource> auths = sysRoleResourceMapper.findResourcesByRoles(roles);
+
+            for (SysResource auth : auths) {
+                authorities.add(new SimpleGrantedAuthority("ROLE_" + auth.getScourceKey()));
+            }
+        }
+        userEntitySecurity.setAuthorities(authorities);
+        userEntitySecurity.setRoles(roles);
+        // 进行登录
+        return new UsernamePasswordAuthenticationToken(userEntitySecurity, password, authorities);
+    }
+
+    @Override
+    public boolean supports(Class<?> authentication) {
+        return true;
+    }
+}
+```
+
+与jwt结合：：
+
+jwt拦截器：
+
+```java
+**
+ * JWT接口请求校验拦截器
+ * 请求接口时会进入这里验证Token是否合法和过期
+ *
+ * @Author Sans
+ * @CreateTime 2019/10/5 16:41
+ */
+@Slf4j
+@Component
+public class JWTAuthenticationTokenFilter extends OncePerRequestFilter {
+
+    @Autowired
+    private JwtUtil jwtUtil;
+
+    @Autowired
+    JwtConfig jwtConfig;
+
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        // 获取请求头中JWT的Token
+        String tokenHeaderAuth = request.getHeader(jwtConfig.getTokenHeader());
+
+        try {
+            if (null != tokenHeaderAuth && tokenHeaderAuth.startsWith(jwtConfig.getTokenPrefix())) {
+                // 截取JWT前缀
+                String token = tokenHeaderAuth.replace(jwtConfig.getTokenPrefix(), "");
+                Claims claims = jwtUtil.parseJWT(token);
+
+                // 获取用户名
+                String username = claims.getSubject();
+                String userId = claims.getId();
+                if (!StringUtils.isEmpty(username) && !StringUtils.isEmpty(userId) && SecurityContextHolder.getContext().getAuthentication() == null) {
+                    // 获取角色
+                    Set<GrantedAuthority> authorities = new HashSet<>();
+                    String authority = claims.get("authorities").toString();
+                    if (!StringUtils.isEmpty(authority)) {
+                        Set<String> authSet = JSONObject.parseObject(authority, Set.class);
+                        for (String s : authSet) {
+                            authorities.add(new SimpleGrantedAuthority(s));
+                        }
+                    }
+
+                    //组装参数
+                    UserEntitySecurity selfUserEntity = new UserEntitySecurity();
+                    selfUserEntity.setUserName(claims.getSubject());
+                    selfUserEntity.setId(userId);
+                    selfUserEntity.setAuthorities(authorities);
+                    UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(selfUserEntity, null, selfUserEntity.getAuthorities());
+                    authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
+            }
+        } catch (ExpiredJwtException e) {
+            ResultUtil.responseJson(response, Result.success(CodeMsg.AUTHENTICATION_TOKEN_EXPIRED));
+        } catch (Exception e) {
+            ResultUtil.responseJson(response, Result.success(CodeMsg.AUTHENTICATION_ERROR));
+        }
+        filterChain.doFilter(request, response);
+        return;
+    }
+
+}
+```
+
+动态添加权限：
+
+AccessDecisionManager：
+
+```
+public class DynamicallyUrlAccessDecisionManager extends AbstractAccessDecisionManager {
+
+    public DynamicallyUrlAccessDecisionManager(List<AccessDecisionVoter<?>> decisionVoters) {
+        super(decisionVoters);
+    }
+
+    @Override
+    public void decide(Authentication authentication, Object object, Collection<ConfigAttribute> configAttributes)
+            throws AccessDeniedException, InsufficientAuthenticationException {
+        int deny = 0;
+
+        for (AccessDecisionVoter voter : getDecisionVoters()) {
+            int result = voter.vote(authentication, object, configAttributes);
+
+            if (logger.isDebugEnabled()) {
+                logger.debug("Voter: " + voter + ", returned: " + result);
+            }
+
+            switch (result) {
+                case AccessDecisionVoter.ACCESS_GRANTED:
+                    return;
+
+                case AccessDecisionVoter.ACCESS_DENIED:
+                    deny++;
+
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+        if (deny > 0) {
+            throw new AccessDeniedException(messages.getMessage(
+                    "AbstractAccessDecisionManager.accessDenied", "Access is denied"));
+        }
+
+        // To get this far, every AccessDecisionVoter abstained
+        checkAllowIfAllAbstainDecisions();
+    }
+}
+
+```
+
+拦截器：
+
+```java
+/**
+ * @Author: Cheng XiaoXiao  (🍊 ^_^ ^_^)
+ * @Date: 2020/2/21 2:45 下午
+ * @Description:
+ */
+public class DynamicallyUrlInterceptor extends AbstractSecurityInterceptor implements Filter {
+
+    //标记自定义的url拦截器已经加载
+    private static final String FILTER_APPLIED = "__spring_security_filterSecurityInterceptor_filterApplied_dynamically";
+
+    private FilterInvocationSecurityMetadataSource securityMetadataSource;
+    private boolean observeOncePerRequest = true;
+
+
+    @Override
+    public Class<?> getSecureObjectClass() {
+        return FilterInvocation.class;
+    }
+
+    @Override
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+        FilterInvocation fi = new FilterInvocation(request, response, chain);
+        invoke(fi);
+    }
+
+    @Override
+    public void init(FilterConfig filterConfig) throws ServletException {
+    }
+
+    @Override
+    public void destroy() {
+    }
+
+    public FilterInvocationSecurityMetadataSource getSecurityMetadataSource() {
+        return this.securityMetadataSource;
+    }
+
+    @Override
+    public SecurityMetadataSource obtainSecurityMetadataSource() {
+        return this.securityMetadataSource;
+    }
+
+    public void setSecurityMetadataSource(FilterInvocationSecurityMetadataSource newSource) {
+        this.securityMetadataSource = newSource;
+    }
+
+    @Override
+    public void setAccessDecisionManager(AccessDecisionManager accessDecisionManager) {
+        super.setAccessDecisionManager(accessDecisionManager);
+    }
+
+    public void invoke(FilterInvocation fi) throws IOException, ServletException {
+
+        if ((fi.getRequest() != null)
+                && (fi.getRequest().getAttribute(FILTER_APPLIED) != null)
+                && observeOncePerRequest) {
+            // filter already applied to this request and user wants us to observe
+            // once-per-request handling, so don't re-do security checking
+            fi.getChain().doFilter(fi.getRequest(), fi.getResponse());
+        } else {
+            // first time this request being called, so perform security checking
+            if (fi.getRequest() != null) {
+                fi.getRequest().setAttribute(FILTER_APPLIED, Boolean.TRUE);
+            }
+
+            InterceptorStatusToken token = super.beforeInvocation(fi);
+
+            try {
+                fi.getChain().doFilter(fi.getRequest(), fi.getResponse());
+            } finally {
+                super.finallyInvocation(token);
+            }
+
+            super.afterInvocation(token, null);
+        }
+    }
+}
+```
+
+数据源：
+
+```java
+/**
+ * @Author: Cheng XiaoXiao  (🍊 ^_^ ^_^)
+ * @Date: 2020/2/21 2:42 下午
+ * @Description:
+ */
+@Component
+public class MyFilterSecurityMetadataSource implements FilterInvocationSecurityMetadataSource {
+
+    private final Map<RequestMatcher, Collection<ConfigAttribute>> requestMap;
+
+
+    /*
+     * 这个例子放在构造方法里初始化url权限数据，我们只要保证在 getAttributes()之前初始好数据就可以了
+     */
+    public MyFilterSecurityMetadataSource(SysResourceService sysResourceService) {
+        List<SysResource> resourceList = sysResourceService.findAll();
+
+        Map<RequestMatcher, Collection<ConfigAttribute>> map = new HashMap<>();
+        AntPathRequestMatcher matcher;
+        SecurityConfig config;
+        ArrayList<ConfigAttribute> configs;
+        for (SysResource sysResource : resourceList) {
+            matcher = new AntPathRequestMatcher(sysResource.getSourceUrl(), sysResource.getHttpMethod());
+            config = new SecurityConfig("ROLE_" + sysResource.getScourceKey());
+            configs = new ArrayList<>();
+            configs.add(config);
+            map.put(matcher, configs);
+        }
+
+        this.requestMap = map;
+    }
+
+
+    /**
+     * 在我们初始化的权限数据中找到对应当前url的权限数据
+     *
+     * @param object
+     * @return
+     * @throws IllegalArgumentException
+     */
+    @Override
+    public Collection<ConfigAttribute> getAttributes(Object object) throws IllegalArgumentException {
+        FilterInvocation fi = (FilterInvocation) object;
+        HttpServletRequest request = fi.getRequest();
+        String url = fi.getRequestUrl();
+        String httpMethod = fi.getRequest().getMethod();
+
+        // Lookup your database (or other source) using this information and populate the
+        // list of attributes (这里初始话你的权限数据)
+        //List<ConfigAttribute> attributes = new ArrayList<ConfigAttribute>();
+
+        //遍历我们初始化的权限数据，找到对应的url对应的权限
+        for (Map.Entry<RequestMatcher, Collection<ConfigAttribute>> entry : requestMap
+                .entrySet()) {
+            if (entry.getKey().matches(request)) {
+                return entry.getValue();
+            }
+        }
+
+        return null;
+    }
+
+    @Override
+    public Collection<ConfigAttribute> getAllConfigAttributes() {
+        return null;
+    }
+
+    @Override
+    public boolean supports(Class<?> clazz) {
+        return FilterInvocation.class.isAssignableFrom(clazz);
+    }
+}
+```
+
+前后端分离下spring-security是无法直接获取application/json数据的。修改为json方式：
+
+重写UsernamePasswordAnthenticationFilter：
+
+```java
+package com.template.filter;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.template.bean.AuthenticationBean;
+import org.springframework.http.MediaType;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.InputStream;
+
+public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
+    @Override
+    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
+        //attempt Authentication when Content-Type is json
+        if(request.getContentType().equals(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                ||request.getContentType().equals(MediaType.APPLICATION_JSON_VALUE)){
+
+            //use jackson to deserialize json
+            ObjectMapper mapper = new ObjectMapper();
+            UsernamePasswordAuthenticationToken authRequest = null;
+            try (InputStream is = request.getInputStream()){
+                AuthenticationBean authenticationBean = mapper.readValue(is,AuthenticationBean.class);
+                authRequest = new UsernamePasswordAuthenticationToken(
+                        authenticationBean.getUsername(), authenticationBean.getPassword());
+            }catch (IOException e) {
+                e.printStackTrace();
+                authRequest = new UsernamePasswordAuthenticationToken(
+                        "", "");
+            }finally {
+                setDetails(request, authRequest);
+                return this.getAuthenticationManager().authenticate(authRequest);
+            }
+        }
+
+        //transmit it to UsernamePasswordAuthenticationFilter
+        else {
+            return super.attemptAuthentication(request, response);
+        }
+    }
+}
+```
+
+把这个`CustomAuthenticationFilter`加到spring security的众多filter里面.
+
+```java
+@Override
+protected void configure(HttpSecurity http) throws Exception {
+    http
+            .cors().and()
+            .antMatcher("/**").authorizeRequests()
+            .antMatchers("/", "/login**").permitAll()
+            .anyRequest().authenticated()
+            //这里必须要写formLogin()，不然原有的UsernamePasswordAuthenticationFilter不会出现，也就无法配置我们重新的UsernamePasswordAuthenticationFilter
+            .and().formLogin().loginPage("/")
+            .and().csrf().disable();
+
+    //用重写的Filter替换掉原有的UsernamePasswordAuthenticationFilter
+    http.addFilterAt(customAuthenticationFilter(),
+    UsernamePasswordAuthenticationFilter.class);
+}
+
+//注册自定义的UsernamePasswordAuthenticationFilter
+@Bean
+CustomAuthenticationFilter customAuthenticationFilter() throws Exception {
+    CustomAuthenticationFilter filter = new CustomAuthenticationFilter();
+    filter.setAuthenticationSuccessHandler(new SuccessHandler());
+    filter.setAuthenticationFailureHandler(new FailureHandler());
+    filter.setFilterProcessesUrl("/login/self");
+
+    //这句很关键，重用WebSecurityConfigurerAdapter配置的AuthenticationManager，不然要自己组装AuthenticationManager
+    filter.setAuthenticationManager(authenticationManagerBean());
+    return filter;
+}
+```
+
 
 
 ### 3.13 日志引入

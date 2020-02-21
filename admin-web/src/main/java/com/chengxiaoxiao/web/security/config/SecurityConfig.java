@@ -5,12 +5,14 @@ import com.chengxiaoxiao.web.security.datasource.DynamicallyUrlAccessDecisionMan
 import com.chengxiaoxiao.web.security.datasource.DynamicallyUrlInterceptor;
 import com.chengxiaoxiao.web.security.datasource.MyFilterSecurityMetadataSource;
 import com.chengxiaoxiao.web.security.evaluator.UserPermissionEvaluator;
+import com.chengxiaoxiao.web.security.filter.CustomAuthenticationFilter;
 import com.chengxiaoxiao.web.security.handler.*;
 import com.chengxiaoxiao.web.security.jwt.JWTAuthenticationTokenFilter;
 import com.chengxiaoxiao.web.security.provider.UserAuthenticationProvider;
 import com.chengxiaoxiao.web.service.SysResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.devtools.restart.FailureHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -103,18 +105,32 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         auth.authenticationProvider(userAuthenticationProvider);
     }
 
+    //注册自定义的UsernamePasswordAuthenticationFilter
+    @Bean
+    CustomAuthenticationFilter customAuthenticationFilter() throws Exception {
+        CustomAuthenticationFilter filter = new CustomAuthenticationFilter();
+        filter.setAuthenticationSuccessHandler(userLoginSuccessHandler);
+        filter.setAuthenticationFailureHandler(userLoginFailureHandler);
+        filter.setFilterProcessesUrl("/login/self");
+
+        //这句很关键，重用WebSecurityConfigurerAdapter配置的AuthenticationManager，不然要自己组装AuthenticationManager
+        filter.setAuthenticationManager(authenticationManagerBean());
+        return filter;
+    }
+
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers("/swagger-ui.html")
                 .antMatchers("/webjars/**")
                 .antMatchers("/v2/**")
                 .antMatchers("/swagger-resources/**")
-                .antMatchers("/druid/**");
+                .antMatchers("/druid/**")
+                .antMatchers(HttpMethod.OPTIONS, "/**");
     }
 
 
     @Bean
-    public DynamicallyUrlInterceptor dynamicallyUrlInterceptor(){
+    public DynamicallyUrlInterceptor dynamicallyUrlInterceptor() {
         DynamicallyUrlInterceptor interceptor = new DynamicallyUrlInterceptor();
         interceptor.setSecurityMetadataSource(new MyFilterSecurityMetadataSource(sysResourceService));
 
@@ -183,7 +199,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // 添加JWT filter
         http.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
         http.addFilterBefore(dynamicallyUrlInterceptor(), FilterSecurityInterceptor.class);
+
+        //用重写的Filter替换掉原有的UsernamePasswordAuthenticationFilter
+        http.addFilterAt(customAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
-
-
 }
