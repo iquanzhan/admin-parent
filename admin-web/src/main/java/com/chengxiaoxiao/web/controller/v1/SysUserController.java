@@ -44,7 +44,6 @@ public class SysUserController extends BaseController implements SysUserControll
 
     @Override
     @GetMapping(value = {""})
-    @PreAuthorize("hasRole('ADMIN')")
     public Result<PageResult<SysUser>> search(SysUserSearchDto sysUserSearchDto, PageQueryDtos pageQueryDtos) {
         Page<SysUser> search = sysUserService.search(sysUserSearchDto, getPageRequest());
 

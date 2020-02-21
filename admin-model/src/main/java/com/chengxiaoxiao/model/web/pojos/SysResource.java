@@ -34,6 +34,8 @@ public class SysResource {
     private Integer type;
     @ApiModelProperty("资源KEY")
     private String scourceKey;
+    @ApiModelProperty("请求方法")
+    private String httpMethod;
     @ApiModelProperty("资源URL")
     private String sourceUrl;
     @ApiModelProperty("资源描述")

@@ -78,8 +78,8 @@ public class UserAuthenticationProvider implements AuthenticationProvider {
             for (SysResource auth : auths) {
                 authorities.add(new SimpleGrantedAuthority("ROLE_" + auth.getScourceKey()));
             }
-            userEntitySecurity.setAuthorities(authorities);
         }
+        userEntitySecurity.setAuthorities(authorities);
         userEntitySecurity.setRoles(roles);
         // 进行登录
         return new UsernamePasswordAuthenticationToken(userEntitySecurity, password, authorities);

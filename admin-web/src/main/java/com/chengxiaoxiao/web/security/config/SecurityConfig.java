@@ -1,15 +1,21 @@
 package com.chengxiaoxiao.web.security.config;
 
 import com.chengxiaoxiao.common.config.JwtConfig;
+import com.chengxiaoxiao.web.security.datasource.DynamicallyUrlAccessDecisionManager;
+import com.chengxiaoxiao.web.security.datasource.DynamicallyUrlInterceptor;
+import com.chengxiaoxiao.web.security.datasource.MyFilterSecurityMetadataSource;
 import com.chengxiaoxiao.web.security.evaluator.UserPermissionEvaluator;
 import com.chengxiaoxiao.web.security.handler.*;
 import com.chengxiaoxiao.web.security.jwt.JWTAuthenticationTokenFilter;
 import com.chengxiaoxiao.web.security.provider.UserAuthenticationProvider;
+import com.chengxiaoxiao.web.service.SysResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.access.AccessDecisionVoter;
+import org.springframework.security.access.vote.RoleVoter;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -18,7 +24,11 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
+import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @Author: Cheng XiaoXiao  (🍊 ^_^ ^_^)
@@ -32,6 +42,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     JwtConfig jwtConfig;
+
+    @Autowired
+    SysResourceService sysResourceService;
 
     @Bean
     public JWTAuthenticationTokenFilter authenticationTokenFilterBean() throws Exception {
@@ -99,6 +112,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/druid/**");
     }
 
+
+    @Bean
+    public DynamicallyUrlInterceptor dynamicallyUrlInterceptor(){
+        DynamicallyUrlInterceptor interceptor = new DynamicallyUrlInterceptor();
+        interceptor.setSecurityMetadataSource(new MyFilterSecurityMetadataSource(sysResourceService));
+
+        //配置RoleVoter决策
+        List<AccessDecisionVoter<? extends Object>> decisionVoters = new ArrayList<AccessDecisionVoter<? extends Object>>();
+        decisionVoters.add(new RoleVoter());
+        //设置认证决策管理器
+        interceptor.setAccessDecisionManager(new DynamicallyUrlAccessDecisionManager(decisionVoters));
+        return interceptor;
+    }
+
     /**
      * 配置security的控制逻辑
      *
@@ -155,6 +182,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.headers().cacheControl();
         // 添加JWT filter
         http.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(dynamicallyUrlInterceptor(), FilterSecurityInterceptor.class);
     }
 
 
