@@ -6,6 +6,7 @@ import com.chengxiaoxiao.model.web.dtos.UserEntitySecurity;
 import com.chengxiaoxiao.model.web.dtos.query.sysuser.SysLoginModelDto;
 import com.chengxiaoxiao.model.web.dtos.query.sysuser.SysUserModelDto;
 import com.chengxiaoxiao.model.web.dtos.query.sysuser.SysUserSearchDto;
+import com.chengxiaoxiao.model.web.dtos.result.UserInfoRolesDto;
 import com.chengxiaoxiao.model.web.pojos.SysUser;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -84,5 +85,5 @@ public interface SysUserService extends BaseService<SysUser, String> {
      * @param token
      * @return
      */
-    SysUser loadUserInfoBytoken(String token);
+    UserInfoRolesDto loadUserInfoBytoken(String token);
 }

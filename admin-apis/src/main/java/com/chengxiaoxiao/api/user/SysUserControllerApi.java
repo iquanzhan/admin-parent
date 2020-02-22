@@ -7,6 +7,7 @@ import com.chengxiaoxiao.model.web.dtos.query.sysuser.SysLoginModelDto;
 import com.chengxiaoxiao.model.web.dtos.query.sysuser.SysUserModelDto;
 import com.chengxiaoxiao.model.web.dtos.query.sysuser.SysUserSearchDto;
 import com.chengxiaoxiao.model.web.dtos.result.SysRoleSimpleDtos;
+import com.chengxiaoxiao.model.web.dtos.result.UserInfoRolesDto;
 import com.chengxiaoxiao.model.web.pojos.SysUser;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -62,5 +63,5 @@ public interface SysUserControllerApi {
     Result dispatchRoleByUserId(@ApiParam(name = "userId", value = "用户Id") String userId, @ApiParam(name = "roldIds", value = "角色Id数组", type = "array", example = "id,id,id,id") String[] roldIds);
 
     @ApiOperation("根据TOKEN获取用户基本信息")
-    Result<SysUser> info(@ApiParam(name = "token", value = "TOKEN") String token);
+    Result<UserInfoRolesDto> info(@ApiParam(name = "token", value = "TOKEN") String token);
 }

@@ -8,6 +8,7 @@ import com.chengxiaoxiao.model.web.dtos.query.sysuser.SysLoginModelDto;
 import com.chengxiaoxiao.model.web.dtos.query.sysuser.SysUserModelDto;
 import com.chengxiaoxiao.model.web.dtos.query.sysuser.SysUserSearchDto;
 import com.chengxiaoxiao.model.web.dtos.result.SysRoleSimpleDtos;
+import com.chengxiaoxiao.model.web.dtos.result.UserInfoRolesDto;
 import com.chengxiaoxiao.model.web.pojos.SysUser;
 import com.chengxiaoxiao.web.controller.BaseController;
 import com.chengxiaoxiao.web.service.SysRoleService;
@@ -97,7 +98,7 @@ public class SysUserController extends BaseController implements SysUserControll
 
     @Override
     @GetMapping("/info")
-    public Result<SysUser> info(String token) {
+    public Result<UserInfoRolesDto> info(@RequestParam String token) {
         return Result.success(sysUserService.loadUserInfoBytoken(token));
     }
 

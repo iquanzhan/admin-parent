@@ -14,6 +14,8 @@ import com.chengxiaoxiao.model.web.dtos.UserEntitySecurity;
 import com.chengxiaoxiao.model.web.dtos.query.sysuser.SysLoginModelDto;
 import com.chengxiaoxiao.model.web.dtos.query.sysuser.SysUserModelDto;
 import com.chengxiaoxiao.model.web.dtos.query.sysuser.SysUserSearchDto;
+import com.chengxiaoxiao.model.web.dtos.result.SysRoleSimpleDtos;
+import com.chengxiaoxiao.model.web.dtos.result.UserInfoRolesDto;
 import com.chengxiaoxiao.model.web.pojos.SysUser;
 import com.chengxiaoxiao.model.repository.SysUserRepository;
 import com.chengxiaoxiao.model.web.pojos.SysUserRole;
@@ -203,7 +205,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser, String> impleme
     }
 
     @Override
-    public SysUser loadUserInfoBytoken(String token) {
+    public UserInfoRolesDto loadUserInfoBytoken(String token) {
         try {
             // 截取JWT前缀
             token = token.replace(jwtConfig.getTokenPrefix(), "");
@@ -214,12 +216,16 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser, String> impleme
             if (!userInfo.isPresent()) {
                 return null;
             }
-            return userInfo.get();
+
+            SysUser sysUser = userInfo.get();
+            UserInfoRolesDto userInfoRolesDto = new UserInfoRolesDto();
+            BeanUtil.copyProperties(sysUser,userInfoRolesDto,CopyOptions.create().setIgnoreNullValue(true).setIgnoreError(true));
+            userInfoRolesDto.setRoles(sysRoleService.getRolesByUserId(sysUser.getId()));
+
+            return userInfoRolesDto;
 
         } catch (ExpiredJwtException e) {
             throw new GlobleException(CodeMsg.AUTHENTICATION_TOKEN_EXPIRED);
-        } catch (Exception e) {
-            throw new GlobleException(CodeMsg.AUTHENTICATION_ERROR);
         }
     }
 }

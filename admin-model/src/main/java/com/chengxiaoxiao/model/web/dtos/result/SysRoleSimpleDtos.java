@@ -25,4 +25,6 @@ public class SysRoleSimpleDtos {
     private String name;
     @ApiModelProperty("角色描述")
     private String descript;
+    @ApiModelProperty("角色KEY")
+    private String roleKey;
 }
