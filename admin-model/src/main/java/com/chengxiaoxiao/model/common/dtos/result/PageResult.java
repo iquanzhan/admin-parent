@@ -32,7 +32,7 @@ public class PageResult<T> implements Serializable {
     public PageResult(Page<T> page) {
         this.total = page.getTotalElements();
         this.pageSize = page.getSize();
-        this.pageNumber = page.getNumber();
+        this.pageNumber = page.getNumber() + 1;
         this.rows = page.getContent();
     }
 }

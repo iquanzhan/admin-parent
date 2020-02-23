@@ -13,6 +13,7 @@ public class IsMobileValidator implements ConstraintValidator<IsMobile, String> 
 
     @Override
     public void initialize(IsMobile constraintAnnotation) {
+
         required = constraintAnnotation.required();
     }
 
@@ -23,7 +24,7 @@ public class IsMobileValidator implements ConstraintValidator<IsMobile, String> 
             return ValidatorUtil.isMobile(s);
         } else {
             if (StringUtils.isEmpty(s)) {
-                return false;
+                return true;
             }
             return ValidatorUtil.isMobile(s);
         }

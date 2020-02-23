@@ -1820,3 +1820,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 }
 ```
 
+### 3.25 TOKEN刷新机制
+
+https://my.oschina.net/odetteisgorgeous/blog/1920762
+
+### 3.26 引入Flyway实现版本控制
+
+依赖
+
+```xml
+      <!-- 无需版本号 -->
+ <dependency>
+      <groupId>org.flywaydb</groupId>
+      <artifactId>flyway-core</artifactId>
+ </dependency>      
+
+```
+

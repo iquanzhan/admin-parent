@@ -1,6 +1,7 @@
 package com.chengxiaoxiao.web.controller.v1;
 
 import com.chengxiaoxiao.api.user.SysUserControllerApi;
+import com.chengxiaoxiao.common.config.JwtConfig;
 import com.chengxiaoxiao.model.common.dtos.query.PageQueryDtos;
 import com.chengxiaoxiao.model.common.dtos.result.PageResult;
 import com.chengxiaoxiao.model.common.dtos.result.Result;
@@ -36,6 +37,8 @@ public class SysUserController extends BaseController implements SysUserControll
     SysUserService sysUserService;
     @Autowired
     SysRoleService sysRoleService;
+    @Autowired
+    JwtConfig jwtConfig;
 
     @Override
     @GetMapping("/{id}")
@@ -98,8 +101,8 @@ public class SysUserController extends BaseController implements SysUserControll
 
     @Override
     @GetMapping("/info")
-    public Result<UserInfoRolesDto> info(@RequestParam String token) {
-        return Result.success(sysUserService.loadUserInfoBytoken(token));
+    public Result<UserInfoRolesDto> info() {
+        return Result.success(sysUserService.loadUserInfoBytoken(request.getHeader(jwtConfig.getTokenHeader())));
     }
 
 

@@ -38,11 +38,7 @@ public class SysUserModelDto {
     @ApiModelProperty(value = "昵称", required = true)
     private String nickName;
 
-    @NotNull
-    @ApiModelProperty(value = "密码", required = true)
-    private String password;
-
-    @IsMobile(message = "请输入正确的手机号码")
+    @IsMobile(message = "请输入正确的手机号码",required = false)
     @ApiModelProperty(value = "手机号码", required = true)
     private String telephone;
 

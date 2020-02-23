@@ -2,9 +2,12 @@ package com.chengxiaoxiao.web.security.handler;
 
 
 
+import com.chengxiaoxiao.common.config.JwtConfig;
 import com.chengxiaoxiao.common.utils.ResultUtil;
 import com.chengxiaoxiao.model.common.dtos.result.CodeMsg;
 import com.chengxiaoxiao.model.common.dtos.result.Result;
+import io.jsonwebtoken.Jwt;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
@@ -22,6 +25,9 @@ import java.util.Map;
  */
 @Component
 public class UserLogoutSuccessHandler implements LogoutSuccessHandler {
+    @Autowired
+    JwtConfig jwtConfig;
+
     @Override
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication){
         SecurityContextHolder.clearContext();

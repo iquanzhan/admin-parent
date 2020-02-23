@@ -86,7 +86,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser, String> impleme
         user.setDeleteStatus(0);
         user.setCreateTime(new Date());
         user.setUpdateTime(new Date());
-        user.setPassword(encoder.encode(user.getPassword()));
+        user.setPassword(encoder.encode("123456"));
         save(user);
         return user;
     }
@@ -219,7 +219,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser, String> impleme
 
             SysUser sysUser = userInfo.get();
             UserInfoRolesDto userInfoRolesDto = new UserInfoRolesDto();
-            BeanUtil.copyProperties(sysUser,userInfoRolesDto,CopyOptions.create().setIgnoreNullValue(true).setIgnoreError(true));
+            BeanUtil.copyProperties(sysUser, userInfoRolesDto, CopyOptions.create().setIgnoreNullValue(true).setIgnoreError(true));
             userInfoRolesDto.setRoles(sysRoleService.getRolesByUserId(sysUser.getId()));
 
             return userInfoRolesDto;
