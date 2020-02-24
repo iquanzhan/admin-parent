@@ -15,6 +15,14 @@ import java.util.List;
  */
 public interface SysRoleRepository extends BaseDao<SysRole, String> {
 
-    @Query(value = "select sys_role.id,sys_role.`name`,sys_role.descript from sys_role INNER JOIN sys_user_role on sys_role.id = sys_user_role.role_id where user_id=:id and delete_status=0",nativeQuery = true)
+    @Query(value = "select sys_role.id,sys_role.`name`,sys_role.descript from sys_role INNER JOIN sys_user_role on sys_role.id = sys_user_role.role_id where user_id=:id and delete_status=0", nativeQuery = true)
     List<Object[]> findRoleListByUserId(@Param("id") String id);
+
+    /**
+     * 根据deleteStatus获取数据
+     *
+     * @param deleteStatus
+     * @return
+     */
+    List<SysRole> findAllByDeleteStatus(Integer deleteStatus);
 }

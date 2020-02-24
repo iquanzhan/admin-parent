@@ -231,4 +231,9 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRole, String> impleme
     public List<SysRole> getRolesByResourceId(String resourceId) {
         return sysRoleMapper.getRolesByResourceId(resourceId);
     }
+
+    @Override
+    public List<SysRole> findAllNotDelete() {
+        return sysRoleRepository.findAllByDeleteStatus(0);
+    }
 }

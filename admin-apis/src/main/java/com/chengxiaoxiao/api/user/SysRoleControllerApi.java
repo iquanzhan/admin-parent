@@ -37,6 +37,13 @@ public interface SysRoleControllerApi {
     Result<PageResult<SysRole>> search(SysRoleSearchDto search, PageQueryDtos dtos);
 
     /**
+     * 查询所有正常的角色信息
+     * @return
+     */
+    @ApiOperation("查询全部角色信息")
+    Result<List<SysRole>> findAll();
+
+    /**
      * 根据Id获取对象信息
      *
      * @param id

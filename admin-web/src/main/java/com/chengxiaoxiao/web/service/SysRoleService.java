@@ -82,4 +82,6 @@ public interface SysRoleService extends BaseService<SysRole, String> {
      * @return
      */
     List<SysRole> getRolesByResourceId(String resourceId);
+
+    List<SysRole> findAllNotDelete();
 }

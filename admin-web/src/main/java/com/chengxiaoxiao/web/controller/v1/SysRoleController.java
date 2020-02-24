@@ -49,10 +49,16 @@ public class SysRoleController extends BaseController implements SysRoleControll
 
     @GetMapping("")
     @Override
-    @PreAuthorize("hasPermission('/v1/sys-role','ADMIN')")
+    //@PreAuthorize("hasPermission('/v1/sys-role','ADMIN')")
     public Result<PageResult<SysRole>> search(SysRoleSearchDto sysRoleSearchDto, PageQueryDtos dtos) {
         Page<SysRole> search = sysRoleService.search(sysRoleSearchDto, getPageRequest());
         return Result.success(new PageResult<>(search));
+    }
+
+    @Override
+    @GetMapping("/all")
+    public Result<List<SysRole>> findAll() {
+        return Result.success(sysRoleService.findAllNotDelete());
     }
 
     @GetMapping("/{id}")
