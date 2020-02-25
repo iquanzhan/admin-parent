@@ -86,4 +86,11 @@ public interface SysUserService extends BaseService<SysUser, String> {
      * @return
      */
     UserInfoRolesDto loadUserInfoBytoken(String token);
+
+    /**
+     * 获取未删除的用户列表
+     *
+     * @return
+     */
+    List<SysUser> findAllNoDelete();
 }

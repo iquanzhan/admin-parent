@@ -25,4 +25,11 @@ public interface SysRoleRepository extends BaseDao<SysRole, String> {
      * @return
      */
     List<SysRole> findAllByDeleteStatus(Integer deleteStatus);
+
+    /**
+     * 查询roleKey是否存在
+     * @param roleKey
+     * @return
+     */
+    Boolean existsByRoleKey(String roleKey);
 }

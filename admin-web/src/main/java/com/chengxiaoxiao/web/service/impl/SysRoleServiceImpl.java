@@ -2,6 +2,7 @@ package com.chengxiaoxiao.web.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
+import cn.hutool.core.util.StrUtil;
 import com.chengxiaoxiao.common.utils.CastEntityUtil;
 import com.chengxiaoxiao.common.utils.IdWorker;
 import com.chengxiaoxiao.model.common.dtos.result.CodeMsg;
@@ -22,6 +23,7 @@ import com.chengxiaoxiao.web.exception.GlobleException;
 import com.chengxiaoxiao.web.service.SysRoleService;
 import com.chengxiaoxiao.web.service.SysUserRoleService;
 import com.chengxiaoxiao.web.service.SysUserService;
+import io.netty.util.internal.StringUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -124,8 +126,16 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRole, String> impleme
 
     @Override
     public SysRole insert(SysRoleModelDto sysRoleDto) {
+
+        if (sysRoleRepository.existsByRoleKey(sysRoleDto.getRoleKey())) {
+            throw new GlobleException(CodeMsg.ROLE_KEY_EXIST);
+        }
         SysRole sysRole = new SysRole();
         BeanUtil.copyProperties(sysRoleDto, sysRole, CopyOptions.create().setIgnoreNullValue(true).setIgnoreError(true));
+
+        if (StrUtil.hasEmpty(sysRole.getParentId())) {
+            sysRole.setParentId("0");
+        }
         sysRole.setId(idWorker.nextId() + "");
         sysRole.setCreateTime(new Date());
         sysRole.setUpdateTime(new Date());

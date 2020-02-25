@@ -55,6 +55,12 @@ public class SysUserController extends BaseController implements SysUserControll
     }
 
     @Override
+    @GetMapping(value = {"/all"})
+    public Result<List<SysUser>> findAll() {
+        return Result.success(sysUserService.findAllNoDelete());
+    }
+
+    @Override
     @PostMapping("")
     public Result<SysUser> insert(@Valid @RequestBody SysUserModelDto user) {
         return Result.success(sysUserService.insert(user));

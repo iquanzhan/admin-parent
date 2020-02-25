@@ -32,6 +32,9 @@ public interface SysUserControllerApi {
     @ApiOperation("条件查询用户信息")
     Result<PageResult<SysUser>> search(SysUserSearchDto sysUserSearchDto, PageQueryDtos pageQueryDtos);
 
+    @ApiOperation("查询所有用户数据")
+    Result<List<SysUser>> findAll();
+
     @ApiOperation("添加用户")
     Result<SysUser> insert(@ApiParam(name = "user", value = "用户对象", required = true) SysUserModelDto user);
 

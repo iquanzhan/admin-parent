@@ -228,4 +228,9 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser, String> impleme
             throw new GlobleException(CodeMsg.AUTHENTICATION_TOKEN_EXPIRED);
         }
     }
+
+    @Override
+    public List<SysUser> findAllNoDelete() {
+        return sysUserRepository.findAllByDeleteStatus(0);
+    }
 }
