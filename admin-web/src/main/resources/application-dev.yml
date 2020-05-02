@@ -20,10 +20,10 @@ spring:
       password: 123456
   datasource:
     druid:
-      url: jdbc:oracle:thin:@localhost:1521:helowinXDB
-      username: system
-      password: system
-      driver-class-name: oracle.jdbc.driver.OracleDriver
+      url: jdbc:mysql://101.200.138.106:3306/xxadmin?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=utf-8&useSSL=false
+      username: root
+      password: 123456
+      driver-class-name: com.mysql.cj.jdbc.Driver
       # 初始化物理连接个数
       initial-size: 1
       # 最大连接池数量
@@ -37,7 +37,7 @@ spring:
       # 启用PSCache后，指定每个连接上PSCache的大小
       max-pool-prepared-statement-per-connection-size: 20
       # 用来检测连接是否有效的sql
-      validation-query: select 1 from dual
+      validation-query: select 'x'
       # 申请连接时不检测连接是否有效
       test-on-borrow: false
       # 归还连接时不检测连接是否有效
@@ -56,39 +56,18 @@ spring:
       use-global-data-source-stat: true
       # 通过connectProperties属性来打开mergeSql(Sql合并)功能；慢SQL记录(配置超过5秒就是慢，默认是3秒)
       connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
-  jpa:
-    show-sql: true
-    open-in-view: false
-    database-platform: org.hibernate.dialect.Oracle10gDialect
-    # 自定义批量增加修改的size
-    batch-operate-size: 10
-    hibernate:
-      naming:
-        physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
-  redis:
-    host: 192.168.4.188
 
-## 该配置节点为独立的节点，有很多同学容易将这个配置放在spring的节点下，导致配置无法被识别
-mybatis:
-  mapper-locations: classpath:mapping/*.xml  #注意：一定要对应mapper映射xml文件的所在路径
-  type-aliases-package: com.chengxiaoxiao.model.web.pojos  # 注意：对应实体类的路径
+
+#开启sql显示
+mybatis-plus:
   configuration:
-    # 开启驼峰映射
-    map-underscore-to-camel-case: true
-    
-logging:
-  level:
-    com:
-      chengxiaoxiao:
-        model:
-          mappers: debug
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      id-type: id_worker_str
+      logic-delete-value: 1
+      logic-not-delete-value: 0
 
-#pagehelper分页插件
-pagehelper:
-  helperDialect: mysql
-  reasonable: true
-  supportMethodsArguments: true
-  params: count=countSql
 
 # admin配置
 management:
@@ -112,4 +91,4 @@ jwt:
   # 过期时间 单位秒 1天后过期=86400 7天后过期=604800
   expiration: 86400
   # 配置不需要认证的接口
-  antMatchers: /index,/login/**,/favicon.ico,/druid/*
+  antMatchers: /index,/login/**,/favicon.ico,/druid/**,/v1/sys-user

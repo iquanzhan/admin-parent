@@ -350,6 +350,25 @@ Druid是Java语言中最好的数据库连接池。Druid提供了强大的监控
   <artifactId>druid-spring-boot-starter</artifactId>
   <version>${druid.version}</version>
 </dependency>
+
+<!--mysql-->
+<dependency>
+  <groupId>mysql</groupId>
+  <artifactId>mysql-connector-java</artifactId>
+  <version>${mysql.version}</version>
+</dependency>
+
+<!--druid-->
+<dependency>
+  <groupId>com.alibaba</groupId>
+  <artifactId>druid-spring-boot-starter</artifactId>
+  <version>${druid.version}</version>
+</dependency>
+
+<dependency>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-starter-jdbc</artifactId>
+</dependency>
 ```
 
 application.yml
@@ -859,7 +878,7 @@ Claims claims=(Claims)request.getAttribute("admin_claims");
 1.添加config
 
 ```java
-package com.chengxiaoxiao.web.security.config;
+package com.chengxiaoxiao.user.security.config;
 
 import com.chengxiaoxiao.common.config.JwtConfig;
 import com.chengxiaoxiao.web.security.datasource.DynamicallyUrlAccessDecisionManager;
@@ -1838,4 +1857,30 @@ https://my.oschina.net/odetteisgorgeous/blog/1920762
 ```
 
 ### 3.27 项目Docker化改造
+
+### 3.28 集成Mybatis-plus
+
+依赖
+
+```
+<mybatisplus.version>3.2.0</mybatisplus.version>
+<!--mybatis-plus-->
+<dependency>
+  <groupId>com.baomidou</groupId>
+  <artifactId>mybatis-plus-boot-starter</artifactId>
+  <version>${mybatisplus.version}</version>
+</dependency>
+```
+
+添加配置
+
+```
+#MyBatis Plus配置
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      id-type: id_worker_str
+```
 
