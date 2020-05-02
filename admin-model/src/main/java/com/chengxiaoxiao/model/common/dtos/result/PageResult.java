@@ -24,7 +24,7 @@ public class PageResult<T> implements Serializable {
     @ApiModelProperty("页码大小")
     private Integer pageSize;
     @ApiModelProperty("当前页")
-    private Integer pageNumber;
+    private Long pageNumber;
     @ApiModelProperty("分页数据")
     private List<T> rows;
 }
