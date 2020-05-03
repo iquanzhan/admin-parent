@@ -1,4 +1,4 @@
-package com.chengxiaoxiao.serurity.entity;
+package com.chengxiaoxiao.user.security.entity;
 
 import com.chengxiaoxiao.model.user.entity.User;
 import lombok.Data;
@@ -12,13 +12,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-
 /**
- * 用户详情
+ * <p>
+ * 安全认证用户详情信息
+ * </p>
  *
- * @Author: Cheng XiaoXiao  (🍊 ^_^ ^_^)
- * @Date: 2020/5/2 3:13 下午
- * @Description:
+ * @author qy
+ * @since 2019-11-08
  */
 @Data
 @Slf4j

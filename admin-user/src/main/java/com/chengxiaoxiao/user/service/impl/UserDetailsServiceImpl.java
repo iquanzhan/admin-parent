@@ -1,7 +1,7 @@
 package com.chengxiaoxiao.user.service.impl;
 
-import com.chengxiaoxiao.serurity.entity.SecurityUser;
 import com.chengxiaoxiao.model.user.entity.User;
+import com.chengxiaoxiao.user.security.entity.SecurityUser;
 import com.chengxiaoxiao.user.service.PermissionService;
 import com.chengxiaoxiao.user.service.UserService;
 import org.springframework.beans.BeanUtils;

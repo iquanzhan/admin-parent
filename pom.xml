@@ -13,7 +13,6 @@
         <module>admin-model</module>
         <module>admin-common</module>
         <module>admin-server</module>
-        <module>spring-security</module>
     </modules>
     <packaging>pom</packaging>
 

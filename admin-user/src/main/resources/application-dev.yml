@@ -68,7 +68,6 @@ spring:
         max-idle: 5
         min-idle: 0
 
-
 #开启sql显示
 mybatis-plus:
   configuration:
@@ -106,3 +105,7 @@ jwt:
   expiration: 86400
   # 配置不需要认证的接口
   antMatchers: /index,/login/**,/favicon.ico,/druid/**,/v1/sys-user
+logging:
+  level:
+    com:
+      chengxiaoxiao: info
