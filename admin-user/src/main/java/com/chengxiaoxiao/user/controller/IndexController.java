@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/admin/acl/index")
+@RequestMapping("/admin/index")
 public class IndexController {
 
     @Autowired
@@ -24,7 +24,7 @@ public class IndexController {
     /**
      * 根据token获取用户信息
      */
-    @GetMapping("info")
+    @GetMapping("/info")
     public Result info(){
         //获取当前登录用户用户名
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -36,7 +36,7 @@ public class IndexController {
      * 获取菜单
      * @return
      */
-    @GetMapping("menu")
+    @GetMapping("/menu")
     public Result getMenu(){
         //获取当前登录用户用户名
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -46,7 +46,7 @@ public class IndexController {
         return Result.success(hashMap);
     }
 
-    @PostMapping("logout")
+    @PostMapping("/logout")
     public Result logout(){
         return Result.success(true);
     }

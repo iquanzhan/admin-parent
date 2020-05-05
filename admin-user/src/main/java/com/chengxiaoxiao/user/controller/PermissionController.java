@@ -21,7 +21,7 @@ import java.util.Map;
  * @since 2020-01-12
  */
 @RestController
-@RequestMapping("/admin/acl/permission")
+@RequestMapping("/permission")
 public class PermissionController {
 
     @Autowired
@@ -38,7 +38,7 @@ public class PermissionController {
     }
 
     @ApiOperation(value = "递归删除菜单")
-    @DeleteMapping("remove/{id}")
+    @DeleteMapping("/{id}")
     public Result remove(@PathVariable String id) {
         permissionService.removeChildByIdGuli(id);
         return Result.success(true);
@@ -62,15 +62,15 @@ public class PermissionController {
 
 
     @ApiOperation(value = "新增菜单")
-    @PostMapping("save")
+    @PostMapping
     public Result save(@RequestBody Permission permission) {
         permissionService.save(permission);
         return Result.success(true);
     }
 
     @ApiOperation(value = "修改菜单")
-    @PutMapping("update")
-    public Result updateById(@RequestBody Permission permission) {
+    @PutMapping("/{id}")
+    public Result updateById(@PathVariable String id, @RequestBody Permission permission) {
         permissionService.updateById(permission);
         return Result.success(true);
     }

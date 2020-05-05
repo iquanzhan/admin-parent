@@ -1,6 +1,5 @@
 package com.chengxiaoxiao.user.config.swagger;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -46,7 +45,7 @@ public class Swagger2Config {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.chengxiaoxiao.app.controller"))
+                .apis(RequestHandlerSelectors.basePackage("com.chengxiaoxiao.user.controller"))
                 .paths(PathSelectors.any())
                 .build()
                 .globalOperationParameters(pars);

@@ -24,7 +24,7 @@ import java.util.List;
  * @since 2020-01-12
  */
 @RestController
-@RequestMapping("/admin/acl/role")
+@RequestMapping("/role")
 //@CrossOrigin
 public class RoleController {
 
@@ -56,35 +56,36 @@ public class RoleController {
     }
 
     @ApiOperation(value = "获取角色")
-    @GetMapping("get/{id}")
+    @GetMapping("/{id}")
     public Result<Role> get(@PathVariable String id) {
         Role role = roleService.getById(id);
         return Result.success(role);
     }
 
     @ApiOperation(value = "新增角色")
-    @PostMapping("save")
+    @PostMapping
     public Result save(@RequestBody Role role) {
         roleService.save(role);
         return Result.success(true);
     }
 
     @ApiOperation(value = "修改角色")
-    @PutMapping("update")
-    public Result updateById(@RequestBody Role role) {
+    @PutMapping("/{id}")
+    public Result updateById(@PathVariable String id,@RequestBody Role role) {
+        role.setId(id);
         roleService.updateById(role);
         return Result.success(role);
     }
 
     @ApiOperation(value = "删除角色")
-    @DeleteMapping("remove/{id}")
+    @DeleteMapping("/{id}")
     public Result remove(@PathVariable String id) {
         roleService.removeById(id);
         return Result.success(true);
     }
 
     @ApiOperation(value = "根据id列表删除角色")
-    @DeleteMapping("batchRemove")
+    @DeleteMapping("/batchRemove")
     public Result batchRemove(@RequestBody List<String> idList) {
         roleService.removeByIds(idList);
         return Result.success(true);

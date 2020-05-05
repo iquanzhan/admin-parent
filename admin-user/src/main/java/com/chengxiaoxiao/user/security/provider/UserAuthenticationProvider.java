@@ -2,7 +2,9 @@ package com.chengxiaoxiao.user.security.provider;
 
 
 import com.chengxiaoxiao.user.security.entity.SecurityUser;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -27,6 +29,9 @@ public class UserAuthenticationProvider implements AuthenticationProvider {
     @Autowired
     private UserDetailsService userDetailsService;
 
+    @Autowired
+    private RedisTemplate redisTemplate;
+
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -34,6 +39,10 @@ public class UserAuthenticationProvider implements AuthenticationProvider {
         String userName = (String) authentication.getPrincipal();
         // 获取表单中输入的密码
         String password = (String) authentication.getCredentials();
+
+        if(StringUtils.isEmpty(userName)){
+            throw new UsernameNotFoundException("用户名不存在");
+        }
 
         // 查询用户是否存在
         SecurityUser userEntitySecurity = (SecurityUser) userDetailsService.loadUserByUsername(userName);
@@ -45,6 +54,7 @@ public class UserAuthenticationProvider implements AuthenticationProvider {
             throw new BadCredentialsException("密码不正确");
         }
 
+        //redisTemplate.opsForValue()
         // 进行登录
         return new UsernamePasswordAuthenticationToken(userEntitySecurity, password, userEntitySecurity.getAuthorities());
     }
